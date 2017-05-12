@@ -12,6 +12,8 @@ public class ImageAlgorithms {
     public void random_algorithm(){};
     ///////////////
 
+    ///
+
     private int picIndex;
 
     public ImageAlgorithms(){
