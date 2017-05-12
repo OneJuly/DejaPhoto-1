@@ -6,7 +6,8 @@ package team4.cse110.dejaphoto;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 
 
@@ -38,8 +39,8 @@ public class ImageAlgorithms {
 
         //TODO if there are no photos in the DejaPhoto album, display a default photo
         if(true){
-            //esources res = getResources();
-            Image returnImage = R.drawable.default;
+            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.defaultImage);
         }
 
         if(imageIndex == 0){
