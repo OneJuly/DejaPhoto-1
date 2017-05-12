@@ -18,28 +18,26 @@ import java.text.ParseException;
 
 public class Photo {
 
-    //Metadata metadata = ImageMetadataReader.readMetadata(jpegFile);
-    //Metadata metadata = ImageMetadataReader.readMetadata(stream);
-
     //TODO replace member variables with their appropriate types
+    private Context context;
     Bitmap returnImage;
     int dayTime;
     String weekday;
     int location;
     boolean karma;
+    int weight;
     //////////
 
-    private Context context;
-    int weight;
     ExifInterface exifInterface;
-    String weekdayFormat;
-    String timeFormat;
-    Date d;
-    String time;
+    private String timeFormat;
+    private String weekdayFormat;
+    private Date d;
+    private String time;
 
     //constructor for the photo class
     public Photo(Context context){
         this.context = context;
+        returnImage = null;
         dayTime = 0;
         weekday = "";
         location = 0;
@@ -47,7 +45,36 @@ public class Photo {
         weight = 0;
     }
 
+    public Photo (Context context, Bitmap bitmap){
+        this.context = context;
+        returnImage = bitmap;
+        dayTime = getTime();
+        weekday = getWeekday();
+        location = getLocation();
+        karma = false;
+        weight = calcWeight();
+    }
+
+    public int getTime(){
+
+        //TODO use this.returnImage???
+
+        time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
+        SimpleDateFormat timeF = new SimpleDateFormat("HH");
+        try {
+            d = timeF.parse(time);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            return 0;
+        }
+        timeFormat = timeF.format(d);
+        return dayTime;
+    }
+
     public String getWeekday() {
+
+        //TODO use this.returnImage???
+
         weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
         SimpleDateFormat weekdayF = new SimpleDateFormat("EEE");
         try {
@@ -60,25 +87,18 @@ public class Photo {
         return weekdayFormat;
     }
 
-    public int getTime(){
-        time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
-        SimpleDateFormat timeF = new SimpleDateFormat("HH");
-        try {
-            d = timeF.parse(time);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            return 0;
-        }
-        timeFormat = timeF.format(d);
-        return dayTime;
+    public int getLocation(){
 
+        //TODO use this.returnImage???
+
+        return 0;
     }
 
+    public void giveKarma(){
+        this.karma = true;
+    }
 
-
-
-    //TODO update these with the appropriate calculations
-    //methods to determine what weights to add onto the photos
+    //TODO replace instances of "false" with calculations
     private boolean is_dayTime() {
         return false;
     }
@@ -103,7 +123,7 @@ public class Photo {
         return false;
     }
 
-    //TODO replace instances of "false" with calculations
+
     //method to return a weight for the image based on how recently the photo was taken
     public int recentlyTakenWeight() {
         if(within_a_week()) {
@@ -119,9 +139,9 @@ public class Photo {
     }
 
     //method to calcualte the overall weight of the photo
-    public void calcWeight(){
+    public int calcWeight(){
         //TODO check whether the time of day is within an hour of the time the pic was taken
-        weight = 300;
+        int weight = 300;
 
         if(is_dayTime()) {
             weight += 100;
@@ -136,6 +156,7 @@ public class Photo {
             weight += 200;
         }
         weight += recentlyTakenWeight();
-        }
+
+        return weight;
     }
 }

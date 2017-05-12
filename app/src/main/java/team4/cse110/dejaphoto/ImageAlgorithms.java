@@ -38,7 +38,7 @@ public class ImageAlgorithms {
         int weightSum = 0;
         for(int index = 0; index < 1; ++index/*each photo in the album*/) {
             for (int i = 0; i < weightSum; ++i) {
-                weightSum +=
+                weightSum += 0;
             }
         }
 
@@ -60,7 +60,7 @@ public class ImageAlgorithms {
         //TODO if there are no photos in the DejaPhoto album, display a default photo
         if(true){
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.defaultImage);
+                    R.drawable.defaultimage);
             return icon;
         }
         //if the user is on the most recent picture (more "next" than "previous" presses)
