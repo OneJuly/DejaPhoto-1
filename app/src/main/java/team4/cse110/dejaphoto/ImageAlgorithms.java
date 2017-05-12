@@ -1,5 +1,5 @@
 /**
- * Created by Alisa on 5/11/17.
+ * Created by Alisa & Sam on 5/11/17.
  */
 
 package team4.cse110.dejaphoto;
@@ -9,16 +9,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-
 public class ImageAlgorithms {
 
-    ///////////////
+    //TODO replace variables with appropriate types and initialize values
     boolean DJV = true;
     Bitmap returnImage;
-    public Bitmap DJV_algorithm(){
-        return returnImage;}
-    public Bitmap random_algorithm(){
-        return returnImage;}
     //////////////
 
     private Context context;
@@ -33,15 +28,42 @@ public class ImageAlgorithms {
     //TODO get a DejaVuEnabled (or something) boolean out of sp for whether DejaVu Mode is enabled
     SharedPreferences sp = context.getSharedPreferences("Settings",0);
 
+    //TODO implement algorithm
+    public Bitmap DJV_algorithm(){
+
+        //for each photo in the DejaVu photo album, update all of their weights.
+        //for each photo in the DejaVu
+
+
+        int weightSum = 0;
+        for(int index = 0; index < 1; ++index/*each photo in the album*/) {
+            for (int i = 0; i < weightSum; ++i) {
+                weightSum +=
+            }
+        }
+
+        return returnImage;
+    }
+
+    //TODO implement algorithm
+    public Bitmap random_algorithm(){
+
+
+
+
+
+        return returnImage;
+    }
+
     //gets called for the next image
     public Bitmap nextImage(){
-
         //TODO if there are no photos in the DejaPhoto album, display a default photo
         if(true){
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.defaultImage);
+            return icon;
         }
-
+        //if the user is on the most recent picture (more "next" than "previous" presses)
         if(imageIndex == 0){
             //TODO update DJV boolean
             if(DJV == true){
