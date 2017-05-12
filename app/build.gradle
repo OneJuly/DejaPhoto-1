@@ -20,7 +20,7 @@ android {
 }
 
 repositories {
-    mavenCentral() // jcenter() works as well because it pulls from Maven Central
+    jcenter() // jcenter() works as well because it pulls from Maven Central
 }
 
 dependencies {
