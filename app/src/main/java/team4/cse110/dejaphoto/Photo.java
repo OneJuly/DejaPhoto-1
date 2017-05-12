@@ -3,10 +3,17 @@
  */
 
 //https://github.com/drewnoakes/metadata-extractor
+//http://stackoverflow.com/questions/28502206/format-time-and-date-which-is-get-from-exifinterface-tag-datetime
+//http://stackoverflow.com/questions/5175728/how-to-get-the-current-date-time-in-java
 
 package team4.cse110.dejaphoto;
+
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.icu.text.SimpleDateFormat;
+import android.media.ExifInterface;
+
+import java.util.Date;
 
 public class Photo {
 
@@ -16,13 +23,16 @@ public class Photo {
     //TODO replace member variables with their appropriate types
     Bitmap returnImage;
     int dayTime;
-    int weekday;
+    String weekday;
     int location;
     boolean karma;
     //////////
 
     private Context context;
     int weight;
+    ExifInterface exifInterface;
+    String weekdayFormat;
+    Date d;
 
     //constructor for the photo class
     public Photo(Context context){
@@ -35,8 +45,10 @@ public class Photo {
     }
 
     public String getWeekday() {
-
-
+        weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+        SimpleDateFormat weekdayF = new SimpleDateFormat("EEE");
+        weekdayFormat = weekdayF.format(d);
+        return weekdayFormat;
     }
 
 
