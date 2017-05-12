@@ -18,7 +18,6 @@ class PhotoUtils {
         this.context = context;
     }
 
-
     /* Returns a list of paths to default camera photos */
     ArrayList<String> getCameraPhotos() {
 

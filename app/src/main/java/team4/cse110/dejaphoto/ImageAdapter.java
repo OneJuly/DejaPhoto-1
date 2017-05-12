@@ -26,8 +26,9 @@ class ImageAdapter extends BaseAdapter {
     public ImageAdapter(Context context) {
         this.context = context;
         photoUtils = new PhotoUtils(context);
-
         cameraPhotos = photoUtils.getCameraPhotos();
+
+
     }
 
     @Override
@@ -47,12 +48,14 @@ class ImageAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
         ImageView imageView;
+
         if (convertView == null) {
             imageView = new ImageView(context);
             imageView.setLayoutParams(new GridView.LayoutParams(250, 250));
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setPadding(4, 4, 4, 4);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setPadding(12, 12, 12, 12);
         } else {
             imageView = (ImageView) convertView;
         }
