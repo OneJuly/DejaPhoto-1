@@ -34,6 +34,15 @@ public class Photo {
         weight = 0;
     }
 
+    public String getWeekday() {
+
+
+    }
+
+
+
+
+
     //TODO update these with the appropriate calculations
     //methods to determine what weights to add onto the photos
     private boolean is_dayTime() {
