@@ -14,6 +14,7 @@ import android.icu.text.SimpleDateFormat;
 import android.media.ExifInterface;
 
 import java.util.Date;
+import java.text.ParseException;
 
 public class Photo {
 
@@ -32,13 +33,15 @@ public class Photo {
     int weight;
     ExifInterface exifInterface;
     String weekdayFormat;
+    String timeFormat;
     Date d;
+    String time;
 
     //constructor for the photo class
     public Photo(Context context){
         this.context = context;
         dayTime = 0;
-        weekday = 0;
+        weekday = "";
         location = 0;
         karma = false;
         weight = 0;
@@ -47,10 +50,29 @@ public class Photo {
     public String getWeekday() {
         weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
         SimpleDateFormat weekdayF = new SimpleDateFormat("EEE");
+        try {
+            d = weekdayF.parse(weekday);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            return "";
+        }
         weekdayFormat = weekdayF.format(d);
         return weekdayFormat;
     }
 
+    public int getTime(){
+        time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
+        SimpleDateFormat timeF = new SimpleDateFormat("HH");
+        try {
+            d = timeF.parse(time);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            return 0;
+        }
+        timeFormat = timeF.format(d);
+        return dayTime;
+
+    }
 
 
 
