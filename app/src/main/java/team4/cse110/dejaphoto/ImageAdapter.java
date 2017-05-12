@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
 
 /**
  * This is the adapter for the GridView thumbnails in GalleryActivity.
@@ -17,14 +19,20 @@ import com.bumptech.glide.Glide;
 class ImageAdapter extends BaseAdapter {
 
     private Context context;
+    private PhotoUtils photoUtils;
+    private ArrayList<String> cameraPhotos;
+
 
     public ImageAdapter(Context context) {
         this.context = context;
+        photoUtils = new PhotoUtils(context);
+
+        cameraPhotos = photoUtils.getCameraPhotos();
     }
 
     @Override
     public int getCount() {
-        return thumbsID.length;
+        return cameraPhotos.size();
     }
 
     @Override
@@ -51,39 +59,10 @@ class ImageAdapter extends BaseAdapter {
 
         Glide
                 .with(context)
-                .load(thumbsID[position])
+                .load(cameraPhotos.get(position))
                 .into(imageView);
 
         return imageView;
     }
 
-    private Integer[] thumbsID = {
-            R.drawable.sample_0, R.drawable.sample_2,
-            R.drawable.sample_3, R.drawable.sample_4,
-            R.drawable.sample_1, R.drawable.sample_4,
-            R.drawable.sample_5, R.drawable.sample_0,
-            R.drawable.sample_1, R.drawable.sample_3,
-            R.drawable.sample_3, R.drawable.sample_4,
-            R.drawable.sample_1, R.drawable.sample_4,
-            R.drawable.sample_5, R.drawable.sample_0,
-            R.drawable.sample_1, R.drawable.sample_3,
-            R.drawable.sample_6, R.drawable.sample_2,
-            R.drawable.sample_6, R.drawable.sample_2,
-            R.drawable.sample_0, R.drawable.sample_2,
-            R.drawable.sample_3, R.drawable.sample_4,
-            R.drawable.sample_1, R.drawable.sample_4,
-            R.drawable.sample_5, R.drawable.sample_0,
-            R.drawable.sample_1, R.drawable.sample_3,
-            R.drawable.sample_6, R.drawable.sample_2,
-            R.drawable.sample_1, R.drawable.sample_4,
-            R.drawable.sample_1, R.drawable.sample_4,
-            R.drawable.sample_3, R.drawable.sample_4,
-            R.drawable.sample_1, R.drawable.sample_4,
-            R.drawable.sample_5, R.drawable.sample_0,
-            R.drawable.sample_1, R.drawable.sample_3,
-            R.drawable.sample_6, R.drawable.sample_2,
-            R.drawable.sample_1, R.drawable.sample_4,
-            R.drawable.sample_1, R.drawable.sample_4,
-            R.drawable.sample_1, R.drawable.sample_4,
-    };
 }
