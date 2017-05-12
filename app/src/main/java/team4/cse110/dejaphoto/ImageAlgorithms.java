@@ -3,9 +3,12 @@
  */
 
 package team4.cse110.dejaphoto;
+
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.media.Image;
+
 
 public class ImageAlgorithms {
 
@@ -32,6 +35,13 @@ public class ImageAlgorithms {
 
     //gets called for the next image
     public Image nextImage(){
+
+        //TODO if there are no photos in the DejaPhoto album, display a default photo
+        if(true){
+            //esources res = getResources();
+            Image returnImage = R.drawable.default;
+        }
+
         if(imageIndex == 0){
             //TODO update DJV boolean
             if(DJV == true){
