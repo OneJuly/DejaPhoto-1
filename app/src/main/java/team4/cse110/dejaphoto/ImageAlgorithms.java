@@ -8,23 +8,22 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 
 
 public class ImageAlgorithms {
 
     ///////////////
     boolean DJV = true;
-    Image returnImage;
-    public Image DJV_algorithm(){
+    Bitmap returnImage;
+    public Bitmap DJV_algorithm(){
         return returnImage;}
-    public Image random_algorithm(){
+    public Bitmap random_algorithm(){
         return returnImage;}
     //////////////
 
     private Context context;
     private int imageIndex;
-    Image[] previousImages = new Image[11];
+    Bitmap[] previousImages = new Bitmap[11];
 
     public ImageAlgorithms(Context context){
         this.context = context;
@@ -35,7 +34,7 @@ public class ImageAlgorithms {
     SharedPreferences sp = context.getSharedPreferences("Settings",0);
 
     //gets called for the next image
-    public Image nextImage(){
+    public Bitmap nextImage(){
 
         //TODO if there are no photos in the DejaPhoto album, display a default photo
         if(true){
@@ -80,7 +79,7 @@ public class ImageAlgorithms {
     }
 
     //gets called for the previous image
-    public Image previousImage(){
+    public Bitmap previousImage(){
         //goes back a maximum of 10 images
         if(imageIndex == 10) {
             return null;
