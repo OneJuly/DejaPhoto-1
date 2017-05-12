@@ -18,7 +18,7 @@ public class Photo {
     int dayTime;
     int weekday;
     int location;
-    int karma;
+    boolean karma;
     //////////
 
     private Context context;
@@ -30,7 +30,7 @@ public class Photo {
         dayTime = 0;
         weekday = 0;
         location = 0;
-        karma = 0;
+        karma = false;
         weight = 0;
     }
 
@@ -45,10 +45,6 @@ public class Photo {
     }
 
     private boolean is_location() {
-        return false;
-    }
-
-    private boolean has_karma() {
         return false;
     }
 
@@ -93,10 +89,9 @@ public class Photo {
         if(is_location()) {
             weight += 100;
         }
-        if(has_karma()) {
-            weight += 100;
+        if(karma) {
+            weight += 200;
         }
-
         weight += recentlyTakenWeight();
         }
     }
