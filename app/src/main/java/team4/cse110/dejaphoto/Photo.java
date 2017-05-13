@@ -91,8 +91,11 @@ public class Photo {
         return returnImage;
     }
 
-    public int getTime(){
-        return 0;
+    public long getTime(){
+        //give the time that the photo was taken in millideconds since jan 1st, 1970
+        String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
+        time = Long.parseLong(dateTaken);
+        return time;
     }
 
     //TODO FINISH METHOD
