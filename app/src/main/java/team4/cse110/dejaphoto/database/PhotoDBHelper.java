@@ -12,7 +12,7 @@ import team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 public class PhotoDBHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
-    private static final String DATABASE_NAME = "dejaPhotoDatabase.db";
+    public static final String DATABASE_NAME = "dejaPhotoDatabase.db";
 
     public PhotoDBHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
@@ -24,13 +24,12 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + PhotoTable.NAME + "(" +
                 "_id integer primary key autoIncrement, " +
                 PhotoTable.Cols.UUID + ", " +
-//                PhotoTable.Cols.DATE+ ", " +
                 PhotoTable.Cols.PATH+ ", " +
                 PhotoTable.Cols.LAT+ ", " +
                 PhotoTable.Cols.LON + ", " +
-                PhotoTable.Cols.KARMA+ ", " +
-                PhotoTable.Cols.ACTIVE + ", " +
-                PhotoTable.Cols.WEIGHT + ")"
+                PhotoTable.Cols.KARMA + ", " +
+                PhotoTable.Cols.WEIGHT + ", " +
+                PhotoTable.Cols.ACTIVE + ")"
         );
     }
 

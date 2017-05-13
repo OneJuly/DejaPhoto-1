@@ -24,7 +24,7 @@ public class PhotoUtilities {
 
     private Context mContext;
     private File mAlbum;
-    private SQLiteDatabase mDatabase;
+    SQLiteDatabase mDatabase;
 
     private PhotoUtilities(Context context) {
         mContext = context.getApplicationContext();
@@ -50,6 +50,7 @@ public class PhotoUtilities {
     /**
      * Returns a List containing all the current Photo objects.
      *
+     //    private static final String DB_NAME = "";
      * @return the list of all photos
      */
     public List<Photo> getPhotos() {
@@ -180,20 +181,16 @@ public class PhotoUtilities {
         for (int i = 0; i < numPhotos; i++) {
             cursor.moveToPosition(i);
             int pathColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            int latColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.LATITUDE);
-            int lonColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.LONGITUDE);
+//            int latColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.LATITUDE);
+//            int lonColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.LONGITUDE);
 
             // init photo to add to the database
             arrPath[i]= cursor.getString(pathColumnIndex);
-//            arrLat[i] = cursor.getString(latColumnIndex);
-//            arrLon[i] = cursor.getString(lonColumnIndex);
 
             Photo photo = new Photo(mContext, arrPath[i]);
             photo.setActive(1);
             photo.setKarma(0);
             photo.setWeight(1);
-//            photo.setLat(arrLat[i]);
-//            photo.setLon(arrLon[i]);
 
             /* insert photo into db */
             addPhoto(photo);

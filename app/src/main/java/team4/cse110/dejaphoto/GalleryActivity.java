@@ -11,12 +11,11 @@ import android.util.Log;
 import java.io.File;
 import java.util.List;
 
-import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable.NAME;
+import team4.cse110.dejaphoto.database.PhotoDBHelper;
 
 public class GalleryActivity extends AppCompatActivity {
 
     private static final String TAG = "GalleryActivity";
-//    private static final String DB_NAME = "";
 
     private static final int GRID_SPAN = 3; // number of columns for ImageViews
 
@@ -37,7 +36,7 @@ public class GalleryActivity extends AppCompatActivity {
         RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
 
         /* Initialize database if necessary */
-        if (!getDatabasePath(NAME).exists()) {
+        if (!getDatabasePath(PhotoDBHelper.DATABASE_NAME).exists()) {
             Log.v(TAG, "Initializing DB!\n");
             PhotoUtilities.getInstance(this).initFromCameraRoll();
         }
