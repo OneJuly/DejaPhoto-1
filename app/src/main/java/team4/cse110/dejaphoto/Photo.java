@@ -57,7 +57,7 @@ public class Photo {
         weekday = "";
         location = null;
         karma = false;
-        recentlyShown = 0;
+        recentlyShown = 1;
         weight = 0;
     }
 
@@ -70,6 +70,7 @@ public class Photo {
         weekday = getWeekday();
         location = getLocation();
         karma = false;
+        recentlyShown = 1;
         weight = calcWeight();
     }
 
@@ -155,7 +156,7 @@ public class Photo {
 
     //assigns member variable to keep track of how recently the photo has been shown
     public void mostRecent(){
-        recentlyShown = 12;
+        recentlyShown = 11;
     }
 
     public void lessRecent(){
@@ -229,7 +230,7 @@ public class Photo {
         //TODO factor in whether the picture was taken recently or not
 
         //sets the most recent photo's weight to zero
-        if(recentlyShown == 12){
+        if(recentlyShown == 11){
             return 0;
         }
         //adjusts for the weight of the photo based on whether it was recently shown
