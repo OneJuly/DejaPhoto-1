@@ -1,5 +1,5 @@
 /**
- * Created by Sam Wang on 5/11/2017.
+ * Created by Alisa & Sam on 5/11/2017.
  */
 
 //https://github.com/drewnoakes/metadata-extractor
@@ -7,56 +7,77 @@
 //http://stackoverflow.com/questions/5175728/how-to-get-the-current-date-time-in-java
 
 package team4.cse110.dejaphoto;
-
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.ExifInterface;
+import java.text.ParseException;
+import java.util.Date;
+import java.text.SimpleDateFormat;
+
+//TODO notes:
+//convert from path string into bitmap
+//check to see if weight member variable is needed
 
 public class Photo {
 
+    //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
+
     //TODO replace member variables with their appropriate types
+    //Class member variables
     private Context context;
     private String path;
-/*    private Bitmap returnImage;
+    private Bitmap returnImage;
     private int dayTime;
     private String weekday;
     private int location;
-    private boolean karma;*/
-    //private int weight;
-    //////////
+    private boolean karma;
+    private int weight;
 
-//    ExifInterface exifInterface;
-/*    private String timeFormat;
+    //TODO clean extra member variables for methods
+    ExifInterface exifInterface;
+    private String timeFormat;
     private String weekdayFormat;
     private Date d;
-    private String time;*/
+    private String time;
 
-    //constructor for the photo class
+    //Default constructor for the photo class
     public Photo(Context context){
         this.context = context;
-/*        returnImage = null;
+        returnImage = null;
         path = null;
         dayTime = 0;
         weekday = "";
         location = 0;
-        karma = false;*/
-        //weight = 0;
+        karma = false;
+        weight = 0;
     }
 
+    //Constructor for the photo class. Used by PhotoUtils class.
     public Photo (Context context, String path){
         this.context = context;
         this.path = path;
-/*        returnImage = null;
+        returnImage = getImage();
         dayTime = getTime();
         weekday = getWeekday();
         location = getLocation();
-        karma = false;*/
-        //weight = calcWeight();
+        karma = false;
+        weight = calcWeight();
     }
 
+    //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
+
+    //path should be set by the photo constructor (DONE)
     public String getPath(){
         return path;
     }
 
-/*    //TODO FINISH METHOD
+    //TODO implement functionality
+    //returns a Bitmap from the "path" member variable
+    public Bitmap getImage(){
+        return returnImage;
+    }
+
+    //TODO FINISH METHOD
     public int getTime(){
 
         //TODO use this.returnImage???
@@ -103,16 +124,18 @@ public class Photo {
         this.karma = true;
     }
 
+    //////////////////// METHODS TO DETERMINE PHOTO WEIGHT ////////////////////
+
     //TODO replace instances of "false" with calculations
-    private boolean is_dayTime() {
+    private boolean same_dayTime() {
         return false;
     }
 
-    private boolean is_weekday() {
+    private boolean same_weekday() {
         return false;
     }
 
-    private boolean is_location() {
+    private boolean same_location() {
         return false;
     }
 
@@ -142,18 +165,22 @@ public class Photo {
         else return 0;
     }
 
-    //method to calcualte the overall weight of the photo
+    public boolean hasKarma(){
+        if(karma){ return true; }
+        else{ return false; }
+    }
+
+    //method to calculate the overall weight of the photo
     public int calcWeight(){
-        //TODO check whether the time of day is within an hour of the time the pic was taken
         int weight = 300;
 
-        if(is_dayTime()) {
+        if(same_dayTime()) {
             weight += 100;
         }
-        if(is_weekday()) {
+        if(same_weekday()) {
             weight += 100;
         }
-        if(is_location()) {
+        if(same_location()) {
             weight += 100;
         }
         if(karma) {
@@ -161,6 +188,8 @@ public class Photo {
         }
         weight += recentlyTakenWeight();
 
+        //TODO factor in whether the picture was taken recently or not
+
         return weight;
-    }*/
+    }
 }

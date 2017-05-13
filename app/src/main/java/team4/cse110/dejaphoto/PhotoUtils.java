@@ -1,14 +1,13 @@
-package team4.cse110.dejaphoto;
+/**
+ * Created by Sean on 5/12/2017.
+ */
 
+package team4.cse110.dejaphoto;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
 
 import java.util.ArrayList;
-
-/**
- * Created by Sean on 5/12/2017.
- */
 
 class PhotoUtils {
 
@@ -57,8 +56,9 @@ class PhotoUtils {
 
         }
         return  photoPaths;
-
     }
 
-
+    public void releasePhoto(){
+        //TODO implement functionality
+    }
 }

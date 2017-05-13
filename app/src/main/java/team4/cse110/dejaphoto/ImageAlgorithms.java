@@ -9,26 +9,43 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.util.ArrayList;
+
+//TODO notes:
+//CHECK IF PHOTO UTILS CLASS INITIALIZES THE BITMAP FOR EACH PHOTO
+//on return, convert return value to a bitmap?
+//make the bitmap array an array of URI's?
+
 public class ImageAlgorithms {
 
-    //TODO replace variables with appropriate types and initialize values
-    Bitmap returnImage;
-    //////////
+    //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
 
     private Context context;
     private int imageIndex;
-    Bitmap[] previousImages = new Bitmap[11];
+    //TODO make previousImages an array of Photo class objects
+    Bitmap[] previousImages;
+    Bitmap returnImage;
+    PhotoUtils photoUtils;
+    ArrayList<Photo> photoAlbum;
 
     public ImageAlgorithms(Context context){
         this.context = context;
         imageIndex = 0;
+        previousImages = new Bitmap[11];
+        Bitmap returnImage = null;
+        photoUtils = new PhotoUtils(context);
+        photoAlbum = photoUtils.getCameraPhotos();
     }
+
+    //////////////////// HELPER METHODS ////////////////////
 
     //TODO get a DejaVuEnabled (or something) boolean out of sp for whether DejaVu Mode is enabled
     private boolean is_DJV_Enabled(){
         SharedPreferences sp = context.getSharedPreferences("Settings",0);
         return false;
     }
+
+    //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
 
     //TODO implement algorithm
     public Bitmap DJV_algorithm(){
@@ -53,10 +70,11 @@ public class ImageAlgorithms {
         return returnImage;
     }
 
+    //////////////////// BUTTON FUNCTIONALITY ////////////////////
+
     //gets called for the next image
     public Bitmap nextImage(){
-        //TODO if there are no photos in the DejaPhoto album
-        if(true){
+        if(photoAlbum.isEmpty()){
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.defaultimage);
             return icon;
@@ -110,5 +128,15 @@ public class ImageAlgorithms {
             imageIndex += 1;
             return previousImages[imageIndex];
         }
+    }
+
+    //TODO implement functionality
+    public void giveKarma(){
+
+    }
+
+    //TODO implement functionality
+    public void releasePhoto(){
+
     }
 }
