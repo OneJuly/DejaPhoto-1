@@ -14,6 +14,10 @@ class PhotoUtils {
 
     private Context context;
 
+    /**
+     *
+     * @param context
+     */
     PhotoUtils(Context context) {
         this.context = context;
     }
