@@ -3,18 +3,16 @@
  */
 
 package team4.cse110.dejaphoto;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import java.util.ArrayList;
 
 //TODO notes:
-//CHECK IF PHOTO UTILS CLASS INITIALIZES THE BITMAP FOR EACH PHOTO
-//on return, convert return value to a bitmap?
 //make the bitmap array an array of URI's?
+//account for recently shown photos (weight) in the DJV/Random methods or in the photo class?
+//create member variables having to do with current time/day/location?
 
 public class ImageAlgorithms {
 
@@ -22,17 +20,16 @@ public class ImageAlgorithms {
 
     private Context context;
     private int imageIndex;
-    //TODO make previousImages an array of Photo class objects
-    Bitmap[] previousImages;
-    Bitmap returnImage;
+    Photo[] previousImages;
+    Photo returnImage;
     PhotoUtils photoUtils;
     ArrayList<Photo> photoAlbum;
 
     public ImageAlgorithms(Context context){
         this.context = context;
         imageIndex = 0;
-        previousImages = new Bitmap[11];
-        Bitmap returnImage = null;
+        previousImages = new Photo[11];
+        Photo returnImage = null;
         photoUtils = new PhotoUtils(context);
         photoAlbum = photoUtils.getCameraPhotos();
     }
@@ -40,6 +37,7 @@ public class ImageAlgorithms {
     //////////////////// HELPER METHODS ////////////////////
 
     //TODO get a DejaVuEnabled (or something) boolean out of sp for whether DejaVu Mode is enabled
+    //http://stackoverflow.com/questions/6737283/weighted-randomness-in-java
     private boolean is_DJV_Enabled(){
         SharedPreferences sp = context.getSharedPreferences("Settings",0);
         return false;
@@ -47,27 +45,36 @@ public class ImageAlgorithms {
 
     //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
 
-    //TODO implement algorithm
-    public Bitmap DJV_algorithm(){
+    //randomly selects next photo based on weight
+    public Photo DJV_algorithm(){
 
-        //for each photo in the DejaVu photo album, update all of their weights.
-        //for each photo in the DejaVu
-
-
-        int weightSum = 0;
-        for(int index = 0; index < 1; ++index/*each photo in the album*/) {
-            for (int i = 0; i < weightSum; ++i) {
-                weightSum += 0;
+        //get the total weight
+        double totalWeight = 0.0d;
+        for(Photo photo : photoAlbum){
+            totalWeight += photo.calcWeight();
+        }
+        //choose a random photo
+        int randomIndex = -1;
+        double random = Math.random() * totalWeight;
+        for(int i = 0; i < photoAlbum.size(); ++i){
+            //TODO change this to photoAlbum.get(i).getWeight()
+            //TODO and have the calcWeight function set the photo's weight field
+            random -= photoAlbum.get(i).calcWeight();
+            if(random < 0.0d){
+                randomIndex = i;
+                break;
             }
         }
-
-        return returnImage;
+        //returns a Photo object
+        return photoAlbum.get(randomIndex);
     }
 
-    //TODO implement algorithm
-    public Bitmap random_algorithm(){
+    //randomly selects next photo
+    public Photo random_algorithm(){
 
-        return returnImage;
+        double random = Math.random() * (photoAlbum.size()+1);
+        int randomIndex = (int) random;
+        return photoAlbum.get(randomIndex);
     }
 
     //////////////////// BUTTON FUNCTIONALITY ////////////////////
@@ -91,7 +98,7 @@ public class ImageAlgorithms {
                 }
                 //updates image array and returns a new image
                 previousImages[0] = returnImage;
-                return returnImage;
+                return returnImage.getImage();
             }
             else{
                 returnImage = random_algorithm();
@@ -103,13 +110,13 @@ public class ImageAlgorithms {
                 }
                 //updates image array and rturns a new image
                 previousImages[0] = returnImage;
-                return returnImage;
+                return returnImage.getImage();
             }
         }
         //updates the imageIndex to point to the next image and returns that image
         else{
             imageIndex -= 1;
-            return previousImages[imageIndex];
+            return previousImages[imageIndex].getImage();
         }
     }
 
@@ -126,17 +133,26 @@ public class ImageAlgorithms {
         //returns the previous image (if there is one)
         else{
             imageIndex += 1;
-            return previousImages[imageIndex];
+            return previousImages[imageIndex].getImage();
         }
     }
 
-    //TODO implement functionality
+    //TODO make sure previousImages[imageIndex].giveKarma() works as expected
     public void giveKarma(){
-
+        previousImages[imageIndex].giveKarma();
     }
 
-    //TODO implement functionality
-    public void releasePhoto(){
-
+    //TODO make sure photoUtils.releasePhoto() works as expected
+    public Bitmap releasePhoto(){
+        photoUtils.releasePhoto();
+        previousImages[imageIndex] = null;
+        //adjusts the Photo array
+        for(int index = imageIndex; index < 10; ++index){
+            while(previousImages[imageIndex+1] != null){
+                previousImages[index] = previousImages[index+1];
+            }
+        }
+        //returns the bitmap of the next image
+        return nextImage();
     }
 }

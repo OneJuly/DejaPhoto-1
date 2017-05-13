@@ -5,11 +5,16 @@
 //https://github.com/drewnoakes/metadata-extractor
 //http://stackoverflow.com/questions/28502206/format-time-and-date-which-is-get-from-exifinterface-tag-datetime
 //http://stackoverflow.com/questions/5175728/how-to-get-the-current-date-time-in-java
+//http://stackoverflow.com/questions/17983865/making-a-location-object-in-android-with-latitude-and-longitude-valuesgit
 
 package team4.cse110.dejaphoto;
 import android.content.Context;
 import android.graphics.Bitmap;
+//import android.icu.text.SimpleDateFormat;
+import android.location.Location;
 import android.media.ExifInterface;
+
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -29,16 +34,19 @@ public class Photo {
     private Bitmap returnImage;
     private int dayTime;
     private String weekday;
-    private int location;
+    private Location location;
     private boolean karma;
     private int weight;
 
     //TODO clean extra member variables for methods
-    ExifInterface exifInterface;
+    private ExifInterface exifInterface;
     private String timeFormat;
     private String weekdayFormat;
     private Date d;
     private String time;
+    private String lat;
+    private String lon;
+    //private String locationStr;
 
     //Default constructor for the photo class
     public Photo(Context context){
@@ -47,7 +55,7 @@ public class Photo {
         path = null;
         dayTime = 0;
         weekday = "";
-        location = 0;
+        location = null;
         karma = false;
         weight = 0;
     }
@@ -81,8 +89,13 @@ public class Photo {
     public int getTime(){
 
         //TODO use this.returnImage???
-
-        time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
+        try {
+            exifInterface = new ExifInterface(path);
+            time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
+        }
+        catch (IOException f){
+            f.printStackTrace();
+        }
         SimpleDateFormat timeF = new SimpleDateFormat("HH");
         try {
             d = timeF.parse(time);
@@ -98,8 +111,13 @@ public class Photo {
     public String getWeekday() {
 
         //TODO use this.returnImage???
-
-        weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+        try {
+            exifInterface = new ExifInterface(path);
+            weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+        }
+        catch(IOException f){
+            f.printStackTrace();
+        }
         SimpleDateFormat weekdayF = new SimpleDateFormat("EEE");
         try {
             d = weekdayF.parse(weekday);
@@ -112,11 +130,21 @@ public class Photo {
     }
 
     //TODO FINISH METHOD
-    public int getLocation(){
+    public Location getLocation(){
 
         //TODO use this.returnImage???
-
-        return 0;
+        try {
+            exifInterface = new ExifInterface(path);
+            lat = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+            lon = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+        }
+        catch(IOException f){
+            f.printStackTrace();
+        }
+        Location location = new Location("");//provider name is unnecessary
+        location.setLatitude(Double.parseDouble(lat));//your coords of course
+        location.setLongitude(Double.parseDouble(lon));
+        return location;
     }
 
     //Give karma to a photo
