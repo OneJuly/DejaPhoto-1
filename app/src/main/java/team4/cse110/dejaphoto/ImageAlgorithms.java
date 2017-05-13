@@ -5,9 +5,7 @@
 package team4.cse110.dejaphoto;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.preference.PreferenceManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -25,10 +23,11 @@ public class ImageAlgorithms {
 
     private Context context;
     private int imageIndex;
-    Photo[] previousImages;
-    Photo returnImage;
-    PhotoUtils photoUtils;
-    ArrayList<Photo> photoAlbum;
+    private Photo[] previousImages;
+    private Photo returnImage;
+    private PhotoUtils photoUtils;
+    private PrefUtils prefUtils;
+    private ArrayList<Photo> photoAlbum;
 
     public ImageAlgorithms(Context context){
         this.context = context;
@@ -36,34 +35,36 @@ public class ImageAlgorithms {
         previousImages = new Photo[11];
         Photo returnImage = null;
         photoUtils = new PhotoUtils(context);
+        //TODO do i need this?-------------
+        prefUtils = new PrefUtils();
         photoAlbum = photoUtils.getCameraPhotos();
     }
 
     //////////////////// HELPER METHODS ////////////////////
 
-    //TODO get a DejaVuEnabled (or something) boolean out of sp for whether DejaVu Mode is enabled
-    //http://stackoverflow.com/questions/6737283/weighted-randomness-in-java
-    private boolean is_DJV_Enabled(){
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-        return false;
+    private boolean is_DJV_Enabled() {
+        //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefUtils.dejaVuEnabled(context);
     }
 
-    public void getCurrentDate(){
+    public Date getCurrentDate(){
+
+    //TODO---------------------
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-
-
+        return date = new Date();
     }
 
     //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
 
     //randomly selects next photo based on weight
-    public Photo DJV_algorithm(){
+    //http://stackoverflow.com/questions/6737283/weighted-randomness-in-java
+    private Photo DJV_algorithm(){
 
         //get the total weight
         double totalWeight = 0.0d;
         for(Photo photo : photoAlbum){
-            totalWeight += photo.calcWeight();
+            totalWeight += photo.calcWeight(Date date);
         }
         //choose a random photo
         int randomIndex = -1;
@@ -80,7 +81,7 @@ public class ImageAlgorithms {
     }
 
     //randomly selects next photo
-    public Photo random_algorithm(){
+    private Photo random_algorithm(){
 
         double random = Math.random() * (photoAlbum.size());
         int randomIndex = (int) random;
@@ -90,10 +91,10 @@ public class ImageAlgorithms {
     //////////////////// BUTTON FUNCTIONALITY ////////////////////
 
     //gets called for the next image
-    public Bitmap nextImage() {
+    private Bitmap nextImage() {
         if (photoAlbum.isEmpty()) {
             //Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-            //        R.drawable.defaultimage);
+            //        R.drawable.defaultImage);
             return null;
         }
         if (photoAlbum.size() == 1){
@@ -102,7 +103,7 @@ public class ImageAlgorithms {
         }
         //if the user is on the most recent picture (more "next" than "previous" presses)
         if(imageIndex == 0){
-            if(is_DJV_Enabled() == true){
+            if(is_DJV_Enabled()){
                 returnImage = DJV_algorithm();
                 //for indexes with images, copies images in array starting with [9]->[10]
                 for(int index = 9; index >-1; --index){
@@ -161,7 +162,7 @@ public class ImageAlgorithms {
     }
 
     //TODO make sure photoUtils.releasePhoto() works as expected
-    public Bitmap releasePhoto(){
+    public Bitmap releasePhotoThroughWidget(){
         photoUtils.releasePhoto();
         previousImages[imageIndex] = null;
         //adjusts the Photo array
@@ -172,5 +173,9 @@ public class ImageAlgorithms {
         }
         //returns the bitmap of the next image
         return nextImage();
+    }
+
+    public void releasePhotoThroughGallery(){
+        photoUtils.releasePhoto();
     }
 }

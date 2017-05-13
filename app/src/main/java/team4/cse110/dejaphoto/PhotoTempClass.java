@@ -8,17 +8,15 @@
 //http://stackoverflow.com/questions/17983865/making-a-location-object-in-android-with-latitude-and-longitude-valuesgit
 
 package team4.cse110.dejaphoto;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.media.ExifInterface;
-import android.provider.MediaStore;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 //TODO notes:
 //convert from path string into bitmap
@@ -33,9 +31,8 @@ public class Photo {
     private Context context;
     private String path;
     private Bitmap returnImage;
-    private long time;
-    private int dayTime;
-    private int dayOfWeek;
+    private double dayTime;
+    private String weekday;
     private Location location;
     private boolean karma;
     private double recentlyShown;
@@ -46,6 +43,7 @@ public class Photo {
     private String timeFormat;
     private String weekdayFormat;
     private Date d;
+    private String time;
     private String lat;
     private String lon;
     //private String locationStr;
@@ -55,9 +53,8 @@ public class Photo {
         this.context = context;
         returnImage = null;
         path = null;
-        time = 0;
         dayTime = 0;
-        dayOfWeek = 0;
+        weekday = "";
         location = null;
         karma = false;
         recentlyShown = 1;
@@ -69,9 +66,8 @@ public class Photo {
         this.context = context;
         this.path = path;
         returnImage = getImage();
-        time = getTime();
-        dayTime = getHour();
-        dayOfWeek = getWeekday();
+        dayTime = getTime();
+        weekday = getWeekday();
         location = getLocation();
         karma = false;
         recentlyShown = 1;
@@ -91,79 +87,48 @@ public class Photo {
         return returnImage;
     }
 
-    public int getTime(){
-        return 0;
-    }
-
     //TODO FINISH METHOD
-    public int getHour(){
+    public double getTime(){
 
-          String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
-
-//        //TODO use this.returnImage???
-//        try {
-//            exifInterface = new ExifInterface(path);
-//            time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
-//        }
-//        catch (IOException f){
-//            f.printStackTrace();
-//        }
-        SimpleDateFormat time = new SimpleDateFormat("HH");
+        //TODO use this.returnImage???
         try {
-            d = time.parse(dateTaken);
+            exifInterface = new ExifInterface(path);
+            time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
+        }
+        catch (IOException f){
+            f.printStackTrace();
+        }
+        SimpleDateFormat timeF = new SimpleDateFormat("HH");
+        try {
+            d = timeF.parse(time);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             return 0;
         }
-        timeFormat = time.format(d);
-        dayTime = Integer.parseInt(timeFormat);
+        timeFormat = timeF.format(d);
         return dayTime;
     }
 
     //TODO FINISH METHOD
-    public int getWeekday() {
+    public String getWeekday() {
 
-        String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
         //TODO use this.returnImage???
-//        try {
-//            exifInterface = new ExifInterface(path);
-//            weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-//        }
-//        catch(IOException f){
-//            f.printStackTrace();
-//        }
-        SimpleDateFormat weekday = new SimpleDateFormat("EEE");
         try {
-            d = weekday.parse(dateTaken);
+            exifInterface = new ExifInterface(path);
+            weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+        }
+        catch(IOException f){
+            f.printStackTrace();
+        }
+        SimpleDateFormat weekdayF = new SimpleDateFormat("EEE");
+        try {
+            d = weekdayF.parse(weekday);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
-            return 0;
+            return "";
         }
-        weekdayFormat = weekday.format(d);
-        switch (weekdayFormat) {
-            case "SUN":
-                dayOfWeek = 0;
-                break;
-            case "MON":
-                dayOfWeek = 1;
-                break;
-            case "TUE":
-                dayOfWeek = 2;
-                break;
-            case "WED":
-                dayOfWeek = 3;
-                break;
-            case "THU":
-                dayOfWeek = 4;
-                break;
-            case "FRI":
-                dayOfWeek = 5;
-                break;
-            case "SAT":
-                dayOfWeek = 6;
-                break;
-        }
-        return dayOfWeek;
+        weekdayFormat = weekdayF.format(d);
+        return weekdayFormat;
     }
 
     //TODO FINISH METHOD
@@ -205,11 +170,16 @@ public class Photo {
     //////////////////// METHODS TO DETERMINE PHOTO WEIGHT ////////////////////
 
     //TODO replace instances of "false" with calculations
-    private boolean same_dayTime() {
+    private boolean same_dayTime(Date date) {
+        long currentTime = date.getTime();
+        long photoTime =
+
+
         return false;
+
     }
 
-    private boolean same_weekday() {
+    private boolean same_weekday(Date date) {
         return false;
     }
 
@@ -217,27 +187,27 @@ public class Photo {
         return false;
     }
 
-    private boolean within_a_week() {
+    private boolean within_a_week(Date date) {
         return false;
     }
 
-    private boolean within_a_month() {
+    private boolean within_a_month(Date date) {
         return false;
     }
 
-    private boolean within_a_year() {
+    private boolean within_a_year(Date date) {
         return false;
     }
 
     //method to return a weight for the image based on how recently the photo was taken
-    public double recentlyTakenWeight() {
-        if(within_a_week()) {
+    public double recentlyTakenWeight(Date date) {
+        if(within_a_week(date)) {
             return 200;
         }
-        if(within_a_month()) {
+        if(within_a_month(date)) {
             return 100;
         }
-        if(within_a_year()) {
+        if(within_a_year(date)) {
             return 50;
         }
         else return 0;
@@ -249,13 +219,13 @@ public class Photo {
     }
 
     //method to calculate the overall weight of the photo
-    public double calcWeight(){
+    public double calcWeight(Date date){
         double weight = 300;
 
-        if(same_dayTime()) {
+        if(same_dayTime(date)) {
             weight += 100;
         }
-        if(same_weekday()) {
+        if(same_weekday(date)) {
             weight += 100;
         }
         if(same_location()) {
@@ -264,7 +234,7 @@ public class Photo {
         if(karma) {
             weight += 200;
         }
-        weight += recentlyTakenWeight();
+        weight += recentlyTakenWeight(date);
 
         //TODO factor in whether the picture was taken recently or not
 
