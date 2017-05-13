@@ -6,6 +6,7 @@ package team4.cse110.dejaphoto;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Location;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -55,6 +56,10 @@ public class ImageAlgorithms {
         return date = new Date();
     }
 
+    public Location getCurrentLocation(){
+        return null;
+    }
+
     //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
 
     //randomly selects next photo based on weight
@@ -64,7 +69,7 @@ public class ImageAlgorithms {
         //get the total weight
         double totalWeight = 0.0d;
         for(Photo photo : photoAlbum){
-            totalWeight += photo.calcWeight(Date date);
+            totalWeight += photo.calcWeight(getCurrentDate(), getCurrentLocation());
         }
         //choose a random photo
         int randomIndex = -1;

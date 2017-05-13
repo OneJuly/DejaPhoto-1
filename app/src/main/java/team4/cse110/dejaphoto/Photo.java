@@ -71,7 +71,7 @@ public class Photo {
         location = getLocation();
         karma = false;
         recentlyShown = 1;
-        weight = calcWeight();
+        weight = 300;
     }
 
     //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
@@ -207,17 +207,17 @@ public class Photo {
     //////////////////// METHODS TO DETERMINE PHOTO WEIGHT ////////////////////
 
     //TODO replace instances of "false" with calculations
-    private boolean same_dayTime() {
+    private boolean same_dayTime(Date date) {
         return false;
     }
 
-    private boolean same_weekday() {
+    private boolean same_weekday(Date date) {
         return false;
     }
 
     private boolean same_location(Location location) {
-        float distanceInMeters =  this.getLocation().distanceTo(location);
-        if (distanceInMeters > 500 ){
+        float distanceInMeters =  this.location.distanceTo(location);
+        if (distanceInMeters < 150 ){
             return true;
         }
         else{
@@ -225,27 +225,27 @@ public class Photo {
         }
     }
 
-    private boolean within_a_week() {
+    private boolean within_a_week(Date date) {
         return false;
     }
 
-    private boolean within_a_month() {
+    private boolean within_a_month(Date date) {
         return false;
     }
 
-    private boolean within_a_year() {
+    private boolean within_a_year(Date date) {
         return false;
     }
 
     //method to return a weight for the image based on how recently the photo was taken
-    public double recentlyTakenWeight() {
-        if(within_a_week()) {
+    public double recentlyTakenWeight(Date date) {
+        if(within_a_week(date)) {
             return 200;
         }
-        if(within_a_month()) {
+        if(within_a_month(date)) {
             return 100;
         }
-        if(within_a_year()) {
+        if(within_a_year(date)) {
             return 50;
         }
         else return 0;
@@ -257,33 +257,31 @@ public class Photo {
     }
 
     //method to calculate the overall weight of the photo
-    public double calcWeight(){
+    public double calcWeight(Date date, Location location){
         double weight = 300;
 
-        if(same_dayTime()) {
+        if(same_dayTime(date)) {
             weight += 100;
         }
-        if(same_weekday()) {
+        if(same_weekday(date)) {
             weight += 100;
         }
-        if(same_location()) {
+        if(same_location(location)) {
             weight += 100;
         }
         if(karma) {
             weight += 200;
         }
-        weight += recentlyTakenWeight();
+        weight += recentlyTakenWeight(date);
 
-        //TODO factor in whether the picture was taken recently or not
-
-        //sets the most recent photo's weight to zero
+        //sets the most recent photo's weight to zero if is the most recent photo
         if(recentlyShown == 11){
             this.weight = 0;
             return 0;
         }
         //adjusts for the weight of the photo based on whether it was recently shown
         else{
-            this.weight = weight/recentlyShown;
+            this.weight = (weight/recentlyShown);
             return (weight/recentlyShown);
         }
     }
