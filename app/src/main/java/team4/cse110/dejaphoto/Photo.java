@@ -16,6 +16,7 @@ import java.util.Date;
 
 //TODO notes:
 //convert from path string into bitmap
+//check to see if weight member variable is needed
 
 public class Photo {
 
@@ -30,7 +31,7 @@ public class Photo {
     private String weekday;
     private int location;
     private boolean karma;
-    //private int weight;
+    private int weight;
 
     //TODO clean extra member variables for methods
     ExifInterface exifInterface;
@@ -48,7 +49,7 @@ public class Photo {
         weekday = "";
         location = 0;
         karma = false;
-        //weight = 0;
+        weight = 0;
     }
 
     //Constructor for the photo class. Used by PhotoUtils class.
@@ -60,7 +61,7 @@ public class Photo {
         weekday = getWeekday();
         location = getLocation();
         karma = false;
-        //weight = calcWeight();
+        weight = calcWeight();
     }
 
     //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
