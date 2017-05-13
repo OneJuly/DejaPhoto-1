@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity {
 
-    private static final int GRID_SPAN = 4;
+    private static final int GRID_SPAN = 3;
 
     private ArrayList<Photo> photos;
 
