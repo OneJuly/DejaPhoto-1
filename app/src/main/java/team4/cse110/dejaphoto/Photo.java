@@ -178,7 +178,7 @@ public class Photo {
         catch(IOException f){
             f.printStackTrace();
         }
-        Location location = new Location("");//provider name is unnecessary
+        location = new Location("");//provider name is unnecessary
         location.setLatitude(Double.parseDouble(lat));//your coords of course
         location.setLongitude(Double.parseDouble(lon));
         return location;
