@@ -13,19 +13,20 @@ import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
 import android.media.ExifInterface;
 
-import java.util.Date;
 import java.text.ParseException;
+import java.util.Date;
 
 public class Photo {
 
     //TODO replace member variables with their appropriate types
     private Context context;
-    Bitmap returnImage;
-    int dayTime;
-    String weekday;
-    int location;
-    boolean karma;
-    int weight;
+    private String path;
+    private Bitmap returnImage;
+    private int dayTime;
+    private String weekday;
+    private int location;
+    private boolean karma;
+    //private int weight;
     //////////
 
     ExifInterface exifInterface;
@@ -38,23 +39,31 @@ public class Photo {
     public Photo(Context context){
         this.context = context;
         returnImage = null;
+        path = null;
         dayTime = 0;
         weekday = "";
         location = 0;
         karma = false;
-        weight = 0;
+        //weight = 0;
     }
 
-    public Photo (Context context, Bitmap bitmap){
+    public Photo (Context context, String path){
         this.context = context;
-        returnImage = bitmap;
+        //TODO convert from string into bitmap
+        returnImage = null;
+        this.path = path;
         dayTime = getTime();
         weekday = getWeekday();
         location = getLocation();
         karma = false;
-        weight = calcWeight();
+        //weight = calcWeight();
     }
 
+    public String getPath(){
+        return path;
+    }
+
+    //TODO FINISH METHOD
     public int getTime(){
 
         //TODO use this.returnImage???
@@ -71,6 +80,7 @@ public class Photo {
         return dayTime;
     }
 
+    //TODO FINISH METHOD
     public String getWeekday() {
 
         //TODO use this.returnImage???
@@ -87,6 +97,7 @@ public class Photo {
         return weekdayFormat;
     }
 
+    //TODO FINISH METHOD
     public int getLocation(){
 
         //TODO use this.returnImage???
@@ -94,6 +105,7 @@ public class Photo {
         return 0;
     }
 
+    //Give karma to a photo
     public void giveKarma(){
         this.karma = true;
     }
@@ -122,7 +134,6 @@ public class Photo {
     private boolean within_a_year() {
         return false;
     }
-
 
     //method to return a weight for the image based on how recently the photo was taken
     public int recentlyTakenWeight() {

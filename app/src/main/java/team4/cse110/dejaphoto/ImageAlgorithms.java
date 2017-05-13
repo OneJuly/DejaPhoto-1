@@ -12,9 +12,8 @@ import android.graphics.BitmapFactory;
 public class ImageAlgorithms {
 
     //TODO replace variables with appropriate types and initialize values
-    boolean DJV = true;
     Bitmap returnImage;
-    //////////////
+    //////////
 
     private Context context;
     private int imageIndex;
@@ -26,7 +25,10 @@ public class ImageAlgorithms {
     }
 
     //TODO get a DejaVuEnabled (or something) boolean out of sp for whether DejaVu Mode is enabled
-    SharedPreferences sp = context.getSharedPreferences("Settings",0);
+    private boolean is_DJV_Enabled(){
+        SharedPreferences sp = context.getSharedPreferences("Settings",0);
+        return false;
+    }
 
     //TODO implement algorithm
     public Bitmap DJV_algorithm(){
@@ -48,16 +50,12 @@ public class ImageAlgorithms {
     //TODO implement algorithm
     public Bitmap random_algorithm(){
 
-
-
-
-
         return returnImage;
     }
 
     //gets called for the next image
     public Bitmap nextImage(){
-        //TODO if there are no photos in the DejaPhoto album, display a default photo
+        //TODO if there are no photos in the DejaPhoto album
         if(true){
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.defaultimage);
@@ -65,9 +63,7 @@ public class ImageAlgorithms {
         }
         //if the user is on the most recent picture (more "next" than "previous" presses)
         if(imageIndex == 0){
-            //TODO update DJV boolean
-            if(DJV == true){
-                //TODO update DJV_algorithm
+            if(is_DJV_Enabled() == true){
                 returnImage = DJV_algorithm();
                 //for indexes with images, copies images in array starting with [9]->[10]
                 for(int index = 9; index >-1; --index){
@@ -80,7 +76,6 @@ public class ImageAlgorithms {
                 return returnImage;
             }
             else{
-                //TODO update random_algorithm
                 returnImage = random_algorithm();
                 //for indexes with images, copies images in array starting with [9]->[10]
                 for(int index = 9; index > -1; --index){
