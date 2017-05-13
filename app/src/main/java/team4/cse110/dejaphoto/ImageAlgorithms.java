@@ -3,12 +3,16 @@
  */
 
 package team4.cse110.dejaphoto;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 
 //TODO notes:
@@ -44,6 +48,15 @@ public class ImageAlgorithms {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return false;
     }
+
+    public void getCurrentDate(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+
+
+    }
+
+
 
     //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
 
@@ -82,11 +95,15 @@ public class ImageAlgorithms {
     //////////////////// BUTTON FUNCTIONALITY ////////////////////
 
     //gets called for the next image
-    public Bitmap nextImage(){
-        if(photoAlbum.isEmpty()){
+    public Bitmap nextImage() {
+        if (photoAlbum.isEmpty()) {
             Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.defaultimage);
             return icon;
+        }
+        if (photoAlbum.size() == 1){
+            photoAlbum.get(0).mostRecent();
+            return photoAlbum.get(0).getImage();
         }
         //if the user is on the most recent picture (more "next" than "previous" presses)
         if(imageIndex == 0){
@@ -95,11 +112,13 @@ public class ImageAlgorithms {
                 //for indexes with images, copies images in array starting with [9]->[10]
                 for(int index = 9; index >-1; --index){
                     if(previousImages[index] != null) {
+                        previousImages[index].lessRecent();
                         previousImages[index + 1] = previousImages[index];
                     }
                 }
                 //updates image array and returns a new image
                 previousImages[0] = returnImage;
+                returnImage.mostRecent();
                 return returnImage.getImage();
             }
             else{
@@ -107,11 +126,13 @@ public class ImageAlgorithms {
                 //for indexes with images, copies images in array starting with [9]->[10]
                 for(int index = 9; index > -1; --index){
                     if(previousImages[index] != null){
+                        previousImages[index].lessRecent();
                         previousImages[index + 1] = previousImages[index];
                     }
                 }
                 //updates image array and rturns a new image
                 previousImages[0] = returnImage;
+                returnImage.mostRecent();
                 return returnImage.getImage();
             }
         }

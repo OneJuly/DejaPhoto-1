@@ -32,11 +32,12 @@ public class Photo {
     private Context context;
     private String path;
     private Bitmap returnImage;
-    private int dayTime;
+    private double dayTime;
     private String weekday;
     private Location location;
     private boolean karma;
-    private int weight;
+    private double recentlyShown;
+    private double weight;
 
     //TODO clean extra member variables for methods
     private ExifInterface exifInterface;
@@ -57,6 +58,7 @@ public class Photo {
         weekday = "";
         location = null;
         karma = false;
+        recentlyShown = 0;
         weight = 0;
     }
 
@@ -65,9 +67,9 @@ public class Photo {
         this.context = context;
         this.path = path;
         returnImage = getImage();
-//        dayTime = getTime();
-//        weekday = getWeekday();
-//        location = getLocation();
+        dayTime = getTime();
+        weekday = getWeekday();
+        location = getLocation();
         karma = false;
         weight = calcWeight();
     }
@@ -86,7 +88,7 @@ public class Photo {
     }
 
     //TODO FINISH METHOD
-    public int getTime(){
+    public double getTime(){
 
         //TODO use this.returnImage???
         try {
@@ -152,6 +154,15 @@ public class Photo {
         this.karma = true;
     }
 
+    //assigns member variable to keep track of how recently the photo has been shown
+    public void mostRecent(){
+        recentlyShown = 12;
+    }
+
+    public void lessRecent(){
+        recentlyShown -= 1;
+    }
+
     //////////////////// METHODS TO DETERMINE PHOTO WEIGHT ////////////////////
 
     //TODO replace instances of "false" with calculations
@@ -180,7 +191,7 @@ public class Photo {
     }
 
     //method to return a weight for the image based on how recently the photo was taken
-    public int recentlyTakenWeight() {
+    public double recentlyTakenWeight() {
         if(within_a_week()) {
             return 200;
         }
@@ -199,8 +210,8 @@ public class Photo {
     }
 
     //method to calculate the overall weight of the photo
-    public int calcWeight(){
-        int weight = 300;
+    public double calcWeight(){
+        weight = 300;
 
         if(same_dayTime()) {
             weight += 100;
@@ -218,6 +229,13 @@ public class Photo {
 
         //TODO factor in whether the picture was taken recently or not
 
-        return weight;
+        //sets the most recent photo's weight to zero
+        if(recentlyShown == 12){
+            return 0;
+        }
+        //adjusts for the weight of the photo based on whether it was recently shown
+        else{
+            return (weight/recentlyShown);
+        }
     }
 }
