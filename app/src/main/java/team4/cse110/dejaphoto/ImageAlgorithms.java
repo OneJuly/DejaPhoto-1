@@ -55,8 +55,6 @@ public class ImageAlgorithms {
 
     }
 
-
-
     //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
 
     //randomly selects next photo based on weight
@@ -146,11 +144,11 @@ public class ImageAlgorithms {
     public Bitmap previousImage(){
         //goes back a maximum of 10 images
         if(imageIndex == 10) {
-            return previousImages[10].getImage();
+            return null;
         }
         //if there is no image to go back to
         else if(previousImages[imageIndex+1] == null){
-            return previousImages[imageIndex].getImage();
+            return null;
         }
         //returns the previous image (if there is one)
         else{
