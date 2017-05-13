@@ -16,12 +16,14 @@ import java.util.List;
  * This is the adapter for the RecyclerView thumbnails in GalleryActivity.
  */
 
+
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
 
     private static final String TAG = "PhotoAdapter";
 
     private Context context;
     private List<Photo> photos;
+    private PhotoUtilities utils;
 
     public PhotoAdapter() {
     }
@@ -36,9 +38,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
         public ViewHolder(Context context, View itemView) {
             super(itemView);
+            this.context = context;
             photo = (ImageView) itemView.findViewById(R.id.gallery_photo);
             checkBox = (CheckBox) itemView.findViewById(R.id.gallery_checkbox);
-            this.context = context;
             itemView.setOnClickListener(this);
         }
 
@@ -48,22 +50,18 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             if (pos != RecyclerView.NO_POSITION) {
                 Photo photo = photos.get(pos);
                 photo.toggleActive();
-
-                /* Toggle checkbox */
-                if (checkBox.isChecked()) {
-                    checkBox.setChecked(false);
-                } else {
-                    checkBox.setChecked(true);
-                }
+                toggleCheckbox(checkBox);
             }
-
         }
+
     }
 
 
     public PhotoAdapter(Context context, List<Photo> photos) {
         this.context = context;
         this.photos = photos;
+        utils = PhotoUtilities.getInstance(context);
+
     }
 
     private Context getContext() {
@@ -90,6 +88,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         Photo photo = photos.get(position);
         ImageView imageView = holder.photo;
 
+        /* Get checkbox info */
+        if (photo.isActive()) {
+            holder.checkBox.setChecked(true);
+        }
+
+        /* Load the image */
         Glide
                 .with(context)
                 .load(photo.getPath())
@@ -103,6 +107,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         return photos.size();
     }
 
+    /* Toggle imageview checkbox */
+    private void toggleCheckbox(CheckBox cb) {
+        if (cb.isChecked()) {
+            cb.setChecked(false);
+        } else {
+            cb.setChecked(true);
+        }
+    }
 
 }
 

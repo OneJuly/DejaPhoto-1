@@ -11,9 +11,12 @@ import android.util.Log;
 import java.io.File;
 import java.util.List;
 
+import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable.NAME;
+
 public class GalleryActivity extends AppCompatActivity {
 
     private static final String TAG = "GalleryActivity";
+//    private static final String DB_NAME = "";
 
     private static final int GRID_SPAN = 3; // number of columns for ImageViews
 
@@ -33,20 +36,20 @@ public class GalleryActivity extends AppCompatActivity {
 
         RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
 
-        /* Initialize album if necessary */
-        if (!PrefUtils.isInit(this)) {
-            PhotoUtilities.getInstance(this, dejaAlbum).initFromCameraRoll();
-            PrefUtils.setInit(this, true);
+        /* Initialize database if necessary */
+        if (!getDatabasePath(NAME).exists()) {
+            Log.v(TAG, "Initializing DB!\n");
+            PhotoUtilities.getInstance(this).initFromCameraRoll();
         }
 
-
-        /* Get photos from the dejaAlbum */
-        photos = PhotoUtilities.getInstance(this, dejaAlbum).getPhotos();
+        /* Get active photos */
+        photos = PhotoUtilities.getInstance(this).getPhotos();
 
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
         rvPhotos.setAdapter(adapter);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
     }
+
 
     /* Get the external DejaPhoto album and create it if it doesn't exist */
     private File getDejaAlbumDir(String name) {

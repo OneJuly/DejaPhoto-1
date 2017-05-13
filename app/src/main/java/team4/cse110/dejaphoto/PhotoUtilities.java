@@ -26,10 +26,10 @@ public class PhotoUtilities {
     private File mAlbum;
     private SQLiteDatabase mDatabase;
 
-    private PhotoUtilities(Context context, File album) {
+    private PhotoUtilities(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new PhotoDBHelper(mContext).getWritableDatabase();
-        mAlbum = album;
+//        mAlbum = album;
     }
 
     /**
@@ -39,9 +39,9 @@ public class PhotoUtilities {
      * @param context the application context
      * @return a PhotoUtilities instance
      */
-    public static PhotoUtilities getInstance(Context context, File album) {
+    public static PhotoUtilities getInstance(Context context) {
         if (sPhotoUtilities == null) {
-            sPhotoUtilities = new PhotoUtilities(context, album);
+            sPhotoUtilities = new PhotoUtilities(context);
         }
 
         return sPhotoUtilities;
@@ -102,11 +102,16 @@ public class PhotoUtilities {
         ContentValues values = getContentValues(photo);
         mDatabase.insert(PhotoTable.NAME, null, values);
 
-        File original = new File(photo.getPath());
-        File added = new File(mAlbum.getAbsolutePath() + photo.getFileName());
-        original.renameTo(added);
+//        File original = new File(photo.getPath());
+//        File added = new File(mAlbum.getAbsolutePath() + photo.getFileName());
+//        original.renameTo(added);
     }
 
+    /**
+     * Update an existing database entry
+     *
+     * @param photo
+     */
     public void updatePhoto(Photo photo) {
         String uuidString = photo.getId().toString();
         ContentValues values = getContentValues(photo);
@@ -130,6 +135,7 @@ public class PhotoUtilities {
         values.put(PhotoTable.Cols.LON, photo.getLon());
         values.put(PhotoTable.Cols.KARMA, photo.hasKarma() ? 1 : 0);
         values.put(PhotoTable.Cols.WEIGHT, photo.getWeight());
+        values.put(PhotoTable.Cols.ACTIVE, photo.isActive() ? 1 : 0);
 
         return values;
     }
@@ -146,7 +152,8 @@ public class PhotoUtilities {
     }
 
 
-     public void initFromCameraRoll() {
+    /* Populate the database with all pictures in camera roll */
+    public void initFromCameraRoll() {
 
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
 
@@ -158,23 +165,38 @@ public class PhotoUtilities {
 
         final String orderDate = MediaStore.Images.Media.DATE_ADDED;
 
-        //Stores all the images from the gallery in Cursor
+        // get cursor over query
         Cursor cursor = mContext.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, selection, selectionArgs, orderDate);
 
-        //Total number of images
+        // number of camera images
         int numPhotos = cursor.getCount();
 
-        //Create an array to store path to all the images
+        // image paths
         String[] arrPath = new String[numPhotos];
+        String[] arrLat = new String[numPhotos];
+        String[] arrLon = new String[numPhotos];
 
         for (int i = 0; i < numPhotos; i++) {
             cursor.moveToPosition(i);
-            int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            int pathColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            int latColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.LATITUDE);
+            int lonColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.LONGITUDE);
 
-            // add photo to the database
-            arrPath[i]= cursor.getString(dataColumnIndex);
-            addPhoto(new Photo(mContext, arrPath[i]));
+            // init photo to add to the database
+            arrPath[i]= cursor.getString(pathColumnIndex);
+//            arrLat[i] = cursor.getString(latColumnIndex);
+//            arrLon[i] = cursor.getString(lonColumnIndex);
+
+            Photo photo = new Photo(mContext, arrPath[i]);
+            photo.setActive(1);
+            photo.setKarma(0);
+            photo.setWeight(1);
+//            photo.setLat(arrLat[i]);
+//            photo.setLon(arrLon[i]);
+
+            /* insert photo into db */
+            addPhoto(photo);
 
         }
     }

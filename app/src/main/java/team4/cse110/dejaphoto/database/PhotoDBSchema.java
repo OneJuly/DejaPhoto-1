@@ -7,7 +7,7 @@ package team4.cse110.dejaphoto.database;
 public class PhotoDBSchema {
 
     public static final class PhotoTable {
-        public static final String NAME = "photos";
+        public static final String NAME = "DejaPhotoDB";
 
         public static final class Cols {
             public static final String UUID = "uuid";
