@@ -1,71 +1,47 @@
 package team4.cse110.dejaphoto;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-
-import java.util.ArrayList;
-
-
 /**
- * This is the adapter for the GridView thumbnails in GalleryActivity.
+ * This is the adapter for the RecyclerView thumbnails in GalleryActivity.
  */
 
-class ImageAdapter extends BaseAdapter {
+public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
+
+    /* Internal photo viewholder */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        public ImageView photo;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            photo = (ImageView) itemView.findViewById(R.id.gallery_photo);
+        }
+    }
 
     private Context context;
-    private PhotoUtils photoUtils;
-    private ArrayList<String> cameraPhotos;
-
-
-    public ImageAdapter(Context context) {
-        this.context = context;
-        photoUtils = new PhotoUtils(context);
-        cameraPhotos = photoUtils.getCameraPhotos();
-
-
-    }
+    private List<Photo> photos;
 
     @Override
-    public int getCount() {
-        return cameraPhotos.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return null;
     }
 
     @Override
-    public long getItemId(int position) {
-        return 0;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        ImageView imageView;
-
-        if (convertView == null) {
-            imageView = new ImageView(context);
-            imageView.setLayoutParams(new GridView.LayoutParams(250, 250));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(12, 12, 12, 12);
-        } else {
-            imageView = (ImageView) convertView;
-        }
-
-        Glide
-                .with(context)
-                .load(cameraPhotos.get(position))
-                .into(imageView);
-
-        return imageView;
+    public int getItemCount() {
+        return 0;
     }
 
+
 }
+
