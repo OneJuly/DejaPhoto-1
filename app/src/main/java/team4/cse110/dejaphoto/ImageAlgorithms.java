@@ -69,8 +69,6 @@ public class ImageAlgorithms {
         int randomIndex = -1;
         double random = Math.random() * totalWeight;
         for(int i = 0; i < photoAlbum.size(); ++i){
-            //TODO change this to photoAlbum.get(i).getWeight() for speed?
-            //TODO and have the calcWeight function set the photo's weight field
             random -= photoAlbum.get(i).getWeight();
             if(random < 0.0d){
                 randomIndex = i;
@@ -84,7 +82,7 @@ public class ImageAlgorithms {
     //randomly selects next photo
     public Photo random_algorithm(){
 
-        double random = Math.random() * (photoAlbum.size()+1);
+        double random = Math.random() * (photoAlbum.size());
         int randomIndex = (int) random;
         return photoAlbum.get(randomIndex);
     }
