@@ -27,8 +27,8 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Log.v(TAG, "In update function");
 
         // Get all associated widget IDs
-        ComponentName widget = new ComponentName(context, DejaAppWidgetProvider.class);
-        int[] allIds = appWidgetManager.getAppWidgetIds(widget);
+        ComponentName widgetProvider = new ComponentName(context, DejaAppWidgetProvider.class);
+        int[] allIds = appWidgetManager.getAppWidgetIds(widgetProvider);
 
         // Update all widgets with default layout
         for (int id : allIds) {
@@ -56,18 +56,32 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     private void onPrev(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Prev button tapped");
+        RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
+        enableView(R.id.button_karma, remoteViews);
+        enableView(R.id.button_release, remoteViews);
+        updateRemoteViews(context, remoteViews);
     }
 
     private void onNext(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Next button tapped");
+        RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
+        enableView(R.id.button_karma, remoteViews);
+        enableView(R.id.button_release, remoteViews);
+        updateRemoteViews(context, remoteViews);
     }
 
     private void onKarma(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Karma button tapped");
+        RemoteViews remoteViews = getDefaultRemoteViews(context);
+        disableView(R.id.button_karma, remoteViews);
+        updateRemoteViews(context, remoteViews);
     }
 
     private void onRelease(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Release button tapped");
+        RemoteViews remoteViews = getDefaultRemoteViews(context);
+        disableView(R.id.button_release, remoteViews);
+        updateRemoteViews(context, remoteViews);
     }
 
     private RemoteViews getDefaultRemoteViews(Context context) {
@@ -102,6 +116,18 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         remoteViews.setOnClickPendingIntent(R.id.button_release, releasePendingIntent);
 
         return remoteViews;
+    }
+
+    private void updateRemoteViews(Context context, RemoteViews remoteViews) {
+        // Get widget manager and all associated ids
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        ComponentName widgetProvider = new ComponentName(context, DejaAppWidgetProvider.class);
+        int[] allIds = appWidgetManager.getAppWidgetIds(widgetProvider);
+
+        // Update all widgets with new views
+        for (int id : allIds) {
+            appWidgetManager.updateAppWidget(id, remoteViews);
+        }
     }
 
     private void enableView(int id, RemoteViews remoteViews) {
