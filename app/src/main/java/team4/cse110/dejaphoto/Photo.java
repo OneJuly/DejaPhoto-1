@@ -10,7 +10,6 @@
 package team4.cse110.dejaphoto;
 import android.content.Context;
 import android.graphics.Bitmap;
-//import android.icu.text.SimpleDateFormat;
 import android.location.Location;
 import android.media.ExifInterface;
 
