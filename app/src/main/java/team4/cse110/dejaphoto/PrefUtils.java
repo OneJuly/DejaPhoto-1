@@ -10,6 +10,7 @@ import android.preference.PreferenceManager;
 public class PrefUtils {
 
     private static final String PREF_DEJAVU_MODE = "dejaVuMode";
+    private static final String PREF_INIT = "initialized";
 
     /* Determine if DejaVu mode is enabled */
     public static boolean dejaVuEnabled(Context context) {
@@ -22,6 +23,18 @@ public class PrefUtils {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
                 .putBoolean(PREF_DEJAVU_MODE, mode)
+                .apply();
+    }
+
+    public static boolean isInit(Context context) {
+       return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(PREF_INIT, false);
+    }
+
+    public static void setInit(Context context, boolean mode) {
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(PREF_INIT, mode)
                 .apply();
     }
 }

@@ -31,6 +31,7 @@ public class PhotoDBCursorWrapper extends CursorWrapper {
         String lon = getString(getColumnIndex(PhotoTable.Cols.LON));
         Double weight = getDouble(getColumnIndex(PhotoTable.Cols.WEIGHT));
         int karma = getInt(getColumnIndex(PhotoTable.Cols.KARMA));
+        int active = getInt(getColumnIndex(PhotoTable.Cols.ACTIVE));
 
         Photo photo = new Photo(UUID.fromString(uuidStr));
         photo.setPath(path);
@@ -38,6 +39,7 @@ public class PhotoDBCursorWrapper extends CursorWrapper {
         photo.setLon(lon);
         photo.setWeight(weight);
         photo.setKarma(karma);
+        photo.setActive(active);
 
         return photo;
     }

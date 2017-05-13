@@ -40,6 +40,7 @@ public class Photo {
     private double recentlyShown;
     private double weight;
     private UUID id;
+    private int active;
 
     //TODO clean extra member variables for methods
     private ExifInterface exifInterface;
@@ -68,16 +69,20 @@ public class Photo {
     public Photo (Context context, String path){
         this.context = context;
         this.path = path;
-        returnImage = getImage();
-        dayTime = getTime();
-        weekday = getWeekday();
-        location = getLocation();
+        id = UUID.randomUUID();
+//        returnImage = getImage();
+//        dayTime = getTime();
+//        weekday = getWeekday();
+//        location = getLocation();
         karma = 0;
         recentlyShown = 1;
-        weight = getWeight();
+//        weight = getWeight();
     }
 
     //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
+    public void setActive(int active) {
+        this.active = active;
+    }
 
     public void setWeight(double weight) {
         this.weight = weight;
@@ -109,6 +114,10 @@ public class Photo {
 
     public UUID getId() {
         return id;
+    }
+
+    public String getFileName() {
+        return "IMG_" + getId().toString() + ".jpg";
     }
     //path should be set by the photo constructor (DONE)
     public String getPath(){
@@ -177,7 +186,7 @@ public class Photo {
         catch(IOException f){
             f.printStackTrace();
         }
-        Location location = new Location("");//provider name is unnecessary
+        Location location = new Location("");//provider dirName is unnecessary
         location.setLatitude(Double.parseDouble(lat));//your coords of course
         location.setLongitude(Double.parseDouble(lon));
         return location;
@@ -271,4 +280,5 @@ public class Photo {
             return (weight/recentlyShown);
         }
     }
+
 }

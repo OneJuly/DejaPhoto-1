@@ -29,6 +29,7 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
                 PhotoTable.Cols.LAT+ ", " +
                 PhotoTable.Cols.LON + ", " +
                 PhotoTable.Cols.KARMA+ ", " +
+                PhotoTable.Cols.ACTIVE + ", " +
                 PhotoTable.Cols.WEIGHT + ")"
         );
     }

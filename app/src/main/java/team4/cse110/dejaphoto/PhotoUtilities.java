@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.MediaStore;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,11 +23,13 @@ public class PhotoUtilities {
     private static PhotoUtilities sPhotoUtilities;
 
     private Context mContext;
+    private File mAlbum;
     private SQLiteDatabase mDatabase;
 
-    private PhotoUtilities(Context context) {
+    private PhotoUtilities(Context context, File album) {
         mContext = context.getApplicationContext();
         mDatabase = new PhotoDBHelper(mContext).getWritableDatabase();
+        mAlbum = album;
     }
 
     /**
@@ -35,10 +39,11 @@ public class PhotoUtilities {
      * @param context the application context
      * @return a PhotoUtilities instance
      */
-    public static PhotoUtilities getInstance(Context context) {
+    public static PhotoUtilities getInstance(Context context, File album) {
         if (sPhotoUtilities == null) {
-            sPhotoUtilities = new PhotoUtilities(context);
+            sPhotoUtilities = new PhotoUtilities(context, album);
         }
+
         return sPhotoUtilities;
     }
 
@@ -89,14 +94,17 @@ public class PhotoUtilities {
     }
 
     /**
-     * Adds a given Photo to the photo database.
+     * Adds a given Photo to the photo database and DejaPhoto album.
      *
      * @param photo the photo to be added
      */
     public void addPhoto(Photo photo) {
         ContentValues values = getContentValues(photo);
-
         mDatabase.insert(PhotoTable.NAME, null, values);
+
+        File original = new File(photo.getPath());
+        File added = new File(mAlbum.getAbsolutePath() + photo.getFileName());
+        original.renameTo(added);
     }
 
     public void updatePhoto(Photo photo) {
@@ -135,5 +143,39 @@ public class PhotoUtilities {
                 );
 
         return new PhotoDBCursorWrapper(cursor);
+    }
+
+
+     public void initFromCameraRoll() {
+
+        final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
+
+        String selection = MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?";
+
+        String[] selectionArgs = new String[] {
+                "Camera"
+        };
+
+        final String orderDate = MediaStore.Images.Media.DATE_ADDED;
+
+        //Stores all the images from the gallery in Cursor
+        Cursor cursor = mContext.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, selection, selectionArgs, orderDate);
+
+        //Total number of images
+        int numPhotos = cursor.getCount();
+
+        //Create an array to store path to all the images
+        String[] arrPath = new String[numPhotos];
+
+        for (int i = 0; i < numPhotos; i++) {
+            cursor.moveToPosition(i);
+            int dataColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+
+            // add photo to the database
+            arrPath[i]= cursor.getString(dataColumnIndex);
+            addPhoto(new Photo(mContext, arrPath[i]));
+
+        }
     }
 }

@@ -17,6 +17,7 @@ public class PhotoDBSchema {
             public static final String LON = "long";
             public static final String KARMA = "karma";
             public static final String WEIGHT = "weight";
+            public static final String ACTIVE = "active";
         }
     }
 }
