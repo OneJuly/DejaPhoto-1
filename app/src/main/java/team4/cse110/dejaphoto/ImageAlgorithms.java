@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
+
 import java.util.ArrayList;
 
 //TODO notes:
@@ -39,7 +41,7 @@ public class ImageAlgorithms {
     //TODO get a DejaVuEnabled (or something) boolean out of sp for whether DejaVu Mode is enabled
     //http://stackoverflow.com/questions/6737283/weighted-randomness-in-java
     private boolean is_DJV_Enabled(){
-        SharedPreferences sp = context.getSharedPreferences("Settings",0);
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return false;
     }
 
