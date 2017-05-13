@@ -8,8 +8,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -36,7 +34,6 @@ public class ImageAlgorithms {
         previousImages = new Photo[11];
         Photo returnImage = null;
         photoUtils = new PhotoUtils(context);
-        //TODO do i need this?-------------
         prefUtils = new PrefUtils();
         photoAlbum = photoUtils.getCameraPhotos();
     }
@@ -50,8 +47,7 @@ public class ImageAlgorithms {
 
     public Date getCurrentDate(){
 
-    //TODO---------------------
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    //  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         return date = new Date();
     }
