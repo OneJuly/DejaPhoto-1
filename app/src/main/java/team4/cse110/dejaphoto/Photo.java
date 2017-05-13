@@ -15,7 +15,6 @@ import android.location.Location;
 import android.media.ExifInterface;
 import android.provider.MediaStore;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,9 +45,6 @@ public class Photo {
     private String timeFormat;
     private String weekdayFormat;
     private Date d;
-    private String lat;
-    private String lon;
-    //private String locationStr;
 
     //Default constructor for the photo class
     public Photo(Context context){
@@ -172,18 +168,21 @@ public class Photo {
     //TODO FINISH METHOD
     public Location getLocation(){
 
+        String latitude = MediaStore.Images.Media.LATITUDE;
+        String longitude = MediaStore.Images.Media.LONGITUDE;
+
         //TODO use this.returnImage???
-        try {
-            exifInterface = new ExifInterface(path);
-            lat = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-            lon = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-        }
-        catch(IOException f){
-            f.printStackTrace();
-        }
+//        try {
+//            exifInterface = new ExifInterface(path);
+//            lat = exifInterface.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
+//            lon = exifInterface.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
+//        }
+//        catch(IOException f){
+//            f.printStackTrace();
+//        }
         location = new Location("");//provider name is unnecessary
-        location.setLatitude(Double.parseDouble(lat));//your coords of course
-        location.setLongitude(Double.parseDouble(lon));
+        location.setLatitude(Double.parseDouble(latitude));//your coords of course
+        location.setLongitude(Double.parseDouble(longitude));
         return location;
     }
 
