@@ -7,10 +7,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
@@ -19,7 +15,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     private static final String TAG = "GalleryActivity";
 
-    private static final int GRID_SPAN = 3; // number of columns for ImageViews
+    private static final int GRID_SPAN = 4; // number of columns for ImageViews
 
     private List<Photo> photos;
 
@@ -50,16 +46,6 @@ public class GalleryActivity extends AppCompatActivity {
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
         rvPhotos.setAdapter(adapter);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
-
-        /** Create onClickListener()'s for each photo in the GridView */
-        OnItemClickListener pictureSelect
-                = new OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String prompt = (String)parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), prompt, Toast.LENGTH_LONG).show();
-            }
-        };
     }
 
     /* Get the external DejaPhoto album and create it if it doesn't exist */
