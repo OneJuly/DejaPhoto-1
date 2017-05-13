@@ -215,8 +215,14 @@ public class Photo {
         return false;
     }
 
-    private boolean same_location() {
-        return false;
+    private boolean same_location(Location location) {
+        float distanceInMeters =  this.getLocation().distanceTo(location);
+        if (distanceInMeters > 500 ){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     private boolean within_a_week() {
