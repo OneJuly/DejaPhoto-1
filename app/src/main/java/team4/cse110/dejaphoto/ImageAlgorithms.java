@@ -9,7 +9,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 //TODO notes:
 //make the bitmap array an array of URI's?
@@ -45,11 +45,9 @@ public class ImageAlgorithms {
         return prefUtils.dejaVuEnabled(context);
     }
 
-    public Date getCurrentDate(){
-
-    //  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        return date = new Date();
+    public Calendar getCurrentDate(){
+        Calendar calendar = Calendar.getInstance();
+        return calendar;
     }
 
     public Location getCurrentLocation(){
