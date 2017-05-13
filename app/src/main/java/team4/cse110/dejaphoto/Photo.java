@@ -56,12 +56,12 @@ public class Photo {
     public Photo (Context context, String path){
         this.context = context;
         this.path = path;
-        returnImage = getImage();
-        dayTime = getTime();
-        weekday = getWeekday();
-        location = getLocation();
-        karma = false;
-        weight = calcWeight();
+//        returnImage = getImage();
+//        dayTime = getTime();
+//        weekday = getWeekday();
+//        location = getLocation();
+//        karma = false;
+//        weight = calcWeight();
     }
 
     //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////

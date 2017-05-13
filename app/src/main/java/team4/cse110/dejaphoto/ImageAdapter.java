@@ -67,6 +67,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 .with(context)
             .load(photo.getPath())
             .into(imageView);
+
 }
 
     // Get the number of photos in the photo list
