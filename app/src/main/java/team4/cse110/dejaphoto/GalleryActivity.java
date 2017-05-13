@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity {
 
+    private static final String TAG = "GalleryActivity";
+
     private static final int GRID_SPAN = 3;
 
     private ArrayList<Photo> photos;
