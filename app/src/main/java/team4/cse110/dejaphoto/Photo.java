@@ -163,6 +163,10 @@ public class Photo {
         recentlyShown -= 1;
     }
 
+    public double getWeight(){
+        return this.weight;
+    }
+
     //////////////////// METHODS TO DETERMINE PHOTO WEIGHT ////////////////////
 
     //TODO replace instances of "false" with calculations
@@ -211,7 +215,7 @@ public class Photo {
 
     //method to calculate the overall weight of the photo
     public double calcWeight(){
-        weight = 300;
+        double weight = 300;
 
         if(same_dayTime()) {
             weight += 100;
@@ -231,10 +235,12 @@ public class Photo {
 
         //sets the most recent photo's weight to zero
         if(recentlyShown == 11){
+            this.weight = 0;
             return 0;
         }
         //adjusts for the weight of the photo based on whether it was recently shown
         else{
+            this.weight = weight/recentlyShown;
             return (weight/recentlyShown);
         }
     }
