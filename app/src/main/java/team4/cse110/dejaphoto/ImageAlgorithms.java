@@ -9,7 +9,14 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+//on return, convert return value to a bitmap
+
+
+
 public class ImageAlgorithms {
+
+
+    //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
 
     //TODO replace variables with appropriate types and initialize values
     Bitmap returnImage;
@@ -29,6 +36,8 @@ public class ImageAlgorithms {
         SharedPreferences sp = context.getSharedPreferences("Settings",0);
         return false;
     }
+
+    //////////////////// DJV & RANDOM ALGORITHM ////////////////////
 
     //TODO implement algorithm
     public Bitmap DJV_algorithm(){
@@ -52,6 +61,8 @@ public class ImageAlgorithms {
 
         return returnImage;
     }
+
+    //////////////////// BUTTON FUNCTIONALITY ////////////////////
 
     //gets called for the next image
     public Bitmap nextImage(){
