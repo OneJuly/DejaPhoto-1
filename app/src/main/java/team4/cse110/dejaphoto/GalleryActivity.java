@@ -2,10 +2,17 @@ package team4.cse110.dejaphoto;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.widget.GridView;
+
+import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity {
+
+    private static final int GRID_SPAN = 4;
+
+    private ArrayList<Photo> photos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,10 +21,14 @@ public class GalleryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        GridView gridView = (GridView) findViewById(R.id.gallery_gridview);
-        gridView.setAdapter(new ImageAdapter(this));
+        RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
 
+        PhotoUtils utils = new PhotoUtils(this);
+        photos = utils.getCameraPhotos();
+
+        ImageAdapter adapter = new ImageAdapter(this, photos);
+        rvPhotos.setAdapter(adapter);
+        rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
 
     }
-
 }

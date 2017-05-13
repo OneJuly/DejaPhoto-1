@@ -19,9 +19,9 @@ class PhotoUtils {
     }
 
     /* Returns a list of paths to default camera photos */
-    ArrayList<String> getCameraPhotos() {
+    ArrayList<Photo> getCameraPhotos() {
 
-        ArrayList<String> photoPaths = new ArrayList<>();
+        ArrayList<Photo> photoPaths = new ArrayList<>();
 
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
 
@@ -49,7 +49,7 @@ class PhotoUtils {
 
             //Store the path of the image
             arrPath[i]= cursor.getString(dataColumnIndex);
-            photoPaths.add(arrPath[i]);
+            photoPaths.add(new Photo(context, arrPath[i]));
 
         }
         return  photoPaths;

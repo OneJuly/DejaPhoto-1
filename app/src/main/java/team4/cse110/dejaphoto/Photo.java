@@ -11,11 +11,21 @@ public class Photo {
 
     private Context context;
     private Uri uri;
+    private String path;
 
     //constructor for the photo class
     public Photo(Context context, Uri uri){
         this.context = context;
         this.uri = uri;
+    }
+
+    public Photo(Context context, String path){
+        this.context = context;
+        this.path = path;
+    }
+
+    public String getPath() {
+        return path;
     }
 
     public Uri getUri() {

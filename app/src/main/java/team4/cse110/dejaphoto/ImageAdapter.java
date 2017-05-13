@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 /**
@@ -42,6 +44,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return context;
     }
 
+    // Inflate the gallery_photo layout into a new viewholder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context c = parent.getContext();
@@ -55,14 +58,21 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return holder;
     }
 
+    // Attach photo data to the vewholder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        Photo photo = photos.get(position);
+        ImageView imageView = holder.photo;
+        Glide
+                .with(context)
+                .load(photo.getPath())
+                .into(imageView);
     }
 
+    // Get the number of photos in the photo list
     @Override
     public int getItemCount() {
-        return 0;
+        return photos.size();
     }
 
 
