@@ -80,6 +80,10 @@ public class Photo {
     }
 
     //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
+    public void toggleActive() {
+        active = (isActive()) ? 0 : 1;
+    }
+
     public void setActive(int active) {
         this.active = active;
     }
@@ -114,6 +118,10 @@ public class Photo {
 
     public UUID getId() {
         return id;
+    }
+
+    public boolean isActive() {
+        return active == 1;
     }
 
     public String getFileName() {

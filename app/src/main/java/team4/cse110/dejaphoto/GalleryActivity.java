@@ -15,7 +15,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     private static final String TAG = "GalleryActivity";
 
-    private static final int GRID_SPAN = 4; // number of columns for ImageViews
+    private static final int GRID_SPAN = 3; // number of columns for ImageViews
 
     private List<Photo> photos;
 
