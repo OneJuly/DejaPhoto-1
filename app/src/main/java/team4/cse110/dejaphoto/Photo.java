@@ -1,5 +1,5 @@
 /**
- * Created by Sam Wang on 5/11/2017.
+ * Created by Alisa & Sam on 5/11/2017.
  */
 
 //https://github.com/drewnoakes/metadata-extractor
@@ -7,18 +7,22 @@
 //http://stackoverflow.com/questions/5175728/how-to-get-the-current-date-time-in-java
 
 package team4.cse110.dejaphoto;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
 import android.media.ExifInterface;
-
 import java.text.ParseException;
 import java.util.Date;
 
+//TODO notes:
+//convert from path string into bitmap
+
 public class Photo {
 
+    //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
+
     //TODO replace member variables with their appropriate types
+    //Class member variables
     private Context context;
     private String path;
     private Bitmap returnImage;
@@ -27,15 +31,15 @@ public class Photo {
     private int location;
     private boolean karma;
     //private int weight;
-    //////////
 
+    //TODO clean extra member variables for methods
     ExifInterface exifInterface;
     private String timeFormat;
     private String weekdayFormat;
     private Date d;
     private String time;
 
-    //constructor for the photo class
+    //Default constructor for the photo class
     public Photo(Context context){
         this.context = context;
         returnImage = null;
@@ -47,11 +51,11 @@ public class Photo {
         //weight = 0;
     }
 
+    //Constructor for the photo class. Used by PhotoUtils class.
     public Photo (Context context, String path){
         this.context = context;
-        //TODO convert from string into bitmap
-        returnImage = null;
         this.path = path;
+        returnImage = getImage();
         dayTime = getTime();
         weekday = getWeekday();
         location = getLocation();
@@ -59,8 +63,17 @@ public class Photo {
         //weight = calcWeight();
     }
 
+    //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
+
+    //path should be set by the photo constructor (DONE)
     public String getPath(){
         return path;
+    }
+
+    //TODO implement functionality
+    //returns a Bitmap from the "path" member variable
+    public Bitmap getImage(){
+        return returnImage;
     }
 
     //TODO FINISH METHOD
@@ -110,16 +123,18 @@ public class Photo {
         this.karma = true;
     }
 
+    //////////////////// METHODS TO DETERMINE PHOTO WEIGHT ////////////////////
+
     //TODO replace instances of "false" with calculations
-    private boolean is_dayTime() {
+    private boolean same_dayTime() {
         return false;
     }
 
-    private boolean is_weekday() {
+    private boolean same_weekday() {
         return false;
     }
 
-    private boolean is_location() {
+    private boolean same_location() {
         return false;
     }
 
@@ -149,24 +164,30 @@ public class Photo {
         else return 0;
     }
 
-    //method to calcualte the overall weight of the photo
+    public boolean hasKarma(){
+        if(karma){ return true; }
+        else{ return false; }
+    }
+
+    //method to calculate the overall weight of the photo
     public int calcWeight(){
-        //TODO check whether the time of day is within an hour of the time the pic was taken
         int weight = 300;
 
-        if(is_dayTime()) {
+        if(same_dayTime()) {
             weight += 100;
         }
-        if(is_weekday()) {
+        if(same_weekday()) {
             weight += 100;
         }
-        if(is_location()) {
+        if(same_location()) {
             weight += 100;
         }
         if(karma) {
             weight += 200;
         }
         weight += recentlyTakenWeight();
+
+        //TODO factor in whether the picture was taken recently or not
 
         return weight;
     }

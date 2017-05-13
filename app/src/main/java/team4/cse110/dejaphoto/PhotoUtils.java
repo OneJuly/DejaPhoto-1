@@ -57,4 +57,8 @@ class PhotoUtils {
         }
         return  photoPaths;
     }
+
+    public void releasePhoto(){
+        //TODO implement functionality
+    }
 }
