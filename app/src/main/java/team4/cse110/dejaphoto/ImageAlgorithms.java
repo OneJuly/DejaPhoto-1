@@ -9,27 +9,29 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-//on return, convert return value to a bitmap
-
-
+//TODO nodes:
+//on return, convert return value to a bitmap?
+//make the bitmap array an array of URI's?
 
 public class ImageAlgorithms {
 
-
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
-
-    //TODO replace variables with appropriate types and initialize values
-    Bitmap returnImage;
-    //////////
 
     private Context context;
     private int imageIndex;
-    Bitmap[] previousImages = new Bitmap[11];
+    Bitmap[] previousImages;
+    Bitmap returnImage;
+    PhotoUtils photoAlbum;
 
     public ImageAlgorithms(Context context){
         this.context = context;
         imageIndex = 0;
+        previousImages = new Bitmap[11];
+        Bitmap returnImage = null;
+        photoAlbum = new PhotoUtils(context);
     }
+
+    //////////////////// HELPER METHODS ////////////////////
 
     //TODO get a DejaVuEnabled (or something) boolean out of sp for whether DejaVu Mode is enabled
     private boolean is_DJV_Enabled(){
@@ -37,7 +39,7 @@ public class ImageAlgorithms {
         return false;
     }
 
-    //////////////////// DJV & RANDOM ALGORITHM ////////////////////
+    //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
 
     //TODO implement algorithm
     public Bitmap DJV_algorithm(){
