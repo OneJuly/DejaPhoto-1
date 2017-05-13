@@ -30,36 +30,9 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         ComponentName widget = new ComponentName(context, DejaAppWidgetProvider.class);
         int[] allIds = appWidgetManager.getAppWidgetIds(widget);
 
+        // Update all widgets with default layout
         for (int id : allIds) {
-            // Inflate the view hierarchy
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_deja);
-
-            // Create intents for each button
-            Intent prevIntent = new Intent(context, DejaAppWidgetProvider.class);
-            prevIntent.setAction(PREV_CLICKED);
-            Intent nextIntent = new Intent(context, DejaAppWidgetProvider.class);
-            nextIntent.setAction(NEXT_CLICKED);
-            Intent karmaIntent = new Intent(context, DejaAppWidgetProvider.class);
-            karmaIntent.setAction(KARMA_CLICKED);
-            Intent releaseIntent = new Intent(context, DejaAppWidgetProvider.class);
-            releaseIntent.setAction(RELEASE_CLICKED);
-
-            // Create pending intents
-            PendingIntent prevPendingIntent = PendingIntent.getBroadcast(context, 0,
-                    prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 0,
-                    nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent karmaPendingIntent = PendingIntent.getBroadcast(context, 0,
-                    karmaIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent releasePendingIntent = PendingIntent.getBroadcast(context, 0,
-                    releaseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            // Update remoteView then set to widget
-            remoteViews.setOnClickPendingIntent(R.id.button_prev, prevPendingIntent);
-            remoteViews.setOnClickPendingIntent(R.id.button_next, nextPendingIntent);
-            remoteViews.setOnClickPendingIntent(R.id.button_karma, karmaPendingIntent);
-            remoteViews.setOnClickPendingIntent(R.id.button_release, releasePendingIntent);
+            RemoteViews remoteViews = getDefaultRemoteViews(context);
             appWidgetManager.updateAppWidget(id, remoteViews);
         }
     }
@@ -71,30 +44,71 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Log.v(TAG, TAG_RECV + intent.getAction());
 
         if (PREV_CLICKED.equals(intent.getAction())) {
-            onPrev();
+            onPrev(context, intent);
         } else if (NEXT_CLICKED.equals(intent.getAction())) {
-            onNext();
+            onNext(context, intent);
         } else if (KARMA_CLICKED.equals(intent.getAction())) {
-            onKarma();
+            onKarma(context, intent);
         } else if (RELEASE_CLICKED.equals(intent.getAction())) {
-            onRelease();
+            onRelease(context, intent);
         }
     }
 
-    private void onPrev() {
+    private void onPrev(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Prev button tapped");
     }
 
-    private void onNext() {
+    private void onNext(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Next button tapped");
     }
 
-    private void onKarma() {
+    private void onKarma(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Karma button tapped");
     }
 
-    private void onRelease() {
+    private void onRelease(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Release button tapped");
     }
 
+    private RemoteViews getDefaultRemoteViews(Context context) {
+        // Inflate view hierarchy
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_deja);
+
+        // Create intents for each button
+        Intent prevIntent = new Intent(context, DejaAppWidgetProvider.class);
+        prevIntent.setAction(PREV_CLICKED);
+        Intent nextIntent = new Intent(context, DejaAppWidgetProvider.class);
+        nextIntent.setAction(NEXT_CLICKED);
+        Intent karmaIntent = new Intent(context, DejaAppWidgetProvider.class);
+        karmaIntent.setAction(KARMA_CLICKED);
+        Intent releaseIntent = new Intent(context, DejaAppWidgetProvider.class);
+        releaseIntent.setAction(RELEASE_CLICKED);
+
+        // Create pending intents
+        PendingIntent prevPendingIntent = PendingIntent.getBroadcast(context, 0,
+                prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent nextPendingIntent = PendingIntent.getBroadcast(context, 0,
+                nextIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent karmaPendingIntent = PendingIntent.getBroadcast(context, 0,
+                karmaIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent releasePendingIntent = PendingIntent.getBroadcast(context, 0,
+                releaseIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Update buttons
+        remoteViews.setOnClickPendingIntent(R.id.button_prev, prevPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_next, nextPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_karma, karmaPendingIntent);
+        remoteViews.setOnClickPendingIntent(R.id.button_release, releasePendingIntent);
+
+        return remoteViews;
+    }
+
+    private void enableView(int id, RemoteViews remoteViews) {
+        remoteViews.setBoolean(id, "setEnabled", true);
+    }
+
+    private void disableView(int id, RemoteViews remoteViews) {
+        remoteViews.setBoolean(id, "setEnabled", false);
+    }
 }
