@@ -10,13 +10,14 @@
 package team4.cse110.dejaphoto;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.icu.text.SimpleDateFormat;
+//import android.icu.text.SimpleDateFormat;
 import android.location.Location;
 import android.media.ExifInterface;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 
 //TODO notes:
 //convert from path string into bitmap
@@ -38,7 +39,7 @@ public class Photo {
     private int weight;
 
     //TODO clean extra member variables for methods
-    ExifInterface exifInterface;
+    private ExifInterface exifInterface;
     private String timeFormat;
     private String weekdayFormat;
     private Date d;
@@ -54,7 +55,7 @@ public class Photo {
         path = null;
         dayTime = 0;
         weekday = "";
-        location = 0;
+        location = null;
         karma = false;
         weight = 0;
     }
