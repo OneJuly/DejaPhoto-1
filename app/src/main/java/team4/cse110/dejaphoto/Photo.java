@@ -99,6 +99,17 @@ public class Photo {
         this.path = path;
     }
 
+    public String getLat(){
+        return lat;
+    }
+
+    public String getLon() {
+        return lon;
+    }
+
+    public UUID getId() {
+        return id;
+    }
     //path should be set by the photo constructor (DONE)
     public String getPath(){
         return path;

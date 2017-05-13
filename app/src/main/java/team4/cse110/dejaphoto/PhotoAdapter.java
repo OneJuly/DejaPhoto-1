@@ -15,11 +15,11 @@ import java.util.List;
  * This is the adapter for the RecyclerView thumbnails in GalleryActivity.
  */
 
-public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
 
-    private static final String TAG = "ImageAdapter";
+    private static final String TAG = "PhotoAdapter";
 
-    public ImageAdapter() {
+    public PhotoAdapter() {
     }
 
     /* Internal photo viewholder */
@@ -37,7 +37,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     private Context context;
     private List<Photo> photos;
 
-    public ImageAdapter(Context context, List<Photo> photos) {
+    public PhotoAdapter(Context context, List<Photo> photos) {
         this.context = context;
         this.photos = photos;
     }

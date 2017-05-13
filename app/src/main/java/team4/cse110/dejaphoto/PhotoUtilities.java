@@ -6,9 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import team4.cse110.dejaphoto.database.PhotoDBCursorWrapper;
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
+
+import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
 /**
  * Singleton to store photos.
@@ -39,36 +43,36 @@ public class PhotoUtilities {
     }
 
     /**
-     * Returns a List containing all the current Crime objects.
+     * Returns a List containing all the current Photo objects.
      *
-     * @return the list of all crimes
+     * @return the list of all photos
      */
-    public List<Crime> getCrimes() {
-        List<Crime> crimes = new ArrayList<>();
+    public List<Photo> getPhotos() {
+        List<Photo> photos = new ArrayList<>();
 
-        CrimeCursorWrapper cursor = queryCrimes(null, null);
+        PhotoDBCursorWrapper cursor = queryPhotos(null, null);
 
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                crimes.add(cursor.getCrime());
+                photos.add(cursor.getPhoto());
                 cursor.moveToNext();
             }
         } finally {
             cursor.close();
         }
 
-        return crimes;
+        return photos;
     }
 
-    /** * Returns a single Crime object according to the supplied UUID.
+    /** * Returns a single Photo object according to the supplied UUID.
      *
-     * @param id a crime's unique identifier
-     * @return the crime with matching id
+     * @param id a photo's unique identifier
+     * @return the photo with matching id
      */
-    public Crime getCrime(UUID id) {
-        CrimeCursorWrapper cursor = queryCrimes(
-                CrimeTable.Cols.UUID + " = ?",
+    public Photo getPhoto(UUID id) {
+        PhotoDBCursorWrapper cursor = queryPhotos(
+                PhotoTable.Cols.UUID + " = ?",
                 new String[] { id.toString() }
         );
 
@@ -78,58 +82,58 @@ public class PhotoUtilities {
             }
 
             cursor.moveToFirst();
-            return cursor.getCrime();
+            return cursor.getPhoto();
         } finally {
             cursor.close();
         }
     }
 
     /**
-     * Adds a given Crime to the crime database.
+     * Adds a given Photo to the photo database.
      *
-     * @param c the crime to be added
+     * @param photo the photo to be added
      */
-    public void addCrime(Crime c) {
-        ContentValues values = getContentValues(c);
+    public void addPhoto(Photo photo) {
+        ContentValues values = getContentValues(photo);
 
-        mDatabase.insert(CrimeTable.NAME, null, values);
+        mDatabase.insert(PhotoTable.NAME, null, values);
     }
 
-    public void updateCrime(Crime crime) {
-        String uuidString = crime.getId().toString();
-        ContentValues values = getContentValues(crime);
+    public void updatePhoto(Photo photo) {
+        String uuidString = photo.getId().toString();
+        ContentValues values = getContentValues(photo);
 
-        mDatabase.update(CrimeTable.NAME, values, CrimeTable.Cols.UUID + " = ?",
+        mDatabase.update(PhotoTable.NAME, values, PhotoTable.Cols.UUID + " = ?",
                 // use '?': good habit to prevent sql injection
                 new String[] { uuidString });
     }
 
     /**
      *
-     * @param crime
+     * @param photo
      * @return
      */
-    private static ContentValues getContentValues(Crime crime) {
+    private static ContentValues getContentValues(Photo photo) {
         ContentValues values = new ContentValues();
 
-        values.put(CrimeTable.Cols.UUID, crime.getId().toString());
-        values.put(CrimeTable.Cols.TITLE, crime.getTitle());
-        values.put(CrimeTable.Cols.DATE, crime.getDate().getTime());
-        values.put(CrimeTable.Cols.SOLVED, crime.isSolved() ? 1 : 0);
-        values.put(CrimeTable.Cols.SUSPECT, crime.getSuspect());
-        values.put(CrimeTable.Cols.TEL, crime.getTel());
+        values.put(PhotoTable.Cols.UUID, photo.getId().toString());
+        values.put(PhotoTable.Cols.PATH, photo.getPath());
+        values.put(PhotoTable.Cols.LAT, photo.getLat());
+        values.put(PhotoTable.Cols.LON, photo.getLon());
+        values.put(PhotoTable.Cols.KARMA, photo.hasKarma() ? 1 : 0);
+        values.put(PhotoTable.Cols.WEIGHT, photo.getWeight());
 
         return values;
     }
 
-    private CrimeCursorWrapper queryCrimes(String whereClause, String[] whereArgs) {
+    private PhotoDBCursorWrapper queryPhotos(String whereClause, String[] whereArgs) {
         Cursor cursor =
-                mDatabase.query(CrimeTable.NAME, null, // columns parameter - null selects all columns
+                mDatabase.query(PhotoTable.NAME, null, // columns parameter - null selects all columns
                         whereClause, whereArgs, null, // groupBy
                         null, // having
                         null  // orderBy
                 );
 
-        return new CrimeCursorWrapper(cursor);
+        return new PhotoDBCursorWrapper(cursor);
     }
 }
