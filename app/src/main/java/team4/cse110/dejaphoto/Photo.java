@@ -8,6 +8,7 @@
 //http://stackoverflow.com/questions/17983865/making-a-location-object-in-android-with-latitude-and-longitude-valuesgit
 
 package team4.cse110.dejaphoto;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -15,8 +16,9 @@ import android.media.ExifInterface;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 //TODO notes:
 //convert from path string into bitmap
@@ -34,9 +36,10 @@ public class Photo {
     private double dayTime;
     private String weekday;
     private Location location;
-    private boolean karma;
+    private int karma;
     private double recentlyShown;
     private double weight;
+    private UUID id;
 
     //TODO clean extra member variables for methods
     private ExifInterface exifInterface;
@@ -49,14 +52,14 @@ public class Photo {
     //private String locationStr;
 
     //Default constructor for the photo class
-    public Photo(Context context){
-        this.context = context;
+    public Photo(UUID uuid){
+        id = uuid;
         returnImage = null;
         path = null;
         dayTime = 0;
         weekday = "";
         location = null;
-        karma = false;
+        karma = 0;
         recentlyShown = 1;
         weight = 0;
     }
@@ -69,12 +72,32 @@ public class Photo {
         dayTime = getTime();
         weekday = getWeekday();
         location = getLocation();
-        karma = false;
+        karma = 0;
         recentlyShown = 1;
-        weight = calcWeight();
+        weight = getWeight();
     }
 
     //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public void setKarma(int karma) {
+        this.karma = karma;
+    }
+
+    public void setLon(String lon) {
+        this.lon = lon;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 
     //path should be set by the photo constructor (DONE)
     public String getPath(){
@@ -151,7 +174,7 @@ public class Photo {
 
     //Give karma to a photo
     public void giveKarma(){
-        this.karma = true;
+        this.karma = 1;
     }
 
     //assigns member variable to keep track of how recently the photo has been shown
@@ -205,12 +228,11 @@ public class Photo {
     }
 
     public boolean hasKarma(){
-        if(karma){ return true; }
-        else{ return false; }
+        return karma == 1;
     }
 
     //method to calculate the overall weight of the photo
-    public double calcWeight(){
+    public double getWeight(){
         weight = 300;
 
         if(same_dayTime()) {
@@ -222,7 +244,7 @@ public class Photo {
         if(same_location()) {
             weight += 100;
         }
-        if(karma) {
+        if(hasKarma()) {
             weight += 200;
         }
         weight += recentlyTakenWeight();

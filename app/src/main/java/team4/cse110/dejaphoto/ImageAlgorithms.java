@@ -66,15 +66,15 @@ public class ImageAlgorithms {
         //get the total weight
         double totalWeight = 0.0d;
         for(Photo photo : photoAlbum){
-            totalWeight += photo.calcWeight();
+            totalWeight += photo.getWeight();
         }
         //choose a random photo
         int randomIndex = -1;
         double random = Math.random() * totalWeight;
         for(int i = 0; i < photoAlbum.size(); ++i){
             //TODO change this to photoAlbum.get(i).getWeight()
-            //TODO and have the calcWeight function set the photo's weight field
-            random -= photoAlbum.get(i).calcWeight();
+            //TODO and have the getWeight function set the photo's weight field
+            random -= photoAlbum.get(i).getWeight();
             if(random < 0.0d){
                 randomIndex = i;
                 break;
