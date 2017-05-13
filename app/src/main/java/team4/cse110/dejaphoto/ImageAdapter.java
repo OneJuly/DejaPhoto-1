@@ -17,6 +17,8 @@ import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
+    private static final String TAG = "ImageAdapter";
+
     public ImageAdapter() {
     }
 
@@ -63,10 +65,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         Photo photo = photos.get(position);
         ImageView imageView = holder.photo;
+
         Glide
-                .with(context)
+            .with(context)
             .load(photo.getPath())
             .into(imageView);
+
 }
 
     // Get the number of photos in the photo list

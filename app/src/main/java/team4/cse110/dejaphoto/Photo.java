@@ -65,9 +65,9 @@ public class Photo {
         this.context = context;
         this.path = path;
         returnImage = getImage();
-        dayTime = getTime();
-        weekday = getWeekday();
-        location = getLocation();
+//        dayTime = getTime();
+//        weekday = getWeekday();
+//        location = getLocation();
         karma = false;
         weight = calcWeight();
     }
