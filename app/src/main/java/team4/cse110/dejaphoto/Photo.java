@@ -8,15 +8,17 @@
 //http://stackoverflow.com/questions/17983865/making-a-location-object-in-android-with-latitude-and-longitude-valuesgit
 
 package team4.cse110.dejaphoto;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.media.ExifInterface;
+import android.provider.MediaStore;
 
 import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 //TODO notes:
 //convert from path string into bitmap
@@ -31,8 +33,8 @@ public class Photo {
     private Context context;
     private String path;
     private Bitmap returnImage;
-    private double dayTime;
-    private String weekday;
+    private int dayTime;
+    private int dayOfWeek;
     private Location location;
     private boolean karma;
     private double recentlyShown;
@@ -54,7 +56,7 @@ public class Photo {
         returnImage = null;
         path = null;
         dayTime = 0;
-        weekday = "";
+        dayOfWeek = 0;
         location = null;
         karma = false;
         recentlyShown = 1;
@@ -67,7 +69,7 @@ public class Photo {
         this.path = path;
         returnImage = getImage();
         dayTime = getTime();
-        weekday = getWeekday();
+        dayOfWeek = getWeekday();
         location = getLocation();
         karma = false;
         recentlyShown = 1;
@@ -88,47 +90,74 @@ public class Photo {
     }
 
     //TODO FINISH METHOD
-    public double getTime(){
+    public int getTime(){
 
-        //TODO use this.returnImage???
+          String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
+
+//        //TODO use this.returnImage???
+//        try {
+//            exifInterface = new ExifInterface(path);
+//            time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
+//        }
+//        catch (IOException f){
+//            f.printStackTrace();
+//        }
+        SimpleDateFormat time = new SimpleDateFormat("HH");
         try {
-            exifInterface = new ExifInterface(path);
-            time = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
-        }
-        catch (IOException f){
-            f.printStackTrace();
-        }
-        SimpleDateFormat timeF = new SimpleDateFormat("HH");
-        try {
-            d = timeF.parse(time);
+            d = time.parse(dateTaken);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             return 0;
         }
-        timeFormat = timeF.format(d);
+        timeFormat = time.format(d);
+        dayTime = Integer.parseInt(timeFormat);
         return dayTime;
     }
 
     //TODO FINISH METHOD
-    public String getWeekday() {
+    public int getWeekday() {
 
+        String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
         //TODO use this.returnImage???
+//        try {
+//            exifInterface = new ExifInterface(path);
+//            weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+//        }
+//        catch(IOException f){
+//            f.printStackTrace();
+//        }
+        SimpleDateFormat weekday = new SimpleDateFormat("EEE");
         try {
-            exifInterface = new ExifInterface(path);
-            weekday = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-        }
-        catch(IOException f){
-            f.printStackTrace();
-        }
-        SimpleDateFormat weekdayF = new SimpleDateFormat("EEE");
-        try {
-            d = weekdayF.parse(weekday);
+            d = weekday.parse(dateTaken);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
-            return "";
+            return 0;
         }
-        weekdayFormat = weekdayF.format(d);
-        return weekdayFormat;
+        weekdayFormat = weekday.format(d);
+        switch (weekdayFormat) {
+            case "SUN":
+                dayOfWeek = 0;
+                break;
+            case "MON":
+                dayOfWeek = 1;
+                break;
+            case "TUE":
+                dayOfWeek = 2;
+                break;
+            case "WED":
+                dayOfWeek = 3;
+                break;
+            case "THU":
+                dayOfWeek = 4;
+                break;
+            case "FRI":
+                dayOfWeek = 5;
+                break;
+            case "SAT":
+                dayOfWeek = 6;
+                break;
+        }
+        return dayOfWeek;
     }
 
     //TODO FINISH METHOD
