@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Calendar;
 
 //TODO notes:
 //convert from path string into bitmap
@@ -27,7 +28,6 @@ public class Photo {
 
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
 
-    //TODO replace member variables with their appropriate types
     //Class member variables
     private Context context;
     private String path;
@@ -207,15 +207,16 @@ public class Photo {
     //////////////////// METHODS TO DETERMINE PHOTO WEIGHT ////////////////////
 
     //TODO replace instances of "false" with calculations
-    private boolean same_dayTime(Date date) {
-        return false;
+    private boolean same_dayTime(Calendar calendar) {
+        return ((calendar.get(Calendar.HOUR_OF_DAY) - dayTime) < 2 &&
+                (calendar.get(Calendar.HOUR_OF_DAY) - dayTime) > -2);
     }
 
-    private boolean same_weekday(Date date) {
-        return false;
+    private boolean same_weekday(Calendar calendar) {
+        return ((calendar.get(Calendar.DAY_OF_WEEK) - 1) == dayOfWeek);
     }
 
-    private boolean same_location(Location location) {
+    private boolean same_location() {
         float distanceInMeters =  this.location.distanceTo(location);
         if (distanceInMeters < 150 ){
             return true;
@@ -225,27 +226,39 @@ public class Photo {
         }
     }
 
-    private boolean within_a_week(Date date) {
-        return false;
+    private boolean within_a_week(Calendar calendar) {
+        //604,800,000 is the milliseconds in a week
+        long day = 604800000L;
+        Date date = calendar.getTime();
+        long currentTime = date.getTime();
+        return ((currentTime - time) < day);
     }
 
-    private boolean within_a_month(Date date) {
-        return false;
+    private boolean within_a_month(Calendar calendar) {
+        //2,600,640,000 is the milliseconds in about 30 days
+        long month = 2600640000L;
+        Date date = calendar.getTime();
+        long currentTime = date.getTime();
+        return ((currentTime - time) < month);
     }
 
-    private boolean within_a_year(Date date) {
-        return false;
+    private boolean within_a_year(Calendar calendar) {
+        //31,449,600,000 is the milliseconds in a year
+        long year = 31449600000L;
+        Date date = calendar.getTime();
+        long currentTime = date.getTime();
+        return ((currentTime - time) < year);
     }
 
     //method to return a weight for the image based on how recently the photo was taken
-    public double recentlyTakenWeight(Date date) {
-        if(within_a_week(date)) {
+    public double recentlyTakenWeight(Calendar calendar) {
+        if(within_a_week(calendar)) {
             return 200;
         }
-        if(within_a_month(date)) {
+        if(within_a_month(calendar)) {
             return 100;
         }
-        if(within_a_year(date)) {
+        if(within_a_year(calendar)) {
             return 50;
         }
         else return 0;
@@ -257,22 +270,22 @@ public class Photo {
     }
 
     //method to calculate the overall weight of the photo
-    public double calcWeight(Date date, Location location){
+    public double calcWeight(Calendar calendar, Location location){
         double weight = 300;
 
-        if(same_dayTime(date)) {
+        if(same_dayTime(calendar)) {
             weight += 100;
         }
-        if(same_weekday(date)) {
+        if(same_weekday(calendar)) {
             weight += 100;
         }
-        if(same_location(location)) {
+        if(same_location()) {
             weight += 100;
         }
         if(karma) {
             weight += 200;
         }
-        weight += recentlyTakenWeight(date);
+        weight += recentlyTakenWeight(calendar);
 
         //sets the most recent photo's weight to zero if is the most recent photo
         if(recentlyShown == 11){
