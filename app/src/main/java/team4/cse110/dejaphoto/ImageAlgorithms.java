@@ -7,13 +7,12 @@ package team4.cse110.dejaphoto;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 
 //TODO notes:
 //make the bitmap array an array of URI's?
@@ -97,9 +96,9 @@ public class ImageAlgorithms {
     //gets called for the next image
     public Bitmap nextImage() {
         if (photoAlbum.isEmpty()) {
-            Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.defaultimage);
-            return icon;
+            //Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
+            //        R.drawable.defaultimage);
+            return null;
         }
         if (photoAlbum.size() == 1){
             photoAlbum.get(0).mostRecent();
@@ -147,11 +146,11 @@ public class ImageAlgorithms {
     public Bitmap previousImage(){
         //goes back a maximum of 10 images
         if(imageIndex == 10) {
-            return null;
+            return previousImages[10].getImage();
         }
         //if there is no image to go back to
         else if(previousImages[imageIndex+1] == null){
-            return null;
+            return previousImages[imageIndex].getImage();
         }
         //returns the previous image (if there is one)
         else{
