@@ -65,9 +65,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         ImageView imageView = holder.photo;
         Glide
                 .with(context)
-                .load(photo.getPath())
-                .into(imageView);
-    }
+            .load(photo.getPath())
+            .into(imageView);
+}
 
     // Get the number of photos in the photo list
     @Override
