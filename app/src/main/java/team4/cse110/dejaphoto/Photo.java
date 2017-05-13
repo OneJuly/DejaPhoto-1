@@ -9,53 +9,46 @@
 package team4.cse110.dejaphoto;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.icu.text.SimpleDateFormat;
-import android.media.ExifInterface;
-
-import java.text.ParseException;
-import java.util.Date;
 
 public class Photo {
 
     //TODO replace member variables with their appropriate types
     private Context context;
     private String path;
-    private Bitmap returnImage;
+/*    private Bitmap returnImage;
     private int dayTime;
     private String weekday;
     private int location;
-    private boolean karma;
+    private boolean karma;*/
     //private int weight;
     //////////
 
-    ExifInterface exifInterface;
-    private String timeFormat;
+//    ExifInterface exifInterface;
+/*    private String timeFormat;
     private String weekdayFormat;
     private Date d;
-    private String time;
+    private String time;*/
 
     //constructor for the photo class
     public Photo(Context context){
         this.context = context;
-        returnImage = null;
+/*        returnImage = null;
         path = null;
         dayTime = 0;
         weekday = "";
         location = 0;
-        karma = false;
+        karma = false;*/
         //weight = 0;
     }
 
     public Photo (Context context, String path){
         this.context = context;
-        //TODO convert from string into bitmap
-        returnImage = null;
         this.path = path;
+/*        returnImage = null;
         dayTime = getTime();
         weekday = getWeekday();
         location = getLocation();
-        karma = false;
+        karma = false;*/
         //weight = calcWeight();
     }
 
@@ -63,7 +56,7 @@ public class Photo {
         return path;
     }
 
-    //TODO FINISH METHOD
+/*    //TODO FINISH METHOD
     public int getTime(){
 
         //TODO use this.returnImage???
@@ -169,5 +162,5 @@ public class Photo {
         weight += recentlyTakenWeight();
 
         return weight;
-    }
+    }*/
 }
