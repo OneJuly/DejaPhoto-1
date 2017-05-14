@@ -13,13 +13,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 
 import com.snappydb.DB;
-import com.snappydb.DBFactory;
+import com.snappydb.SnappyDB;
 import com.snappydb.SnappydbException;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -29,6 +29,8 @@ import java.util.List;
 //create member variables having to do with current time/day/location?
 
 public class ImageAlgorithms implements Algorithm {
+
+    private static final String TAG = "ImageAlgorithms";
 
     private static final String DB_NAME = "AlgorithmDB";
     private static final String IMAGE_INDEX= "imageIndex";
@@ -52,15 +54,21 @@ public class ImageAlgorithms implements Algorithm {
         this.context = context;
         photoUtils = new PhotoUtils(context);
         prefUtils = new PrefUtils();
+        photoAlbum = photoUtils.getCameraPhotos();
 
-        load();
-
-        /* Get snappyDB reference */
+        /* Build snappyDB */
         try {
-            snappydb = DBFactory.open(context, DB_NAME);
+
+            snappydb = new SnappyDB.Builder(context)
+                    .directory(Environment.getExternalStorageDirectory().getAbsolutePath())
+                    .name(DB_NAME)
+                    .build();
+
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
+
+        load();
     }
 
     //////////////////// HELPER METHODS ////////////////////
@@ -99,22 +107,18 @@ public class ImageAlgorithms implements Algorithm {
         LocationListener locListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-
             }
 
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
-
             }
 
             @Override
             public void onProviderEnabled(String provider) {
-
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-
             }
         };
 
@@ -291,14 +295,28 @@ public class ImageAlgorithms implements Algorithm {
     //TODO implement algorithm
     public void load() {
         try {
-            imageIndex = snappydb.getInt(IMAGE_INDEX);
-            previousImages = snappydb.getObjectArray(PREV_IMAGES, Photo.class);
-            photoAlbum = snappydb.getObject(PHOTO_ALBUM, List.class);
+            if (snappydb.exists(IMAGE_INDEX)) {
+                imageIndex = snappydb.getInt(IMAGE_INDEX);
+            } else {
+                imageIndex = 0;
+            }
+
+            if (snappydb.exists(PREV_IMAGES)) {
+                previousImages = snappydb.getObjectArray(PREV_IMAGES, Photo.class);
+            } else {
+                previousImages = new Photo[previousArrSize];
+            }
+
+            if (snappydb.exists(PHOTO_ALBUM)) {
+                photoAlbum = snappydb.getObject(PHOTO_ALBUM, List.class);
+            } else {
+                photoAlbum = photoUtils.getCameraPhotos();
+            }
+
+            snappydb.close();
+
         } catch (SnappydbException e) {
             e.printStackTrace();
-            imageIndex = 0;
-            previousImages = new Photo[previousArrSize];
-            photoAlbum = new ArrayList<>();
         }
     }
 }

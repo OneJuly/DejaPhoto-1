@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="team4.cse110.dejaphoto">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
@@ -22,7 +23,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <receiver android:name="DejaAppWidgetProvider">
@@ -30,8 +30,10 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider"
-                       android:resource="@xml/deja_appwidget_info" />
+                android:resource="@xml/deja_appwidget_info" />
         </receiver>
+
     </application>
+
 
 </manifest>

@@ -17,12 +17,12 @@ class PhotoUtils {
      *
      * @param context
      */
-    PhotoUtils(Context context) {
+   public PhotoUtils(Context context) {
         this.context = context;
     }
 
     /* Returns a list of paths to default camera photos */
-    ArrayList<Photo> getCameraPhotos() {
+    public ArrayList<Photo> getCameraPhotos() {
 
         ArrayList<Photo> photoPaths = new ArrayList<>();
 
