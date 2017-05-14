@@ -1,5 +1,7 @@
 package team4.cse110.dejaphoto;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -9,9 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import team4.cse110.dejaphoto.database.PhotoDBHelper;
+import droidninja.filepicker.FilePickerBuilder;
+import droidninja.filepicker.FilePickerConst;
 
 /**
  * This class sets up the app's homepage, where photos from the phone's camera
@@ -20,9 +24,11 @@ import team4.cse110.dejaphoto.database.PhotoDBHelper;
 public class GalleryActivity extends AppCompatActivity {
 
     private static final String TAG = "GalleryActivity";
+    public static int PHOTO_REQUEST_CODE = 2929;
     private static final int GRID_SPAN = 3; // number of columns for ImageViews
 
     private List<Photo> photos;
+    private ArrayList<String> paths;
 
     /** Create a new directory to store selected folders. */
     static final String dirName = "DejaPhoto";
@@ -43,20 +49,47 @@ public class GalleryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
+        PhotoUtils.getInstance(this);
+        photos = new ArrayList<>();
+
+        FilePickerBuilder.getInstance().setMaxCount(10)
+                .setSelectedFiles(paths)
+                .setActivityTheme(R.style.AppTheme)
+                .pickPhoto(this);
 
         /* Initialize database if necessary */
-        if (!getDatabasePath(PhotoDBHelper.DATABASE_NAME).exists()) {
-            Log.v(TAG, "Initializing DB!\n");
-            PhotoUtils.getInstance(this).initFromCameraRoll();
-        }
+//        if (!getDatabasePath(PhotoDBHelper.DATABASE_NAME).exists()) {
+//            Log.v(TAG, "Initializing DB!\n");
+//            PhotoUtils.getInstance(this).initFromCameraRoll();
+//        }
+//        PhotoUtils.getInstance(this).initFromCameraRoll();
 
         /* Get active photos */
-        photos = PhotoUtils.getInstance(this).getPhotos();
+//        photos = PhotoUtils.getInstance(this).getPhotos();
 
         /* Hook up the adapter to the RecyclerView */
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
         rvPhotos.setAdapter(adapter);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch(requestCode)
+        {
+            case FilePickerConst.REQUEST_CODE_PHOTO:
+                if (resultCode == Activity.RESULT_OK && data != null)
+                {
+                    paths = new ArrayList<>();
+                    paths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
+                }
+                break;
+        }
+
+        /* Populate Photo array */
+        for (String path : paths) {
+            photos.add(new Photo(path));
+        }
     }
 
     /* Get the external DejaPhoto album and create it if it doesn't exist */

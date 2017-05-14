@@ -40,14 +40,4 @@ public interface Algorithm {
      */
     Bitmap release();
 
-    /**
-     * Save object state into persistent store.
-     */
-    void save();
-
-    /**
-     * Load object state from persistent store. Note that this may override the current state
-     */
-    void load();
-
 }

@@ -12,6 +12,7 @@ import android.util.Log;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import team4.cse110.dejaphoto.database.PhotoDBCursorWrapper;
@@ -20,10 +21,11 @@ import team4.cse110.dejaphoto.database.PhotoDBHelper;
 import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
 /**
- * Singleton to store photos.
+ * Singleton to store Photos and Photo-related utilities.
  */
 public class PhotoUtils {
     private static final String TAG = "PhotoUtils";
+    private static int imageIndex; // last image
 
     private static PhotoUtils sPhotoUtils;
 
@@ -111,17 +113,29 @@ public class PhotoUtils {
     }
 
     /**
+     * Removes a given Photo from the database
+     *
+     * @param photo the photo to be added
+     */
+    public void removePhoto(Photo photo) {
+        String id = photo.getId().toString();
+
+        mDatabase.delete(PhotoTable.NAME, PhotoTable.Cols.UUID + " =?",
+                new String[] { id });
+    }
+
+    /**
      * Update an existing database entry
      *
      * @param photo
      */
     public void updatePhoto(Photo photo) {
-        String uuidString = photo.getId().toString();
+        String id = photo.getId().toString();
         ContentValues values = getContentValues(photo);
 
         mDatabase.update(PhotoTable.NAME, values, PhotoTable.Cols.UUID + " = ?",
-                // use '?': good habit to prevent sql injection
-                new String[] { uuidString });
+
+                new String[] { id });
     }
 
     /**
@@ -171,6 +185,31 @@ public class PhotoUtils {
         return new PhotoDBCursorWrapper(cursor);
     }
 
+    /**
+     *
+     * @return
+     */
+    public Bitmap next() {
+
+        List<Photo> album = getPhotos();
+
+        /* Check if the photos db is empty */
+        if (album.isEmpty()) {
+            return null;
+        }
+
+        /* Only one Photo in the db */
+        if (album.size() == 1) {
+            return getBitmap(album.get(0));
+        }
+
+        /* Get a random photo */
+        Random rand = new Random();
+        int randIndex = rand.next
+
+
+    }
+
 
     /**
      *
@@ -189,21 +228,19 @@ public class PhotoUtils {
 
         // get cursor over query
         Cursor cursor = mContext.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, selection, selectionArgs, orderDate);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
+                selection, selectionArgs, orderDate);
 
         // number of camera images
         int numPhotos = cursor.getCount();
 
         // image paths
         String[] arrPath = new String[numPhotos];
-        String[] arrLat = new String[numPhotos];
-        String[] arrLon = new String[numPhotos];
 
         for (int i = 0; i < numPhotos; i++) {
             cursor.moveToPosition(i);
+
             int pathColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-//            int latColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.LATITUDE);
-//            int lonColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.LONGITUDE);
 
             // init photo to add to the database
             arrPath[i]= cursor.getString(pathColumnIndex);
