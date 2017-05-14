@@ -4,16 +4,10 @@
 
 package team4.cse110.dejaphoto;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
@@ -21,6 +15,8 @@ import com.snappydb.SnappydbException;
 
 import java.util.Calendar;
 import java.util.List;
+
+//
 
 //TODO notes:
 //make the bitmap array an array of URI's?
@@ -97,8 +93,20 @@ public class ImageAlgorithms implements Algorithm {
 
     public Location getCurrentLocation() {
         //TODO take out the following if statement and fix code
-        if(true){ return null; }
 
+        //http://stackoverflow.com/questions/32491960/android-check-permission-for-locationmanager
+        LocationManager locationManager;
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        try {
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            return location;
+        }
+        catch (SecurityException e) {
+            return null;
+        }
+
+        /*
+        if(true){ return null; }
 
         //create location manager instance
         LocationManager locManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -148,6 +156,7 @@ public class ImageAlgorithms implements Algorithm {
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         return null;
+        */
     }
 
     //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
