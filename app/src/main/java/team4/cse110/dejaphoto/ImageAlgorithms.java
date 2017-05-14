@@ -292,6 +292,19 @@ public class ImageAlgorithms implements Algorithm {
         save();
     }
 
+    public String getAddress(){
+        Location location = getCurrentLocation();
+        if(location == null){
+            return "address:______";
+        }
+        else{
+
+
+
+            return null;
+        }
+    }
+
     //TODO implement algorithm
     public void save(){
         try {
