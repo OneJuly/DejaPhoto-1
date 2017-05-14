@@ -22,7 +22,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public ImageAdapter() {
     }
 
-    /* Internal photo viewholder */
+    /**
+     *
+     *
+     *
+     * Internal photo viewholder
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView photo;
@@ -70,7 +75,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             .with(context)
             .load(photo.getPath())
             .into(imageView);
-
 }
 
     // Get the number of photos in the photo list
@@ -78,7 +82,5 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public int getItemCount() {
         return photos.size();
     }
-
-
 }
 

@@ -292,6 +292,5 @@ public class ImageAlgorithms implements Algorithm {
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
-
     }
 }

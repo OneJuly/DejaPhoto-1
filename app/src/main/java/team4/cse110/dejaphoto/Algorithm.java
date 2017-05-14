@@ -49,5 +49,4 @@ public interface Algorithm {
      * Load object state from persistent store. Note that this may override the current state
      */
     void load();
-
 }
