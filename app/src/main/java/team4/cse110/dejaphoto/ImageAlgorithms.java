@@ -44,6 +44,7 @@ public class ImageAlgorithms implements Algorithm {
     private DB snappydb;
 
     public ImageAlgorithms(Context context) {
+        load();
         this.context = context;
         imageIndex = 0;
         previousImages = new Photo[11];
@@ -86,6 +87,9 @@ public class ImageAlgorithms implements Algorithm {
 
 
     public Location getCurrentLocation() {
+        //TODO take out the following if statement and fix code
+        if(true){ return null; }
+
 
         //create location manager instance
         LocationManager locManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -197,6 +201,7 @@ public class ImageAlgorithms implements Algorithm {
                 //updates image array and returns a new image
                 previousImages[0] = returnImage;
                 returnImage.mostRecent();
+                save();
                 return returnImage.getImage();
             }
             else{
@@ -211,12 +216,14 @@ public class ImageAlgorithms implements Algorithm {
                 //updates image array and rturns a new image
                 previousImages[0] = returnImage;
                 returnImage.mostRecent();
+                save();
                 return returnImage.getImage();
             }
         }
         //updates the imageIndex to point to the next image and returns that image
         else{
             imageIndex -= 1;
+            save();
             return previousImages[imageIndex].getImage();
         }
     }
@@ -225,15 +232,18 @@ public class ImageAlgorithms implements Algorithm {
     public Bitmap prev(){
         //goes back a maximum of 10 images
         if(imageIndex == 10) {
+            save();
             return null;
         }
         //if there is no image to go back to
         else if(previousImages[imageIndex+1] == null){
+            save();
             return null;
         }
         //returns the previous image (if there is one)
         else{
             imageIndex += 1;
+            save();
             return previousImages[imageIndex].getImage();
         }
     }
@@ -241,6 +251,7 @@ public class ImageAlgorithms implements Algorithm {
     //TODO make sure previousImages[imageIndex].giveKarma() works as expected
     public void incKarma(){
         previousImages[imageIndex].giveKarma();
+        save();
     }
 
     //TODO make sure photoUtils.releasePhoto() works as expected
@@ -254,11 +265,13 @@ public class ImageAlgorithms implements Algorithm {
             }
         }
         //returns the bitmap of the next image
+        save();
         return next();
     }
 
     public void releasePhotoThroughGallery(){
         photoUtils.releasePhoto();
+        save();
     }
 
     //TODO implement algorithm

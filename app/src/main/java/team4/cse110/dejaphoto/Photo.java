@@ -64,11 +64,11 @@ public class Photo {
     public Photo (Context context, String path){
         this.context = context;
         this.path = path;
-//        returnImage = getImage();
-//        time = getTime();
-//        dayTime = getHour();
-//        dayOfWeek = getWeekday();
-//        location = getLocation();
+        returnImage = getImage();
+        time = getTime();
+        dayTime = getHour();
+        dayOfWeek = getWeekday();
+        location = getLocation();
         karma = false;
         recentlyShown = 1;
         weight = 300;
@@ -216,7 +216,10 @@ public class Photo {
         return ((calendar.get(Calendar.DAY_OF_WEEK) - 1) == dayOfWeek);
     }
 
-    private boolean same_location() {
+    private boolean same_location(Location location) {
+        if(this.location == null || location == null){
+            return false;
+        }
         float distanceInMeters =  this.location.distanceTo(location);
         if (distanceInMeters < 150 ){
             return true;
@@ -279,7 +282,7 @@ public class Photo {
         if(same_weekday(calendar)) {
             weight += 100;
         }
-        if(same_location()) {
+        if(same_location(location)) {
             weight += 100;
         }
         if(karma) {

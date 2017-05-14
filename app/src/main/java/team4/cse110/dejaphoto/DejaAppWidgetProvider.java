@@ -58,7 +58,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     private void onPrev(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Prev button tapped");
 
-        Algorithm algorithm = new DummyAlgorithm();
+        Algorithm algorithm = new ImageAlgorithms(context);
 
         // Set the previous wallpaper
         Bitmap bitmap = algorithm.prev();
@@ -68,7 +68,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
         // Enable the karma button if no karma
         if (!algorithm.hasKarma()) {
-            RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
+            RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
         }
@@ -77,7 +77,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     private void onNext(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Next button tapped");
 
-        Algorithm algorithm = new DummyAlgorithm();
+        Algorithm algorithm = new ImageAlgorithms(context);
 
         // Set the next wallpaper or default if none exits
         Bitmap bitmap = algorithm.next();
@@ -98,7 +98,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     private void onKarma(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Karma button tapped");
 
-        Algorithm algorithm = new DummyAlgorithm();
+        Algorithm algorithm = new ImageAlgorithms(context);
 
         // Set karma and disable button
         algorithm.incKarma();
@@ -110,7 +110,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     private void onRelease(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Release button tapped");
 
-        Algorithm algorithm = new DummyAlgorithm();
+        Algorithm algorithm = new ImageAlgorithms(context);
 
         // Release image and set replacement
         Bitmap bitmap = algorithm.release();
