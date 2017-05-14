@@ -9,6 +9,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.app.WallpaperManager;
+
+import java.io.IOException;
+
 
 /**
  * AppWidgetProvider for the DejaVu class
@@ -177,10 +181,21 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     }
 
     private void setWallpaper(Bitmap bitmap) {
-
+        WallpaperManager myWallpaperManager =
+                WallpaperManager.getInstance();
+        try {
+            myWallpaperManager.setBitmap(Bitmap bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setDefaultWallpaper() {
-
+        WallpaperManager myWallpaperManager =
+                WallpaperManager.getInstance();
+        try {
+            myWallpaperManager.setResource(+ R.drawable.defaultimage);
+        } catch (IOException e) {
+            e.printStackTrace();
     }
 }
