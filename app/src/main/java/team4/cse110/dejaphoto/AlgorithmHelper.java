@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
  */
 
 public class AlgorithmHelper implements Algorithm {
+
     @Override
     public Bitmap next() {
         return null;

@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +19,19 @@ import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
  */
 public class PhotoUtils {
     private static final String TAG = "PhotoUtils";
+    private static final String DB_MAIN= "DejaPhotoMainDB";
+    private static final String DB_CACHE = "DejaPhotoCacheDB";
 
     private static PhotoUtils sPhotoUtils;
 
     private Context mContext;
     SQLiteDatabase mDatabase;
+    SQLiteDatabase mCache;
 
     private PhotoUtils(Context context) {
         mContext = context.getApplicationContext();
-        mDatabase = new PhotoDBHelper(mContext).getWritableDatabase();
+        mDatabase = new PhotoDBHelper(mContext, DB_MAIN).getWritableDatabase();
+        mCache = new PhotoDBHelper(mContext, DB_CACHE).getWritableDatabase();
     }
 
     /**
@@ -50,7 +52,6 @@ public class PhotoUtils {
     /**
      * Returns a List containing all the current Photo objects.
      *
-     //    private static final String DB_NAME = "";
      * @return the list of all photos
      */
     public List<Photo> getPhotos() {
@@ -69,6 +70,16 @@ public class PhotoUtils {
         }
 
         return photos;
+    }
+
+    /**
+     * Returns a list of Photos that were previously used as wallpaper.
+     *
+     * @return
+     */
+    public List<Photo> getCache() {
+        return null;
+
     }
 
     /** * Returns a single Photo object according to the supplied UUID.
@@ -150,17 +161,6 @@ public class PhotoUtils {
         return values;
     }
 
-
-    /**
-     * Build a bitmap from a given Photo object
-     *
-     * @param photo
-     * @return
-     */
-    Bitmap getBitmap(Photo photo) {
-        return BitmapFactory.decodeFile(photo.getPath());
-    }
-
     /**
      *
      * @param whereClause
@@ -178,26 +178,5 @@ public class PhotoUtils {
         return new PhotoDBCursorWrapper(cursor);
     }
 
-    /**
-     *
-     * @return
-     */
-    public Bitmap next() {
-
-        List<Photo> album = getPhotos();
-
-        /* Check if the photos db is empty */
-        if (album.isEmpty()) {
-            return null;
-        }
-
-        /* Only one Photo in the db */
-        if (album.size() == 1) {
-            return getBitmap(album.get(0));
-        }
-
-        return null;
-
-    }
 
 }
