@@ -67,7 +67,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         // Set the previous wallpaper
         Bitmap bitmap = algorithm.prev();
         if (bitmap != null) {
-            setWallpaper(bitmap);
+            setWallpaper(bitmap, context);
         }
 
         // Enable the karma button if no karma
@@ -86,9 +86,9 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         // Set the next wallpaper or default if none exits
         Bitmap bitmap = algorithm.next();
         if (bitmap != null) {
-            setWallpaper(bitmap);
+            setWallpaper(bitmap, context);
         } else {
-            setDefaultWallpaper();
+            setDefaultWallpaper(context);
         }
 
         // Enable the karma button if no karma
@@ -119,9 +119,9 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         // Release image and set replacement
         Bitmap bitmap = algorithm.release();
         if (bitmap != null) {
-            setWallpaper(bitmap);
+            setWallpaper(bitmap, context);
         } else {
-            setDefaultWallpaper();
+            setDefaultWallpaper(context);
         }
     }
 
@@ -179,9 +179,9 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         remoteViews.setBoolean(id, "setEnabled", false);
     }
 
-    private void setWallpaper(Bitmap bitmap) {
+    private void setWallpaper(Bitmap bitmap, Context context) {
         WallpaperManager myWallpaperManager =
-                WallpaperManager.getInstance( );
+                WallpaperManager.getInstance(context);
         try {
             myWallpaperManager.setBitmap(bitmap);
         } catch (IOException e) {
@@ -189,9 +189,9 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    private void setDefaultWallpaper() {
+    private void setDefaultWallpaper(Context context) {
         WallpaperManager myWallpaperManager =
-                WallpaperManager.getInstance( );
+                WallpaperManager.getInstance(context);
         try {
             myWallpaperManager.setResource(+ R.drawable.defaultimage);
         } catch (IOException e) {
