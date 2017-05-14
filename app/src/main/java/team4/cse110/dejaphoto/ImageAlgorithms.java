@@ -23,7 +23,6 @@ import java.util.ArrayList;
 public class ImageAlgorithms {
 
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
-
     private Context context;
     private int imageIndex;
     Photo[] previousImages;
@@ -55,7 +54,6 @@ public class ImageAlgorithms {
 
 
     }
-
 
 
     //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////

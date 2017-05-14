@@ -16,7 +16,6 @@ import team4.cse110.dejaphoto.database.PhotoDBHelper;
 public class GalleryActivity extends AppCompatActivity {
 
     private static final String TAG = "GalleryActivity";
-
     private static final int GRID_SPAN = 3; // number of columns for ImageViews
 
     private List<Photo> photos;
@@ -44,13 +43,14 @@ public class GalleryActivity extends AppCompatActivity {
         /* Get active photos */
         photos = PhotoUtilities.getInstance(this).getPhotos();
 
+        /* Hook up the adapter to the RecyclerView */
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
         rvPhotos.setAdapter(adapter);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
     }
 
-
     /* Get the external DejaPhoto album and create it if it doesn't exist */
+    /* TODO */
     private File getDejaAlbumDir(String name) {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(

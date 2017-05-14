@@ -2,6 +2,7 @@ package team4.cse110.dejaphoto;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +22,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
     private static final String TAG = "PhotoAdapter";
 
-    private Context context;
     private List<Photo> photos;
     private PhotoUtilities utils;
-
-    public PhotoAdapter() {
-    }
+    private Context context;
 
     /* Internal clickable photo viewholder */
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -34,11 +32,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
         public ImageView photo;
         public CheckBox checkBox;
-        private Context context;
 
-        public ViewHolder(Context context, View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            this.context = context;
             photo = (ImageView) itemView.findViewById(R.id.gallery_photo);
             checkBox = (CheckBox) itemView.findViewById(R.id.gallery_checkbox);
             itemView.setOnClickListener(this);
@@ -47,21 +43,27 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         @Override
         public void onClick(View view) {
             int pos = getAdapterPosition();
+
             if (pos != RecyclerView.NO_POSITION) {
                 Photo photo = photos.get(pos);
-                photo.toggleActive();
                 toggleCheckbox(checkBox);
+                if (photo.isActive()) {
+                    Log.v(TAG, "Photo is active " + pos);
+                    photo.setActive(0);
+                } else {
+                    Log.v(TAG, "Photo is inactive " + pos);
+                    photo.setActive(1);
+                }
             }
         }
 
     }
 
-
+    /* PhotoAdapter constructor */
     public PhotoAdapter(Context context, List<Photo> photos) {
         this.context = context;
         this.photos = photos;
         utils = PhotoUtilities.getInstance(context);
-
     }
 
     private Context getContext() {
@@ -78,7 +80,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         View photoView = inflater.inflate(R.layout.gallery_photo, parent, false);
 
         // Return the new viewholder
-        ViewHolder holder = new ViewHolder(context, photoView);
+        ViewHolder holder = new ViewHolder(photoView);
         return holder;
     }
 
@@ -98,7 +100,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                 .with(context)
                 .load(photo.getPath())
                 .into(imageView);
-
     }
 
     // Get the number of photos in the photo list
