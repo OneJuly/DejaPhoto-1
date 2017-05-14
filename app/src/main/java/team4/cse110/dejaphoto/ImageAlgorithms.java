@@ -303,6 +303,5 @@ public class ImageAlgorithms implements Algorithm {
         } catch (SnappydbException e) {
             throw e;
         }
-
     }
 }

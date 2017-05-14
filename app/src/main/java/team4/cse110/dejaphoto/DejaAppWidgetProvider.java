@@ -22,6 +22,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     public static final String TAG = "DEJA_PROVIDER";
     public static final String TAG_RECV = "Receive: ";
 
+    // Intent actions
     private static final String PREV_CLICKED = "PREV_BUTTON_CLICK";
     private static final String NEXT_CLICKED = "NEXT_BUTTON_CLICK";
     private static final String KARMA_CLICKED = "KARMA_BUTTON_CLICK";
@@ -125,6 +126,12 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
+    /**
+     * Inflates a default view hierarchy
+     *
+     * @param context current application context
+     * @return the default view hierarchy
+     */
     private RemoteViews getDefaultRemoteViews(Context context) {
         // Inflate view hierarchy
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -159,6 +166,12 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         return remoteViews;
     }
 
+    /**
+     * Updates all associated widgets with the given view hierarchy
+     *
+     * @param context     current application context
+     * @param remoteViews view hierarchy
+     */
     private void updateRemoteViews(Context context, RemoteViews remoteViews) {
         // Get widget manager and all associated ids
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -171,14 +184,32 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
+    /**
+     * Enable a view in the given view hierarchy
+     *
+     * @param id          id of the view
+     * @param remoteViews view hierarchy
+     */
     private void enableView(int id, RemoteViews remoteViews) {
         remoteViews.setBoolean(id, "setEnabled", true);
     }
 
+    /**
+     * Disable a view in the given view hierarchy
+     *
+     * @param id          id of the view
+     * @param remoteViews view hierarchy
+     */
     private void disableView(int id, RemoteViews remoteViews) {
         remoteViews.setBoolean(id, "setEnabled", false);
     }
 
+    /**
+     * Set the wallpaper of the device to the bitmap
+     *
+     * @param bitmap  bitmap of new wallpaper
+     * @param context current application context
+     */
     private void setWallpaper(Bitmap bitmap, Context context) {
         WallpaperManager myWallpaperManager =
                 WallpaperManager.getInstance(context);
@@ -189,6 +220,10 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
+    /***
+     * Set the wallpaper of the device to the default bitmap
+     * @param context current application context
+     */
     private void setDefaultWallpaper(Context context) {
         WallpaperManager myWallpaperManager =
                 WallpaperManager.getInstance(context);
