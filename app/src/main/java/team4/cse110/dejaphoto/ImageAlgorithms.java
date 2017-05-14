@@ -71,6 +71,9 @@ public class ImageAlgorithms implements Algorithm {
 
 
     public Location getCurrentLocation() {
+        //TODO take out the following if statement and fix code
+        if(true){ return null; }
+
 
         //create location manager instance
         LocationManager locManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
