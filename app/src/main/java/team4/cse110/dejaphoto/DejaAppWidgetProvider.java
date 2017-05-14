@@ -108,7 +108,6 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     }
 
     private void onRelease(Context context, Intent intent) {
-        // TODO call onNext to set a new picture
         Log.v(TAG, TAG_RECV + "Release button tapped");
 
         Algorithm algorithm = new DummyAlgorithm();
