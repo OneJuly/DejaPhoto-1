@@ -15,6 +15,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -25,6 +29,9 @@ import java.util.Calendar;
 
 public class ImageAlgorithms implements Algorithm {
 
+    private static final String DB_NAME = "AlgorithmDB";
+    private static final String OB_NAME = "my_algorithm";
+
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
 
     private Context context;
@@ -34,6 +41,7 @@ public class ImageAlgorithms implements Algorithm {
 
     private PhotoUtils photoUtils;
     private PrefUtils prefUtils;
+    private DB snappydb;
 
     public ImageAlgorithms(Context context) {
         this.context = context;
@@ -42,6 +50,13 @@ public class ImageAlgorithms implements Algorithm {
         photoUtils = new PhotoUtils(context);
         prefUtils = new PrefUtils();
         photoAlbum = photoUtils.getCameraPhotos();
+
+        /* Get snappyDB reference */
+        try {
+            snappydb = DBFactory.open(context, DB_NAME);
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
     }
 
     //////////////////// HELPER METHODS ////////////////////
@@ -100,14 +115,14 @@ public class ImageAlgorithms implements Algorithm {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED ) {
+                            != PackageManager.PERMISSION_GRANTED ) {
                 //TODO fix first argument (don't cast to android.app.Activity)
-            ActivityCompat.requestPermissions((android.app.Activity) context, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.INTERNET
-            }, 10 );
+                ActivityCompat.requestPermissions((android.app.Activity) context, new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.INTERNET
+                }, 10 );
 
-            return null;
+                return null;
             }
         }
         else{
@@ -248,9 +263,22 @@ public class ImageAlgorithms implements Algorithm {
 
     //TODO implement algorithm
     public void save(){
+        try {
+            snappydb.put(OB_NAME, this);
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
     }
 
     //TODO implement algorithm
     public void load(){
+        try {
+            ImageAlgorithms savedAlgorithms =
+                    snappydb.getObject(OB_NAME, ImageAlgorithms.class);
+
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
+
     }
 }
