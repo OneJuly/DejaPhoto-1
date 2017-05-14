@@ -64,11 +64,11 @@ public class Photo {
     public Photo (Context context, String path){
         this.context = context;
         this.path = path;
-        returnImage = getImage();
-        time = getTime();
-        dayTime = getHour();
-        dayOfWeek = getWeekday();
-        location = getLocation();
+//        returnImage = getImage();
+//        time = getTime();
+//        dayTime = getHour();
+//        dayOfWeek = getWeekday();
+//        location = getLocation();
         karma = false;
         recentlyShown = 1;
         weight = 300;
