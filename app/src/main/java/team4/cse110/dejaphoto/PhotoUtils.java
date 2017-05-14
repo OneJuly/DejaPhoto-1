@@ -17,7 +17,7 @@ import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 /**
  * Singleton to store Photos and Photo-related utilities.
  */
-public class PhotoUtils {
+public class PhotoUtils implements  PhotoDB{
     private static final String TAG = "PhotoUtils";
     private static final String DB_MAIN= "DejaPhotoMainDB";
     private static final String DB_CACHE = "DejaPhotoCacheDB";
@@ -82,6 +82,11 @@ public class PhotoUtils {
 
     }
 
+    @Override
+    public int getPosition() {
+        return 0;
+    }
+
     /** * Returns a single Photo object according to the supplied UUID.
      *
      * @param id a photo's unique identifier
@@ -133,13 +138,33 @@ public class PhotoUtils {
      *
      * @param photo
      */
-    public void updatePhoto(Photo photo) {
+    public boolean updatePhoto(Photo photo) {
         String id = photo.getId().toString();
         ContentValues values = getContentValues(photo);
 
-        mDatabase.update(PhotoTable.NAME, values, PhotoTable.Cols.UUID + " = ?",
+        int updated = mDatabase.update(PhotoTable.NAME, values, PhotoTable.Cols.UUID + " = ?",
 
                 new String[] { id });
+
+        return updated > 0;
+    }
+
+    /**
+     *
+     * @param cache
+     */
+    @Override
+    public void setCache(List<Photo> cache) {
+
+    }
+
+    /**
+     *
+     * @param pos
+     */
+    @Override
+    public void setPosition(int pos) {
+
     }
 
     /**
@@ -156,7 +181,7 @@ public class PhotoUtils {
         values.put(PhotoTable.Cols.LON, photo.getLon());
         values.put(PhotoTable.Cols.KARMA, photo.hasKarma() ? 1 : 0);
         values.put(PhotoTable.Cols.WEIGHT, photo.getWeight());
-        values.put(PhotoTable.Cols.ACTIVE, photo.isActive() ? 1 : 0);
+        values.put(PhotoTable.Cols.PREV, photo.isActive() ? 1 : 0);
 
         return values;
     }
