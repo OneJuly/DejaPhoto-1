@@ -12,13 +12,12 @@ package team4.cse110.dejaphoto;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.media.ExifInterface;
 import android.provider.MediaStore;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 
 //TODO notes:
 //convert from path string into bitmap
@@ -39,12 +38,6 @@ public class Photo {
     private boolean karma;
     private double recentlyShown;
     private double weight;
-
-    //TODO clean extra member variables for methods
-    private ExifInterface exifInterface;
-    private String timeFormat;
-    private String weekdayFormat;
-    private Date d;
 
     //Default constructor for the photo class
     public Photo(Context context){
@@ -87,7 +80,7 @@ public class Photo {
         return returnImage;
     }
 
-    public long getTime(){
+    private long getTime(){
         //give the time that the photo was taken in millideconds since jan 1st, 1970
         String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
         time = Long.parseLong(dateTaken);
@@ -95,8 +88,8 @@ public class Photo {
     }
 
     //TODO FINISH METHOD
-    public int getHour(){
-
+    private int getHour(){
+        Date d;
           String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
 
 //        //TODO use this.returnImage???
@@ -114,14 +107,15 @@ public class Photo {
             // TODO Auto-generated catch block
             return 0;
         }
-        timeFormat = time.format(d);
+        String timeFormat = time.format(d);
         dayTime = Integer.parseInt(timeFormat);
         return dayTime;
     }
 
     //TODO FINISH METHOD
-    public int getWeekday() {
+    private int getWeekday() {
 
+        Date d;
         String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
         //TODO use this.returnImage???
 //        try {
@@ -138,7 +132,7 @@ public class Photo {
             // TODO Auto-generated catch block
             return 0;
         }
-        weekdayFormat = weekday.format(d);
+        String weekdayFormat = weekday.format(d);
         switch (weekdayFormat) {
             case "SUN":
                 dayOfWeek = 0;
@@ -166,7 +160,7 @@ public class Photo {
     }
 
     //TODO FINISH METHOD
-    public Location getLocation(){
+    private Location getLocation(){
 
         String latitude = MediaStore.Images.Media.LATITUDE;
         String longitude = MediaStore.Images.Media.LONGITUDE;
@@ -221,12 +215,7 @@ public class Photo {
             return false;
         }
         float distanceInMeters =  this.location.distanceTo(location);
-        if (distanceInMeters < 150 ){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (distanceInMeters < 150);
     }
 
     private boolean within_a_week(Calendar calendar) {
@@ -254,7 +243,7 @@ public class Photo {
     }
 
     //method to return a weight for the image based on how recently the photo was taken
-    public double recentlyTakenWeight(Calendar calendar) {
+    private double recentlyTakenWeight(Calendar calendar) {
         if(within_a_week(calendar)) {
             return 200;
         }
@@ -268,8 +257,7 @@ public class Photo {
     }
 
     public boolean hasKarma(){
-        if(karma){ return true; }
-        else{ return false; }
+        return karma;
     }
 
     //method to calculate the overall weight of the photo
