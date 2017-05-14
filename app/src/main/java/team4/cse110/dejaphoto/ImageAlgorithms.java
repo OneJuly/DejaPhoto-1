@@ -23,16 +23,15 @@ public class ImageAlgorithms {
     private Context context;
     private int imageIndex;
     private Photo[] previousImages;
-    private Photo returnImage;
+    private ArrayList<Photo> photoAlbum;
+
     private PhotoUtils photoUtils;
     private PrefUtils prefUtils;
-    private ArrayList<Photo> photoAlbum;
 
     public ImageAlgorithms(Context context){
         this.context = context;
         imageIndex = 0;
         previousImages = new Photo[11];
-        Photo returnImage = null;
         photoUtils = new PhotoUtils(context);
         prefUtils = new PrefUtils();
         photoAlbum = photoUtils.getCameraPhotos();
@@ -103,7 +102,7 @@ public class ImageAlgorithms {
         //if the user is on the most recent picture (more "next" than "previous" presses)
         if(imageIndex == 0){
             if(is_DJV_Enabled()){
-                returnImage = DJV_algorithm();
+                Photo returnImage = DJV_algorithm();
                 //for indexes with images, copies images in array starting with [9]->[10]
                 for(int index = 9; index >-1; --index){
                     if(previousImages[index] != null) {
@@ -117,7 +116,7 @@ public class ImageAlgorithms {
                 return returnImage.getImage();
             }
             else{
-                returnImage = random_algorithm();
+                Photo returnImage = random_algorithm();
                 //for indexes with images, copies images in array starting with [9]->[10]
                 for(int index = 9; index > -1; --index){
                     if(previousImages[index] != null){
