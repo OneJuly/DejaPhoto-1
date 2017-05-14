@@ -4,7 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,6 +23,8 @@ import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
  * Singleton to store photos.
  */
 public class PhotoUtils {
+    private static final String TAG = "PhotoUtils";
+
     private static PhotoUtils sPhotoUtils;
 
     private Context mContext;
@@ -86,7 +91,6 @@ public class PhotoUtils {
             if (cursor.getCount() == 0) {
                 return null;
             }
-
             cursor.moveToFirst();
             return cursor.getPhoto();
         } finally {
@@ -103,9 +107,7 @@ public class PhotoUtils {
         ContentValues values = getContentValues(photo);
         mDatabase.insert(PhotoTable.NAME, null, values);
 
-//        File original = new File(photo.getPath());
-//        File added = new File(mAlbum.getAbsolutePath() + photo.getFileName());
-//        original.renameTo(added);
+        //TODO copy image file to app ext dir
     }
 
     /**
@@ -141,6 +143,23 @@ public class PhotoUtils {
         return values;
     }
 
+
+    /**
+     * Build a bitmap from a given Photo object
+     *
+     * @param photo
+     * @return
+     */
+    Bitmap getBitmap(Photo photo) {
+        return BitmapFactory.decodeFile(photo.getPath());
+    }
+
+    /**
+     *
+     * @param whereClause
+     * @param whereArgs
+     * @return
+     */
     private PhotoDBCursorWrapper queryPhotos(String whereClause, String[] whereArgs) {
         Cursor cursor =
                 mDatabase.query(PhotoTable.NAME, null, // columns parameter - null selects all columns
@@ -153,7 +172,9 @@ public class PhotoUtils {
     }
 
 
-    /* Populate the database with all pictures in camera roll */
+    /**
+     *
+     */
     public void initFromCameraRoll() {
 
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
@@ -187,13 +208,14 @@ public class PhotoUtils {
             // init photo to add to the database
             arrPath[i]= cursor.getString(pathColumnIndex);
 
-            Photo photo = new Photo(mContext, arrPath[i]);
-            photo.setActive(1);
+            Photo photo = new Photo(arrPath[i]);
+            photo.setActive(0);
             photo.setKarma(0);
             photo.setWeight(1);
 
             /* insert photo into db */
             addPhoto(photo);
+            Log.v(TAG, "add photo");
 
         }
     }

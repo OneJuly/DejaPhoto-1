@@ -6,21 +6,20 @@ package team4.cse110.dejaphoto;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Environment;
 
 import com.snappydb.DB;
-import com.snappydb.SnappyDB;
+import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
 
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
 
 //
 
@@ -61,19 +60,13 @@ public class ImageAlgorithms implements Algorithm {
         prefUtils = new PrefUtils();
         photoAlbum = PhotoUtils.getInstance(context).getPhotos();
 
-        // Get SnappyDB reference for object persistence
         try {
-
-            snappydb = new SnappyDB.Builder(context)
-                    .directory(Environment.getExternalStorageDirectory().getAbsolutePath())
-                    .name(DB_NAME)
-                    .build();
-
+            snappydb = DBFactory.open(context);
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
 
-        load();
+//        load();
     }
 
     //////////////////// HELPER METHODS ////////////////////
@@ -238,6 +231,10 @@ public class ImageAlgorithms implements Algorithm {
      * @return
      */
     public Bitmap next() {
+
+        // Get current instance of photoutils
+        PhotoUtils utils = PhotoUtils.getInstance(context);
+
         if (photoAlbum.isEmpty()) {
             //Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
             //        R.drawable.defaultImage);
@@ -245,7 +242,7 @@ public class ImageAlgorithms implements Algorithm {
         }
         if (photoAlbum.size() == 1){
             photoAlbum.get(0).mostRecent();
-            return getBitmap(photoAlbum.get(0));
+            return utils.getBitmap(photoAlbum.get(0));
         }
         //if the user is on the most recent picture (more "next" than "previous" presses)
         if(imageIndex == 0){
@@ -262,7 +259,7 @@ public class ImageAlgorithms implements Algorithm {
                 previousImages[0] = returnImage;
                 returnImage.mostRecent();
                 save();
-                return getBitmap(returnImage);
+                return utils.getBitmap(returnImage);
             }
             else{
                 Photo returnImage = random_algorithm();
@@ -277,14 +274,14 @@ public class ImageAlgorithms implements Algorithm {
                 previousImages[0] = returnImage;
                 returnImage.mostRecent();
                 save();
-                return getBitmap(returnImage);
+                return utils.getBitmap(returnImage);
             }
         }
         //updates the imageIndex to point to the next image and returns that image
         else{
             imageIndex -= 1;
             save();
-            return getBitmap(previousImages[imageIndex]);
+            return utils.getBitmap(previousImages[imageIndex]);
         }
     }
 
@@ -295,6 +292,7 @@ public class ImageAlgorithms implements Algorithm {
      * @return
      */
     public Bitmap prev(){
+
         //goes back a maximum of 10 images
         if(imageIndex == 10) {
             save();
@@ -309,7 +307,8 @@ public class ImageAlgorithms implements Algorithm {
         else{
             imageIndex += 1;
             save();
-            return getBitmap(previousImages[imageIndex]);
+            return PhotoUtils.getInstance(context)
+                    .getBitmap(previousImages[imageIndex]);
         }
     }
 
@@ -426,13 +425,4 @@ public class ImageAlgorithms implements Algorithm {
         }
     }
 
-    /**
-     * Build a bitmap from a given Photo object
-     *
-     * @param photo
-     * @return
-     */
-    private Bitmap getBitmap(Photo photo) {
-        return BitmapFactory.decodeFile(photo.getPath());
-    }
 }

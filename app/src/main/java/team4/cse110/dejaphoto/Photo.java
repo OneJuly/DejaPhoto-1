@@ -50,31 +50,21 @@ public class Photo {
     private UUID id;
 
     /**
-     * Default constructor with random UUID
+     * Default constructor with given filepath
      */
-    public Photo() {
-        this(UUID.randomUUID());
-    }
-
-    /**
-     * Constructor with given UUID
-     *
-     * @param uuid
-     */
-    public Photo(UUID uuid){
+    public Photo(String path) {
 //        time = getTime();
-        id = uuid;
+        id = UUID.randomUUID();
         dayTime = getHour();
         dayOfWeek = getWeekday();
 //        location = getLocation();
         karma = 0;
         recentlyShown = 1;
         weight = 300;
+        this.path = path;
     }
 
     //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
-
-
     /**
      *
      * @param active
