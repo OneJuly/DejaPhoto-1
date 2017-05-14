@@ -181,7 +181,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     private void setWallpaper(Bitmap bitmap) {
         WallpaperManager myWallpaperManager =
-                WallpaperManager.getInstance();
+                WallpaperManager.getInstance( );
         try {
             myWallpaperManager.setBitmap(bitmap);
         } catch (IOException e) {
@@ -191,7 +191,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     private void setDefaultWallpaper() {
         WallpaperManager myWallpaperManager =
-                WallpaperManager.getInstance();
+                WallpaperManager.getInstance( );
         try {
             myWallpaperManager.setResource(+ R.drawable.defaultimage);
         } catch (IOException e) {
