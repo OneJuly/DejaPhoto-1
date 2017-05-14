@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -56,6 +57,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     private void onPrev(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Prev button tapped");
+
         RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
         enableView(R.id.button_karma, remoteViews);
         enableView(R.id.button_release, remoteViews);
@@ -136,5 +138,13 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     private void disableView(int id, RemoteViews remoteViews) {
         remoteViews.setBoolean(id, "setEnabled", false);
+    }
+
+    private void setWallpaper(Bitmap bitmap) {
+
+    }
+
+    private void setDefaultWallpaper() {
+
     }
 }
