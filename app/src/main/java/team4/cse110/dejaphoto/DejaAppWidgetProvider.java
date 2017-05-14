@@ -183,7 +183,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         WallpaperManager myWallpaperManager =
                 WallpaperManager.getInstance();
         try {
-            myWallpaperManager.setBitmap(Bitmap bitmap);
+            myWallpaperManager.setBitmap(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
