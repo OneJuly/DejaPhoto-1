@@ -30,8 +30,9 @@ public interface Algorithm {
 
     /**
      * Release the last image returned by prev() or next() from the display cycle
+     * @return bitmap to display instead
      */
-    void release();
+    Bitmap release();
 
     /**
      * Save object state into persistent store
