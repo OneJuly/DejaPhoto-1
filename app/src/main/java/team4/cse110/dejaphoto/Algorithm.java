@@ -33,7 +33,8 @@ public interface Algorithm {
     boolean hasKarma();
 
     /**
-     * Release the last image returned by prev() or next() from the display cycle
+     * Release the last image returned by prev() or next() from the display cycle. save() is
+     * called before return
      *
      * @return bitmap to display instead, or null if there are no replacement bitmaps
      */
