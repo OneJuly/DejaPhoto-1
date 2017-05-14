@@ -168,3 +168,4 @@ fabric.properties
 # Google Services plugin
 
 !/gradle/wrapper/gradle-wrapper.jar
+.idea/copyright/

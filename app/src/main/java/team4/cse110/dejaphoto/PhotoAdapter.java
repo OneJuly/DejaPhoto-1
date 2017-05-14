@@ -23,7 +23,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
     private static final String TAG = "PhotoAdapter";
 
     private List<Photo> photos;
-    private PhotoUtilities utils;
+    private PhotoUtils utils;
     private Context context;
 
     /* Internal clickable photo viewholder */
@@ -63,7 +63,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
     public PhotoAdapter(Context context, List<Photo> photos) {
         this.context = context;
         this.photos = photos;
-        utils = PhotoUtilities.getInstance(context);
+        utils = PhotoUtils.getInstance(context);
     }
 
     private Context getContext() {

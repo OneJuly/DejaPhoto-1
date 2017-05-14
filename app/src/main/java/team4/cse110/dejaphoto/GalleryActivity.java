@@ -13,6 +13,10 @@ import java.util.List;
 
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
 
+/**
+ * This class sets up the app's homepage, where photos from the phone's camera
+ * album will be displayed in a scrollable grid.
+ */
 public class GalleryActivity extends AppCompatActivity {
 
     private static final String TAG = "GalleryActivity";
@@ -20,11 +24,17 @@ public class GalleryActivity extends AppCompatActivity {
 
     private List<Photo> photos;
 
+    /** Create a new directory to store selected folders. */
+    static final String dirName = "DejaPhoto";
+
     /** Get the DejaPhoto directory; create if non-existent */
-    String dirName = "DejaPhoto";
     File dejaAlbum = getDejaAlbumDir(dirName);
 
-
+    /**
+     * This method sets up the app's home page with thumbnails of the photos
+     * from the camera album.
+     * @param savedInstanceState - TODO
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +47,11 @@ public class GalleryActivity extends AppCompatActivity {
         /* Initialize database if necessary */
         if (!getDatabasePath(PhotoDBHelper.DATABASE_NAME).exists()) {
             Log.v(TAG, "Initializing DB!\n");
-            PhotoUtilities.getInstance(this).initFromCameraRoll();
+            PhotoUtils.getInstance(this).initFromCameraRoll();
         }
 
         /* Get active photos */
-        photos = PhotoUtilities.getInstance(this).getPhotos();
+        photos = PhotoUtils.getInstance(this).getPhotos();
 
         /* Hook up the adapter to the RecyclerView */
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
