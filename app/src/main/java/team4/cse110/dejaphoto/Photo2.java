@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto.database;
+package team4.cse110.dejaphoto;
 
 import java.util.UUID;
 
