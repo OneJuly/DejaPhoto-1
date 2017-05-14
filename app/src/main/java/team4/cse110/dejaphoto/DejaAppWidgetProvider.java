@@ -93,7 +93,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
         // Enable the karma button if no karma
         if (!algorithm.hasKarma()) {
-            RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
+            RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
         }
@@ -121,7 +121,6 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         if (bitmap != null) {
             setWallpaper(bitmap);
         } else {
-            // TODO disable release button on default wallpaper
             setDefaultWallpaper();
         }
     }

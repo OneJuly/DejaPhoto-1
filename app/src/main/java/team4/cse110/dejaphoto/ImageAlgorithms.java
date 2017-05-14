@@ -15,6 +15,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -25,6 +29,9 @@ import java.util.Calendar;
 
 public class ImageAlgorithms implements Algorithm {
 
+    private static final String DB_NAME = "AlgorithmDB";
+    private static final String OB_NAME = "my_algorithm";
+
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
 
     private Context context;
@@ -34,14 +41,23 @@ public class ImageAlgorithms implements Algorithm {
 
     private PhotoUtils photoUtils;
     private PrefUtils prefUtils;
+    private DB snappydb;
 
     public ImageAlgorithms(Context context) {
+        load();
         this.context = context;
         imageIndex = 0;
         previousImages = new Photo[11];
         photoUtils = new PhotoUtils(context);
         prefUtils = new PrefUtils();
         photoAlbum = photoUtils.getCameraPhotos();
+
+        /* Get snappyDB reference */
+        try {
+            snappydb = DBFactory.open(context, DB_NAME);
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
     }
 
     //////////////////// HELPER METHODS ////////////////////
@@ -71,6 +87,9 @@ public class ImageAlgorithms implements Algorithm {
 
 
     public Location getCurrentLocation() {
+        //TODO take out the following if statement and fix code
+        if(true){ return null; }
+
 
         //create location manager instance
         LocationManager locManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -100,14 +119,14 @@ public class ImageAlgorithms implements Algorithm {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED ) {
+                            != PackageManager.PERMISSION_GRANTED ) {
                 //TODO fix first argument (don't cast to android.app.Activity)
-            ActivityCompat.requestPermissions((android.app.Activity) context, new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.INTERNET
-            }, 10 );
+                ActivityCompat.requestPermissions((android.app.Activity) context, new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.INTERNET
+                }, 10 );
 
-            return null;
+                return null;
             }
         }
         else{
@@ -182,6 +201,7 @@ public class ImageAlgorithms implements Algorithm {
                 //updates image array and returns a new image
                 previousImages[0] = returnImage;
                 returnImage.mostRecent();
+                save();
                 return returnImage.getImage();
             }
             else{
@@ -196,12 +216,14 @@ public class ImageAlgorithms implements Algorithm {
                 //updates image array and rturns a new image
                 previousImages[0] = returnImage;
                 returnImage.mostRecent();
+                save();
                 return returnImage.getImage();
             }
         }
         //updates the imageIndex to point to the next image and returns that image
         else{
             imageIndex -= 1;
+            save();
             return previousImages[imageIndex].getImage();
         }
     }
@@ -210,15 +232,18 @@ public class ImageAlgorithms implements Algorithm {
     public Bitmap prev(){
         //goes back a maximum of 10 images
         if(imageIndex == 10) {
+            save();
             return null;
         }
         //if there is no image to go back to
         else if(previousImages[imageIndex+1] == null){
+            save();
             return null;
         }
         //returns the previous image (if there is one)
         else{
             imageIndex += 1;
+            save();
             return previousImages[imageIndex].getImage();
         }
     }
@@ -226,6 +251,7 @@ public class ImageAlgorithms implements Algorithm {
     //TODO make sure previousImages[imageIndex].giveKarma() works as expected
     public void incKarma(){
         previousImages[imageIndex].giveKarma();
+        save();
     }
 
     //TODO make sure photoUtils.releasePhoto() works as expected
@@ -239,18 +265,33 @@ public class ImageAlgorithms implements Algorithm {
             }
         }
         //returns the bitmap of the next image
+        save();
         return next();
     }
 
     public void releasePhotoThroughGallery(){
         photoUtils.releasePhoto();
+        save();
     }
 
     //TODO implement algorithm
     public void save(){
+        try {
+            snappydb.put(OB_NAME, this);
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
     }
 
     //TODO implement algorithm
     public void load(){
+        try {
+            ImageAlgorithms savedAlgorithms =
+                    snappydb.getObject(OB_NAME, ImageAlgorithms.class);
+
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
+
     }
 }
