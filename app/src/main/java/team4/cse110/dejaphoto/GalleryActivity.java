@@ -15,6 +15,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+/**
+ * This class sets up the app's homepage, where photos from the phone's camera
+ * album will be displayed in a scrollable grid.
+ */
 public class GalleryActivity extends AppCompatActivity {
 
     private static final String TAG = "GalleryActivity";
@@ -23,11 +27,16 @@ public class GalleryActivity extends AppCompatActivity {
 
     private ArrayList<Photo> photos;
 
-    /** Create a new directory to store selected folders. */
+    // Create a new directory to store selected folders. TODO do we need this?
     static final String dirName = "DejaPhoto";
     static final File imageRoot = new File(Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES), dirName);
 
+    /**
+     * This method sets up the app's home page with thumbnails of the photos
+     * from the camera album.
+     * @param savedInstanceState - TODO
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +53,7 @@ public class GalleryActivity extends AppCompatActivity {
         rvPhotos.setAdapter(adapter);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
 
-        /** Create onClickListener()'s for each photo in the GridView */
+        // Create onClickListener()'s for each photo in the GridView. TODO do we even need this
         OnItemClickListener pictureSelect
             = new OnItemClickListener(){
             @Override

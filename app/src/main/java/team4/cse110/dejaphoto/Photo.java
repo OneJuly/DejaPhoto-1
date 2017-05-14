@@ -24,11 +24,16 @@ import java.util.Date;
 //convert from path string into bitmap
 //check to see if weight member variable is needed
 
+/**
+ * This class keeps track of the metadata of a photo, and calculates weights
+ * for the photo, which is used in deciding the probability of the photo being
+ * shown.
+ */
 public class Photo {
 
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
 
-    //Class member variables
+    // Class member variables.
     private Context context;
     private String path;
     private Bitmap returnImage;
@@ -40,7 +45,10 @@ public class Photo {
     private double recentlyShown;
     private double weight;
 
-    //Default constructor for the photo class
+    /**
+     * Default constructor.
+     * @param context - environment data.
+     */
     public Photo(Context context){
         this.context = context;
         returnImage = null;
@@ -54,7 +62,11 @@ public class Photo {
         weight = 0;
     }
 
-    //Constructor for the photo class. Used by PhotoUtils class.
+    /**
+     * Default constructor, used by the PhotoUtils class.
+     * @param context - environment data.
+     * @param path - the file path of the photo.
+     */
     public Photo (Context context, String path){
         this.context = context;
         this.path = path;
@@ -70,19 +82,30 @@ public class Photo {
 
     //////////////////// HELPER METHODS TO SET CLASS MEMBER VARIABLE VALUES ////////////////////
 
-    //path should be set by the photo constructor (DONE)
+    /**
+     * This method checks the file path of a photo.
+     * @return the file path of the photo.
+     */
     public String getPath(){
         return path;
     }
 
     //TODO implement functionality
-    //returns a Bitmap from the "path" member variable
+    /**
+     * This method returns a Bitmap from the "path" member variable.
+     * @return a Bitmap from the "path" member variable.
+     */
     public Bitmap getImage(){
         return returnImage;
     }
 
+    /**
+     * This method calculates how long ago a picture was taken.
+     * @return how long ago a picture was taken, in milliseconds.
+     */
     private long getTime(){
-        //give the time that the photo was taken in milliseconds since jan 1st, 1970
+        // Give the time that the photo was taken in milliseconds since
+        // 1.1.1970.
         String[] columns = { MediaStore.Audio.Media._ID };
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
@@ -93,12 +116,17 @@ public class Photo {
         cursor.moveToFirst();
         String dateTaken = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN));
         cursor.close();
-        //String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
+        // String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
         time = Long.parseLong(dateTaken);
         return time;
     }
 
     //TODO FINISH METHOD
+
+    /**
+     * This method calculates
+     * @return
+     */
     private int getHour(){
         Date d;
         String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
@@ -229,6 +257,12 @@ public class Photo {
         return (distanceInMeters < 150);
     }
 
+    /**
+     * This method calculates whether a photo was taken in the past week.
+     * @param calendar - the current date.
+     * @return true if the photo was taken within the last week; false
+     * otherwise.
+     */
     private boolean within_a_week(Calendar calendar) {
         //604,800,000 is the milliseconds in a week
         long day = 604800000L;
@@ -237,23 +271,40 @@ public class Photo {
         return ((currentTime - time) < day);
     }
 
+    /**
+     * This method calculates whether a photo was taken in the past month.
+     * @param calendar - the current date.
+     * @return true if the photo was taken within the last month; false
+     * otherwise.
+     */
     private boolean within_a_month(Calendar calendar) {
-        //2,600,640,000 is the milliseconds in about 30 days
+        // 2,600,640,000 milliseconds in 30 days.
         long month = 2600640000L;
         Date date = calendar.getTime();
         long currentTime = date.getTime();
         return ((currentTime - time) < month);
     }
 
+    /**
+     * This method checks if a photo was taken within the last year.
+     * @param calendar - the current date.
+     * @return true if the photo was taken within the last year; false
+     * otherwise.
+     */
     private boolean within_a_year(Calendar calendar) {
-        //31,449,600,000 is the milliseconds in a year
+        // 31,449,600,000 milliseconds in a year
         long year = 31449600000L;
         Date date = calendar.getTime();
         long currentTime = date.getTime();
         return ((currentTime - time) < year);
     }
 
-    //method to return a weight for the image based on how recently the photo was taken
+    /**
+     * This method returns a weight for the image based on how recently the
+     * photo was taken.
+     * @param calendar - the date the photo was taken.
+     * @return the weight given to the photo.
+     */
     private double recentlyTakenWeight(Calendar calendar) {
         if(within_a_week(calendar)) {
             return 200;
@@ -271,7 +322,12 @@ public class Photo {
         return karma;
     }
 
-    //method to calculate the overall weight of the photo
+    /**
+     * This method calculates the overall weight of a photo.
+     * @param calendar - the date the photo was taken.
+     * @param location - the location where the photo was taken.
+     * @return the weight given to the photo.
+     */
     public double calcWeight(Calendar calendar, Location location){
         double weight = 300;
 
@@ -289,12 +345,12 @@ public class Photo {
         }
         weight += recentlyTakenWeight(calendar);
 
-        //sets the most recent photo's weight to zero if is the most recent photo
+        // Sets the most recent photo's weight to zero if is the most recent photo.
         if(recentlyShown == 11){
             this.weight = 0;
             return 0;
         }
-        //adjusts for the weight of the photo based on whether it was recently shown
+        // Adjusts for the weight of the photo based on whether it was recently shown.
         else{
             this.weight = (weight/recentlyShown);
             return (weight/recentlyShown);

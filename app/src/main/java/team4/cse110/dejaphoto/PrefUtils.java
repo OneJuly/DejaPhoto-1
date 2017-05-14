@@ -1,12 +1,12 @@
 package team4.cse110.dejaphoto;
 
+
 import android.content.Context;
 import android.preference.PreferenceManager;
 
 /**
  * Convenience class for interfacing with application preferences.
  */
-
 public class PrefUtils {
 
     private static final String PREF_DEJAVU_MODE = "dejaVuMode";
@@ -15,8 +15,8 @@ public class PrefUtils {
 
     /**
      * This method determines if DejaVu mode is enabled.
-     * @param context
-     * @return
+     * @param context -
+     * @return true if DejaVu mode is enabled; false otherwise.
      */
     public static boolean dejaVuEnabled(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)

@@ -34,6 +34,7 @@ public class ImageAlgorithms implements Algorithm {
     private static final String PREV_IMAGES = "previousImages";
     private static final String PHOTO_ALBUM = "photoAlbum";
 
+    // Store up to 10 photos in history.
     private static final int previousArrSize = 11;
 
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
@@ -47,6 +48,10 @@ public class ImageAlgorithms implements Algorithm {
     private PrefUtils prefUtils;
     private DB snappydb;
 
+    /**
+     * Constructor.
+     * @param context - environment data.
+     */
     public ImageAlgorithms(Context context) {
         this.context = context;
         photoUtils = new PhotoUtils(context);
@@ -61,7 +66,7 @@ public class ImageAlgorithms implements Algorithm {
             imageIndex = 0;
         }
 
-        /* Get snappyDB reference */
+        // Get SnappyDB reference.
         try {
             snappydb = DBFactory.open(context, DB_NAME);
         } catch (SnappydbException e) {
@@ -71,21 +76,34 @@ public class ImageAlgorithms implements Algorithm {
 
     //////////////////// HELPER METHODS ////////////////////
 
+    /**
+     * This method checks if DejaVu mode is enabled.
+     * @return true if DejaVu mode if enable; false otherwise.
+     */
     private boolean is_DJV_Enabled() {
         //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         return prefUtils.dejaVuEnabled(context);
     }
 
+    /**
+     * This method checks the current date.
+     * @return the current date.
+     */
     public Calendar getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
         return calendar;
     }
 
+    /**
+     * This method checks if a photo has been given karma.
+     * @return true if the photo has karma; false otherwise.
+     */
     public boolean hasKarma(){
-        //edge case: no image
+        // Edge case - no image
         if(previousImages[imageIndex] == null) {
             return false;
         }
+
         if(previousImages[imageIndex].hasKarma()){
             return true;
         }
@@ -94,11 +112,14 @@ public class ImageAlgorithms implements Algorithm {
         }
     }
 
-
+    /**
+     * This method checks the current location of the user.
+     * @return the current location of the user.
+     */
     public Location getCurrentLocation() {
         //TODO take out the following if statement and fix code
 
-        //http://stackoverflow.com/questions/32491960/android-check-permission-for-locationmanager
+        // http://stackoverflow.com/questions/32491960/android-check-permission-for-locationmanager
         LocationManager locationManager;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         try {
@@ -165,16 +186,20 @@ public class ImageAlgorithms implements Algorithm {
 
     //////////////////// DJV() & RANDOM() ALGORITHM ////////////////////
 
-    //randomly selects next photo based on weight
     //http://stackoverflow.com/questions/6737283/weighted-randomness-in-java
+    /**
+     * This method randomly selects the next photo to be displayed, based on
+     * weight.
+     * @return the next photo to be displayed.
+     */
     private Photo DJV_algorithm(){
 
-        //get the total weight
+        // Get the total weight.
         double totalWeight = 0.0d;
         for(Photo photo : photoAlbum){
             totalWeight += photo.calcWeight(getCurrentDate(), getCurrentLocation());
         }
-        //choose a random photo
+        // Choose a random photo.
         int randomIndex = -1;
         double random = Math.random() * totalWeight;
         for(int i = 0; i < photoAlbum.size(); ++i){
@@ -184,21 +209,31 @@ public class ImageAlgorithms implements Algorithm {
                 break;
             }
         }
-        //returns a Photo object
+        // Return a Photo object.
         return photoAlbum.get(randomIndex);
     }
 
-    //randomly selects next photo
+    /**
+     * This method randomly selected the next photo to be displayed.
+     * @return the next photo to be displayed.
+     */
     private Photo random_algorithm(){
-
+        // Generate a random number.
         double random = Math.random() * (photoAlbum.size());
+        // Convert that number into an int.
         int randomIndex = (int) random;
+        // Retrieve the photo at that index of the collection.
         return photoAlbum.get(randomIndex);
     }
 
     //////////////////// BUTTON FUNCTIONALITY ////////////////////
 
     //gets called for the next image
+
+    /**
+     * This method TODO
+     * @return
+     */
     public Bitmap next() {
         if (photoAlbum.isEmpty()) {
             //Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
@@ -251,6 +286,11 @@ public class ImageAlgorithms implements Algorithm {
     }
 
     //gets called for the previous image
+
+    /**
+     * This method TODO
+     * @return
+     */
     public Bitmap prev(){
         //goes back a maximum of 10 images
         if(imageIndex == 10) {
@@ -271,12 +311,21 @@ public class ImageAlgorithms implements Algorithm {
     }
 
     //TODO make sure previousImages[imageIndex].giveKarma() works as expected
+
+    /**
+     * This method gives karma to a photo.
+     */
     public void incKarma(){
         previousImages[imageIndex].giveKarma();
         save();
     }
 
     //TODO make sure photoUtils.releasePhoto() works as expected
+
+    /**
+     * This method deletes a photo from the display cycle.
+     * @return TODO
+     */
     public Bitmap release(){
         photoUtils.releasePhoto();
         previousImages[imageIndex] = null;
@@ -291,11 +340,18 @@ public class ImageAlgorithms implements Algorithm {
         return next();
     }
 
+    /**
+     * This method releases a photo from the display gallery TODO
+     */
     public void releasePhotoThroughGallery(){
         photoUtils.releasePhoto();
         save();
     }
 
+    /**
+     * This method retrieves the location where a photo was taken.
+     * @return the location where the photo was taken.
+     */
     public String getAddress(){
         String cityName = "address:______";
         Photo currPhoto = previousImages[imageIndex];
@@ -321,6 +377,10 @@ public class ImageAlgorithms implements Algorithm {
     }
 
     //TODO implement algorithm
+
+    /**
+     * This method TODO
+     */
     public void save(){
         try {
             snappydb.put(IMAGE_INDEX, imageIndex);
@@ -332,6 +392,11 @@ public class ImageAlgorithms implements Algorithm {
     }
 
     //TODO implement algorithm
+
+    /**
+     * This method TODO
+     * @throws SnappydbException if TODO
+     */
     public void load() throws SnappydbException {
         try {
             imageIndex = snappydb.getInt(IMAGE_INDEX);

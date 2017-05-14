@@ -36,14 +36,14 @@ public interface Algorithm {
 
     /**
      * Release the last image returned by prev() or next() from the display cycle. save() is
-     * called before return
+     * called before return.
      *
      * @return bitmap to display instead, or null if there are no replacement bitmaps
      */
     Bitmap release();
 
     /**
-     * Save object state into persistent store
+     * Save object state into persistent store.
      */
     void save();
 

@@ -9,19 +9,25 @@ import android.provider.MediaStore;
 
 import java.util.ArrayList;
 
+/**
+ *
+ */
 class PhotoUtils {
 
     private Context context;
 
     /**
-     *
+     * This constructor sets TODO
      * @param context
      */
     PhotoUtils(Context context) {
         this.context = context;
     }
 
-    /* Returns a list of paths to default camera photos */
+    /**
+     * This method returns a list of paths to default camera photos.
+     * @return a list of patahs to default camera photos.
+     */
     ArrayList<Photo> getCameraPhotos() {
 
         ArrayList<Photo> photoPaths = new ArrayList<>();
@@ -30,20 +36,18 @@ class PhotoUtils {
 
         String selection = MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?";
 
-        String[] selectionArgs = new String[] {
-                "Camera"
-        };
+        String[] selectionArgs = new String[] { "Camera" };
 
         final String orderDate = MediaStore.Images.Media.DATE_ADDED;
 
-        //Stores all the images from the gallery in Cursor
+        // Stores all the images from the gallery in Cursor.
         Cursor cursor = context.getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, selection, selectionArgs, orderDate);
 
-        //Total number of images
+        // Total number of images.
         int numPhotos = cursor.getCount();
 
-        //Create an array to store path to all the images
+        // Create an array to store path to all the images.
         String[] arrPath = new String[numPhotos];
 
         for (int i = 0; i < numPhotos; i++) {
@@ -53,8 +57,8 @@ class PhotoUtils {
             //Store the path of the image
             arrPath[i]= cursor.getString(dataColumnIndex);
             photoPaths.add(new Photo(context, arrPath[i]));
-
         }
+
         return  photoPaths;
     }
 
