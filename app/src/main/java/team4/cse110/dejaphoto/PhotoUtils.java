@@ -6,13 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.provider.MediaStore;
-import android.util.Log;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import team4.cse110.dejaphoto.database.PhotoDBCursorWrapper;
@@ -30,13 +26,11 @@ public class PhotoUtils {
     private static PhotoUtils sPhotoUtils;
 
     private Context mContext;
-    private File mAlbum;
     SQLiteDatabase mDatabase;
 
     private PhotoUtils(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new PhotoDBHelper(mContext).getWritableDatabase();
-//        mAlbum = album;
     }
 
     /**
@@ -203,57 +197,8 @@ public class PhotoUtils {
             return getBitmap(album.get(0));
         }
 
-        /* Get a random photo */
-        Random rand = new Random();
-        int randIndex = rand.next
-
+        return null;
 
     }
 
-
-    /**
-     *
-     */
-    public void initFromCameraRoll() {
-
-        final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
-
-        String selection = MediaStore.Images.Media.BUCKET_DISPLAY_NAME + " = ?";
-
-        String[] selectionArgs = new String[] {
-                "Camera"
-        };
-
-        final String orderDate = MediaStore.Images.Media.DATE_ADDED;
-
-        // get cursor over query
-        Cursor cursor = mContext.getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
-                selection, selectionArgs, orderDate);
-
-        // number of camera images
-        int numPhotos = cursor.getCount();
-
-        // image paths
-        String[] arrPath = new String[numPhotos];
-
-        for (int i = 0; i < numPhotos; i++) {
-            cursor.moveToPosition(i);
-
-            int pathColumnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-
-            // init photo to add to the database
-            arrPath[i]= cursor.getString(pathColumnIndex);
-
-            Photo photo = new Photo(arrPath[i]);
-            photo.setActive(0);
-            photo.setKarma(0);
-            photo.setWeight(1);
-
-            /* insert photo into db */
-            addPhoto(photo);
-            Log.v(TAG, "add photo");
-
-        }
-    }
 }
