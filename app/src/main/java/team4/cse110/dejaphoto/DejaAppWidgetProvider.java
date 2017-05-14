@@ -196,5 +196,5 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
             myWallpaperManager.setResource(+ R.drawable.defaultimage);
         } catch (IOException e) {
             e.printStackTrace();
-    }
-}
+        }
+    }   }
