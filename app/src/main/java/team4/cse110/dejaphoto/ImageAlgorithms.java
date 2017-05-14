@@ -6,6 +6,8 @@ package team4.cse110.dejaphoto;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 
@@ -13,8 +15,10 @@ import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 //
 
@@ -293,15 +297,26 @@ public class ImageAlgorithms implements Algorithm {
     }
 
     public String getAddress(){
-        Location location = getCurrentLocation();
+        String cityName = "address:______";
+        Photo currPhoto = previousImages[imageIndex];
+        Location location = currPhoto.getLocation(); //TODO get the location
         if(location == null){
-            return "address:______";
+            return cityName;
         }
         else{
-
-
-
-            return null;
+            Geocoder geo = new Geocoder(context, Locale.getDefault());
+            try {
+                List<Address> address = geo.getFromLocation(location.getLatitude(),
+                        location.getLongitude(), 1);
+                if (address.size() > 0) {
+                    System.out.println(address.get(0).getLocality());
+                    cityName = address.get(0).getLocality();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            return cityName;
         }
     }
 
