@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  *
  */
-class PhotoUtils {
+public class PhotoUtils {
 
     private Context context;
 
@@ -20,7 +20,7 @@ class PhotoUtils {
      * This constructor sets TODO
      * @param context
      */
-    PhotoUtils(Context context) {
+    public PhotoUtils(Context context) {
         this.context = context;
     }
 
@@ -28,7 +28,7 @@ class PhotoUtils {
      * This method returns a list of paths to default camera photos.
      * @return a list of patahs to default camera photos.
      */
-    ArrayList<Photo> getCameraPhotos() {
+    public ArrayList<Photo> getCameraPhotos() {
 
         ArrayList<Photo> photoPaths = new ArrayList<>();
 
