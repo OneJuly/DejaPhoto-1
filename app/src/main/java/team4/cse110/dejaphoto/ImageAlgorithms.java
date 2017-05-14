@@ -23,7 +23,7 @@ import java.util.Calendar;
 //account for recently shown photos (weight) in the DJV/Random methods or in the photo class?
 //create member variables having to do with current time/day/location?
 
-public class ImageAlgorithms {
+public class ImageAlgorithms implements Algorithm {
 
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
 
@@ -54,6 +54,19 @@ public class ImageAlgorithms {
     public Calendar getCurrentDate() {
         Calendar calendar = Calendar.getInstance();
         return calendar;
+    }
+
+    public boolean hasKarma(){
+        //edge case: no image
+        if(previousImages[imageIndex] == null) {
+            return false;
+        }
+        if(previousImages[imageIndex].hasKarma()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
@@ -88,7 +101,8 @@ public class ImageAlgorithms {
                     != PackageManager.PERMISSION_GRANTED &&
                     ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions(context, new String[]{
+                //TODO fix first argument (don't cast to android.app.Activity)
+            ActivityCompat.requestPermissions((android.app.Activity) context, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.INTERNET
             }, 10 );
@@ -144,7 +158,7 @@ public class ImageAlgorithms {
     //////////////////// BUTTON FUNCTIONALITY ////////////////////
 
     //gets called for the next image
-    private Bitmap nextImage() {
+    public Bitmap next() {
         if (photoAlbum.isEmpty()) {
             //Bitmap icon = BitmapFactory.decodeResource(context.getResources(),
             //        R.drawable.defaultImage);
@@ -193,7 +207,7 @@ public class ImageAlgorithms {
     }
 
     //gets called for the previous image
-    public Bitmap previousImage(){
+    public Bitmap prev(){
         //goes back a maximum of 10 images
         if(imageIndex == 10) {
             return null;
@@ -210,12 +224,12 @@ public class ImageAlgorithms {
     }
 
     //TODO make sure previousImages[imageIndex].giveKarma() works as expected
-    public void giveKarma(){
+    public void incKarma(){
         previousImages[imageIndex].giveKarma();
     }
 
     //TODO make sure photoUtils.releasePhoto() works as expected
-    public Bitmap releasePhotoThroughWidget(){
+    public Bitmap release(){
         photoUtils.releasePhoto();
         previousImages[imageIndex] = null;
         //adjusts the Photo array
@@ -225,10 +239,18 @@ public class ImageAlgorithms {
             }
         }
         //returns the bitmap of the next image
-        return nextImage();
+        return next();
     }
 
     public void releasePhotoThroughGallery(){
         photoUtils.releasePhoto();
+    }
+
+    //TODO implement algorithm
+    public void save(){
+    }
+
+    //TODO implement algorithm
+    public void load(){
     }
 }
