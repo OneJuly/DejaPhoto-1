@@ -58,32 +58,69 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     private void onPrev(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Prev button tapped");
 
-        RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
-        enableView(R.id.button_karma, remoteViews);
-        enableView(R.id.button_release, remoteViews);
-        updateRemoteViews(context, remoteViews);
+        Algorithm algorithm = new DummyAlgorithm();
+
+        // Set the previous wallpaper
+        Bitmap bitmap = algorithm.prev();
+        if (bitmap != null) {
+            setWallpaper(bitmap);
+        }
+
+        // Enable the karma button if no karma
+        if (!algorithm.hasKarma()) {
+            RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
+            enableView(R.id.button_karma, remoteViews);
+            updateRemoteViews(context, remoteViews);
+        }
     }
 
     private void onNext(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Next button tapped");
-        RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
-        enableView(R.id.button_karma, remoteViews);
-        enableView(R.id.button_release, remoteViews);
-        updateRemoteViews(context, remoteViews);
+
+        Algorithm algorithm = new DummyAlgorithm();
+
+        // Set the next wallpaper or default if none exits
+        Bitmap bitmap = algorithm.next();
+        if (bitmap != null) {
+            setWallpaper(bitmap);
+        } else {
+            setDefaultWallpaper();
+        }
+
+        // Enable the karma button if no karma
+        if (!algorithm.hasKarma()) {
+            RemoteViews remoteViews = getDefaultRemoteViews(context); // TODO query algorithm
+            enableView(R.id.button_karma, remoteViews);
+            updateRemoteViews(context, remoteViews);
+        }
     }
 
     private void onKarma(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Karma button tapped");
+
+        Algorithm algorithm = new DummyAlgorithm();
+
+        // Set karma and disable button
+        algorithm.incKarma();
         RemoteViews remoteViews = getDefaultRemoteViews(context);
         disableView(R.id.button_karma, remoteViews);
         updateRemoteViews(context, remoteViews);
     }
 
     private void onRelease(Context context, Intent intent) {
+        // TODO call onNext to set a new picture
         Log.v(TAG, TAG_RECV + "Release button tapped");
-        RemoteViews remoteViews = getDefaultRemoteViews(context);
-        disableView(R.id.button_release, remoteViews);
-        updateRemoteViews(context, remoteViews);
+
+        Algorithm algorithm = new DummyAlgorithm();
+
+        // Release image and set replacement
+        Bitmap bitmap = algorithm.release();
+        if (bitmap != null) {
+            setWallpaper(bitmap);
+        } else {
+            // TODO disable release button on default wallpaper
+            setDefaultWallpaper();
+        }
     }
 
     private RemoteViews getDefaultRemoteViews(Context context) {
