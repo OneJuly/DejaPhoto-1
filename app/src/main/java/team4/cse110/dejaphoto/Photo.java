@@ -10,6 +10,7 @@
 package team4.cse110.dejaphoto;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.provider.MediaStore;
@@ -81,8 +82,18 @@ public class Photo {
     }
 
     private long getTime(){
-        //give the time that the photo was taken in millideconds since jan 1st, 1970
-        String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
+        //give the time that the photo was taken in milliseconds since jan 1st, 1970
+        String[] columns = { MediaStore.Audio.Media._ID };
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
+                MediaStore.MediaColumns.DATA + "='" + path + "'", null, null);
+        if (cursor.getCount() == 0) {
+            return 0;
+        }
+        cursor.moveToFirst();
+        String dateTaken = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATE_TAKEN));
+        cursor.close();
+        //String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
         time = Long.parseLong(dateTaken);
         return time;
     }
@@ -90,7 +101,7 @@ public class Photo {
     //TODO FINISH METHOD
     private int getHour(){
         Date d;
-          String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
+        String dateTaken = MediaStore.Images.Media.DATE_TAKEN;
 
 //        //TODO use this.returnImage???
 //        try {
@@ -160,7 +171,7 @@ public class Photo {
     }
 
     //TODO FINISH METHOD
-    private Location getLocation(){
+    public Location getLocation(){
 
         String latitude = MediaStore.Images.Media.LATITUDE;
         String longitude = MediaStore.Images.Media.LONGITUDE;

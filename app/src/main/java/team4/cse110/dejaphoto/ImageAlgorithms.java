@@ -309,7 +309,7 @@ public class ImageAlgorithms implements Algorithm {
                 List<Address> address = geo.getFromLocation(location.getLatitude(),
                         location.getLongitude(), 1);
                 if (address.size() > 0) {
-                    System.out.println(address.get(0).getLocality());
+                    //System.out.println(address.get(0).getLocality());
                     cityName = address.get(0).getLocality();
                 }
             }
