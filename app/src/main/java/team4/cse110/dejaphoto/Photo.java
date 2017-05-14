@@ -65,10 +65,10 @@ public class Photo {
         this.context = context;
         this.path = path;
         returnImage = getImage();
-        time = getTime();
+//        time = getTime();
         dayTime = getHour();
         dayOfWeek = getWeekday();
-        location = getLocation();
+//        location = getLocation();
         karma = false;
         recentlyShown = 1;
         weight = 300;

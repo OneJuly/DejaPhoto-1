@@ -19,6 +19,7 @@ import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -52,14 +53,7 @@ public class ImageAlgorithms implements Algorithm {
         photoUtils = new PhotoUtils(context);
         prefUtils = new PrefUtils();
 
-        try {
-            load();
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-            previousImages = new Photo[previousArrSize];
-            photoAlbum = photoUtils.getCameraPhotos();
-            imageIndex = 0;
-        }
+        load();
 
         /* Get snappyDB reference */
         try {
@@ -295,13 +289,16 @@ public class ImageAlgorithms implements Algorithm {
     }
 
     //TODO implement algorithm
-    public void load() throws SnappydbException {
+    public void load() {
         try {
             imageIndex = snappydb.getInt(IMAGE_INDEX);
             previousImages = snappydb.getObjectArray(PREV_IMAGES, Photo.class);
             photoAlbum = snappydb.getObject(PHOTO_ALBUM, List.class);
         } catch (SnappydbException e) {
-            throw e;
+            e.printStackTrace();
+            imageIndex = 0;
+            previousImages = new Photo[previousArrSize];
+            photoAlbum = new ArrayList<>();
         }
     }
 }
