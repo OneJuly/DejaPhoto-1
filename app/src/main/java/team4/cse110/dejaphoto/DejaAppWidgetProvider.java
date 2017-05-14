@@ -128,6 +128,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     /**
      * Inflates a default view hierarchy
+     *
      * @param context current application context
      * @return the default view hierarchy
      */
@@ -167,7 +168,8 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     /**
      * Updates all associated widgets with the given view hierarchy
-     * @param context current application context
+     *
+     * @param context     current application context
      * @param remoteViews view hierarchy
      */
     private void updateRemoteViews(Context context, RemoteViews remoteViews) {
@@ -184,7 +186,8 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     /**
      * Enable a view in the given view hierarchy
-     * @param id id of the view
+     *
+     * @param id          id of the view
      * @param remoteViews view hierarchy
      */
     private void enableView(int id, RemoteViews remoteViews) {
@@ -193,7 +196,8 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     /**
      * Disable a view in the given view hierarchy
-     * @param id id of the view
+     *
+     * @param id          id of the view
      * @param remoteViews view hierarchy
      */
     private void disableView(int id, RemoteViews remoteViews) {
@@ -202,7 +206,8 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     /**
      * Set the wallpaper of the device to the bitmap
-     * @param bitmap bitmap of new wallpaper
+     *
+     * @param bitmap  bitmap of new wallpaper
      * @param context current application context
      */
     private void setWallpaper(Bitmap bitmap, Context context) {
@@ -223,8 +228,9 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         WallpaperManager myWallpaperManager =
                 WallpaperManager.getInstance(context);
         try {
-            myWallpaperManager.setResource(+ R.drawable.defaultimage);
+            myWallpaperManager.setResource(+R.drawable.defaultimage);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }   }
+    }
+}
