@@ -39,4 +39,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.snappydb:snappydb-lib:0.4.0'
     compile 'com.esotericsoftware.kryo:kryo:2.24.0'
+    compile 'com.github.hotchemi:permissionsdispatcher:2.0.7'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.0.7'
 }
