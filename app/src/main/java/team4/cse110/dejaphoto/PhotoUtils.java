@@ -21,7 +21,6 @@ import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
  */
 public class PhotoUtils {
     private static final String TAG = "PhotoUtils";
-    private static int imageIndex; // last image
 
     private static PhotoUtils sPhotoUtils;
 
