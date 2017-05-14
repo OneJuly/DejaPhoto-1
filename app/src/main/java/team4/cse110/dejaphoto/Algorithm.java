@@ -2,6 +2,8 @@ package team4.cse110.dejaphoto;
 
 import android.graphics.Bitmap;
 
+import com.snappydb.SnappydbException;
+
 public interface Algorithm {
 
     /**
@@ -48,6 +50,6 @@ public interface Algorithm {
     /**
      * Load object state from persistent store. Note that this may override the current state
      */
-    void load();
+    void load() throws SnappydbException;
 
 }

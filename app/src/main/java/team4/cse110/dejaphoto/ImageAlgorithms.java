@@ -19,8 +19,8 @@ import com.snappydb.DB;
 import com.snappydb.DBFactory;
 import com.snappydb.SnappydbException;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 //TODO notes:
 //make the bitmap array an array of URI's?
@@ -30,27 +30,36 @@ import java.util.Calendar;
 public class ImageAlgorithms implements Algorithm {
 
     private static final String DB_NAME = "AlgorithmDB";
-    private static final String OB_NAME = "my_algorithm";
+    private static final String IMAGE_INDEX= "imageIndex";
+    private static final String PREV_IMAGES = "previousImages";
+    private static final String PHOTO_ALBUM = "photoAlbum";
+
+    private static final int previousArrSize = 11;
 
     //////////////////// MEMBER VARIABLES AND CONSTRUCTORS ////////////////////
 
     private Context context;
     private int imageIndex;
     private Photo[] previousImages;
-    private ArrayList<Photo> photoAlbum;
+    private List<Photo> photoAlbum;
 
     private PhotoUtils photoUtils;
     private PrefUtils prefUtils;
     private DB snappydb;
 
     public ImageAlgorithms(Context context) {
-        load();
         this.context = context;
-        imageIndex = 0;
-        previousImages = new Photo[11];
         photoUtils = new PhotoUtils(context);
         prefUtils = new PrefUtils();
-        photoAlbum = photoUtils.getCameraPhotos();
+
+        try {
+            load();
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+            previousImages = new Photo[previousArrSize];
+            photoAlbum = photoUtils.getCameraPhotos();
+            imageIndex = 0;
+        }
 
         /* Get snappyDB reference */
         try {
@@ -277,20 +286,22 @@ public class ImageAlgorithms implements Algorithm {
     //TODO implement algorithm
     public void save(){
         try {
-            snappydb.put(OB_NAME, this);
+            snappydb.put(IMAGE_INDEX, imageIndex);
+            snappydb.put(PREV_IMAGES, previousImages);
+            snappydb.put(PHOTO_ALBUM, photoAlbum);
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
     }
 
     //TODO implement algorithm
-    public void load(){
+    public void load() throws SnappydbException {
         try {
-            ImageAlgorithms savedAlgorithms =
-                    snappydb.getObject(OB_NAME, ImageAlgorithms.class);
-
+            imageIndex = snappydb.getInt(IMAGE_INDEX);
+            previousImages = snappydb.getObjectArray(PREV_IMAGES, Photo.class);
+            photoAlbum = snappydb.getObject(PHOTO_ALBUM, List.class);
         } catch (SnappydbException e) {
-            e.printStackTrace();
+            throw e;
         }
 
     }
