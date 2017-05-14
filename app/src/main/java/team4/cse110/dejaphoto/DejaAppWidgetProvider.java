@@ -68,11 +68,13 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         // Set the previous wallpaper
         Bitmap bitmap = algorithm.prev();
         if (bitmap != null) {
+            Log.v(TAG, "Setting prev bitmap"); // DEBUG
             setWallpaper(bitmap, context);
         }
 
         // Enable the karma button if no karma
         if (!algorithm.hasKarma()) {
+            Log.v(TAG, "Enabling button karma after prev"); // DEBUG
             RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
@@ -87,13 +89,16 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         // Set the next wallpaper or default if none exits
         Bitmap bitmap = algorithm.next();
         if (bitmap != null) {
+            Log.v(TAG, "Setting next bitmap"); // DEBUG
             setWallpaper(bitmap, context);
         } else {
+            Log.v(TAG, "Setting next default photo"); // DEBUG
             setDefaultWallpaper(context);
         }
 
         // Enable the karma button if no karma
         if (!algorithm.hasKarma()) {
+            Log.v(TAG, "Enabling button karma after next"); // DEBUG
             RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
@@ -120,8 +125,10 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         // Release image and set replacement
         Bitmap bitmap = algorithm.release();
         if (bitmap != null) {
+            Log.v(TAG, "Setting release bitmap"); // DEBUG
             setWallpaper(bitmap, context);
         } else {
+            Log.v(TAG, "Setting release default photo"); // DEBUG
             setDefaultWallpaper(context);
         }
     }
