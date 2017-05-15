@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.ExifInterface;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -120,6 +122,29 @@ public class PhotoUtils implements  PhotoDB {
      * @param photo the photo to be added
      */
     public void addPhoto(Photo photo) {
+
+        File file = new File(photo.getPath());
+        ExifInterface exif = null;
+        String date;
+
+//        if (file != null) {
+//            try {
+//                exif = new ExifInterface(photo.getPath());
+//
+//                if (exif != null) {
+//                    date = exif.getAttribute(ExifInterface.TAG_DATETIME);
+//
+//                    if (date != null)
+//                        Log.v(TAG, "DATE: " + date.toString());
+//
+//                }
+//
+//            } catch (IOException e1) {
+//                e1.printStackTrace();
+//            }
+//        }
+
+
         ContentValues values = getContentValues(photo);
         mDatabase.insert(PhotoTable.MAIN_NAME, null, values);
     }
