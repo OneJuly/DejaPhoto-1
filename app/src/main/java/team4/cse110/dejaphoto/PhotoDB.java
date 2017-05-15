@@ -24,7 +24,8 @@ public interface PhotoDB {
 
     /**
      *
-     * @return current position in cache
+     * @return current position in cache, which points to the last Photo returned by either prev()
+     * or next()
      */
     int getPosition();
 
