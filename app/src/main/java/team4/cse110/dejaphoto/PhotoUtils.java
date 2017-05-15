@@ -129,9 +129,10 @@ public class PhotoUtils implements  PhotoDB {
     /**
      * Adds a given Photo to the photo database and DejaPhoto album.
      *
+     * @param table
      * @param photo the photo to be added
      */
-    public void addPhoto(Photo photo) {
+    public void addPhoto(String table, Photo photo) {
 
         File file = new File(photo.getPath());
         ExifInterface exif = null;
@@ -157,7 +158,7 @@ public class PhotoUtils implements  PhotoDB {
 
 
         ContentValues values = getContentValues(photo);
-        mDatabase.insert(PhotoTable.MAIN_NAME, null, values);
+        mDatabase.insert(table, null, values);
     }
 
     /**
@@ -200,7 +201,7 @@ public class PhotoUtils implements  PhotoDB {
 
         /* Populate cache from Photo list*/
         for (Photo p : cache) {
-            mDatabase.insert(CacheTable.CACHE_NAME, null, getContentValues(p);
+            addPhoto(CacheTable.CACHE_NAME, p);
         }
 
     }
