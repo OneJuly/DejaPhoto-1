@@ -50,24 +50,34 @@ public class DejaAlgorithm implements Algorithm {
 
         // Update cache
         addToCache(chosenPhoto);
-        save();
+        db.setCache(cache);
 
         return chosenPhoto.getBitmap();
     }
 
     @Override
     public Bitmap prev() {
-        return null;
+        if (cachePos < 0) return null;
+
+        cachePos--;
+        Photo photo = cache.get(cachePos);
+        save();
+        return photo.getBitmap();
     }
 
     @Override
     public void incKarma() {
-
+        Photo photo = getCurrentPhoto();
+        if (photo != null) {
+            photo.setKarma(true);
+            db.updatePhoto(photo);
+        }
     }
 
     @Override
     public boolean hasKarma() {
-        return false;
+        Photo photo = getCurrentPhoto();
+        return photo != null && photo.getKarma();
     }
 
     @Override
@@ -89,7 +99,11 @@ public class DejaAlgorithm implements Algorithm {
      * @return photo currently set as the wallpaper
      */
     private Photo getCurrentPhoto() {
-        return cache.get(cachePos);
+        if (0 <= cachePos && cachePos < cache.size()) {
+            return cache.get(cachePos);
+        } else {
+            return null;
+        }
     }
 
     /**
