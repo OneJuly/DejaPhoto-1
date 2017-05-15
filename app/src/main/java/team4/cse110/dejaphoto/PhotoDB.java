@@ -10,6 +10,13 @@ public interface PhotoDB {
     List<Photo> getPhotos();
 
     /**
+     * Removes an entry in the database
+     * @param p photo to update
+     * @return true if the update was succesful, false otherwise
+     */
+    void removePhoto(Photo p);
+
+    /**
      *
      * @return all the photos in the previous cache
      */
@@ -27,6 +34,7 @@ public interface PhotoDB {
      * @return true if the update was succesful, false otherwise
      */
     boolean updatePhoto(Photo p);
+
 
     /**
      * Updates the cache in the database
