@@ -143,18 +143,21 @@ public class PhotoUtils implements  PhotoDB {
         SimpleDateFormat df = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
 
         Date date = null;
-        double lat;
-        double lon;
+        float[] latlon = new float[2];
 
         /*  Make sure the photo exists */
         if (file != null) {
             try {
                 exif = new ExifInterface(photo.getPath());
-                if (exif != null) {
 
+                if (exif != null) {
                     try {
                         /* Parse the Exif date according to SDF pattern */
                         date = df.parse(exif.getAttribute(ExifInterface.TAG_DATETIME_DIGITIZED));
+
+                        /* Get latitude/longitude data */
+                        exif.getLatLong(latlon);
+
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -165,9 +168,15 @@ public class PhotoUtils implements  PhotoDB {
             }
         }
 
-        /* If we received a valid Date object, set the Photo time in millis */
+        /* Set the Photo time in millis */
         if (date != null) {
            photo.setTime(date.getTime());
+        }
+
+        /* Set latitude and longitude information */
+        if (latlon != null) {
+            photo.setLat((double) latlon[0]);
+            photo.setLat((double) latlon[1]);
         }
 
         /* Add the Photo to the Database */
