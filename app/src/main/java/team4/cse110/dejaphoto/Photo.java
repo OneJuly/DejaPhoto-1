@@ -16,7 +16,7 @@ public class Photo {
     private String path;
     private double lat;
     private double lon;
-    private int karma;
+    private boolean karma;
     private double weight;
     private int time;  // see MediaStore.Images.Media.DATE...says it's an int?
 
@@ -105,7 +105,7 @@ public class Photo {
      *
      * @return
      */
-    public int getKarma() {
+    public boolean getKarma() {
         return karma;
     }
 
@@ -113,7 +113,7 @@ public class Photo {
      *
      * @param karma
      */
-    public void setKarma(int karma) {
+    public void setKarma(boolean karma) {
         this.karma = karma;
     }
 
