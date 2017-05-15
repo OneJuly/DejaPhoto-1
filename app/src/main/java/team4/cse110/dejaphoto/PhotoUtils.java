@@ -30,8 +30,8 @@ public class PhotoUtils implements  PhotoDB {
 
     private PhotoUtils(Context context) {
         mContext = context.getApplicationContext();
-        mDatabase = new PhotoDBHelper(mContext, DB_MAIN).getWritableDatabase();
-        mCache = new PhotoDBHelper(mContext, DB_CACHE).getWritableDatabase();
+        mDatabase = new PhotoDBHelper(mContext).getWritableDatabase();
+//        mCache = new PhotoDBHelper(mContext).getWritableDatabase();
     }
 
     /**

@@ -3,8 +3,11 @@ package team4.cse110.dejaphoto.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PrevIndexTable;
+
+import static team4.cse110.dejaphoto.database.PhotoDBSchema.CacheTable;
 
 /**
  * Created by Sean on 5/13/2017.
@@ -13,10 +16,10 @@ import team4.cse110.dejaphoto.database.PhotoDBSchema.PrevIndexTable;
 public class PhotoDBHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
-//    public static final String DATABASE_NAME = "dejaPhotoDatabase.db";
+    public static final String DATABASE_NAME = "dejaPhotoDatabase.db";
 
-    public PhotoDBHelper(Context context, String dbName) {
-        super(context, dbName, null, VERSION);
+    public PhotoDBHelper(Context context) {
+        super(context, DATABASE_NAME, null, VERSION);
     }
 
     /* Called when DB is created for the first time */
@@ -34,10 +37,21 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
                 PhotoTable.Cols.WEIGHT + ")"
         );
 
+        /* Create main Photo table*/
+        db.execSQL("create table " + CacheTable.NAME + "(" +
+                "_id integer primary key autoIncrement, " +
+                CacheTable.Cols.UUID + ", " +
+                CacheTable.Cols.PATH+ ", " +
+                CacheTable.Cols.LAT + ", " +
+                CacheTable.Cols.LON + ", " +
+                CacheTable.Cols.KARMA + ", " +
+                CacheTable.Cols.WEIGHT + ")"
+        );
+
         /* Create previous index table  */
         db.execSQL("create table " + PrevIndexTable.NAME + "(" +
                 "_id integer primary key autoIncrement, " +
-                PrevIndexTable.Cols.INDEX + ", " + ")"
+                PrevIndexTable.Cols.INDEX + ")"
         );
     }
 

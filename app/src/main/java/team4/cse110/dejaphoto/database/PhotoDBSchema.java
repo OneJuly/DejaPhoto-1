@@ -20,7 +20,22 @@ public class PhotoDBSchema {
         }
     }
 
-    /* Cache table schema */
+    /* Cached photos table schema */
+    public static final class CacheTable {
+        public static final String NAME = "CacheDB";
+
+        public static final class Cols {
+            public static final String UUID = "uuid";
+            public static final String PATH = "path";
+            public static final String LAT = "lat";
+            public static final String LON = "long";
+            public static final String KARMA = "karma";
+            public static final String WEIGHT = "weight";
+        }
+    }
+
+
+    /* Previous index table schema */
     public static final class PrevIndexTable{
         public static final String NAME = "PrevIndex";
 
