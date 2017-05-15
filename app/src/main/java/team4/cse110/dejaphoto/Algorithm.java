@@ -40,4 +40,14 @@ public interface Algorithm {
      */
     Bitmap release();
 
+    /**
+     * Save state to data base
+     */
+    void save();
+
+    /**
+     * Load state from data base. Note that this my overwrite current state
+     */
+    void load();
+
 }
