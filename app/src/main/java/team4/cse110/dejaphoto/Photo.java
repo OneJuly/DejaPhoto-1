@@ -24,6 +24,7 @@ public class Photo {
     /* Construct a Photo with a specified filepath */
     public Photo(String path) {
         this.path = path;
+        this.id = UUID.randomUUID();
     }
 
 
