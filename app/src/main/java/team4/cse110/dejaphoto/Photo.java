@@ -18,6 +18,12 @@ public class Photo {
     private int active;
 
 
+    /* Construct a Photo with a specified filepath */
+    public Photo(String path) {
+        this.path = path;
+    }
+
+
     /******************** Attribute Accessors/Mutators ********************/
     public UUID getId() {
         return id;
