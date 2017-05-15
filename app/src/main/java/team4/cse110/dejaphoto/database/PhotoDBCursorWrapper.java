@@ -36,7 +36,7 @@ public class PhotoDBCursorWrapper extends CursorWrapper {
         photo.setLon(lon);
         photo.setKarma(karma);
         photo.setWeight(weight);
-        photo.setActive(prev);
+        photo.setPrev(prev);
 
         return photo;
     }

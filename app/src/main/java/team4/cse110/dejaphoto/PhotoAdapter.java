@@ -49,10 +49,10 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                 toggleCheckbox(checkBox);
                 if (photo.isActive()) {
                     Log.v(TAG, "Photo is active " + pos);
-                    photo.setActive(0);
+                    photo.setPrev(0);
                 } else {
                     Log.v(TAG, "Photo is inactive " + pos);
-                    photo.setActive(1);
+                    photo.setPrev(1);
                 }
             }
         }

@@ -69,7 +69,7 @@ public class Photo {
      *
      * @param active
      */
-    public void setActive(int active) {
+    public void setPrev(int active) {
         this.active = active;
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
+import team4.cse110.dejaphoto.database.PhotoDBSchema.PrevIndexTable;
 
 /**
  * Created by Sean on 5/13/2017.
@@ -30,6 +31,11 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
                 PhotoTable.Cols.KARMA + ", " +
                 PhotoTable.Cols.WEIGHT + ", " +
                 PhotoTable.Cols.PREV + ")"
+        );
+
+        db.execSQL("create table " + PrevIndexTable.NAME + "(" +
+                "_id integer primary key autoIncrement, " +
+                PrevIndexTable.Cols.INDEX + ", " + ")"
         );
     }
 

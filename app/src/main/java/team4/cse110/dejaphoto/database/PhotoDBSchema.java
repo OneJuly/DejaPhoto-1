@@ -19,4 +19,12 @@ public class PhotoDBSchema {
             public static final String PREV = "active";
         }
     }
+
+    public static final class PrevIndexTable{
+        public static final String NAME = "PrevIndex";
+
+        public static final class Cols {
+            public static final String INDEX = "index";
+        }
+    }
 }

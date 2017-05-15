@@ -17,7 +17,7 @@ import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 /**
  * Singleton to store Photos and Photo-related utilities.
  */
-public class PhotoUtils implements  PhotoDB{
+public class PhotoUtils implements  PhotoDB {
     private static final String TAG = "PhotoUtils";
     private static final String DB_MAIN= "DejaPhotoMainDB";
     private static final String DB_CACHE = "DejaPhotoCacheDB";
@@ -57,7 +57,7 @@ public class PhotoUtils implements  PhotoDB{
     public List<Photo> getPhotos() {
         List<Photo> photos = new ArrayList<>();
 
-        PhotoDBCursorWrapper cursor = queryPhotos(null, null);
+        PhotoDBCursorWrapper cursor = queryMain(null, null);
 
         try {
             cursor.moveToFirst();
@@ -78,9 +78,12 @@ public class PhotoUtils implements  PhotoDB{
      * @return
      */
     public List<Photo> getCache() {
-        return null;
+        List<Photo> cache = new ArrayList<>();
+
+        PhotoDBCursorWrapper cursor = queryCache(null, null);
 
     }
+
 
     @Override
     public int getPosition() {
@@ -93,7 +96,7 @@ public class PhotoUtils implements  PhotoDB{
      * @return the photo with matching id
      */
     public Photo getPhoto(UUID id) {
-        PhotoDBCursorWrapper cursor = queryPhotos(
+        PhotoDBCursorWrapper cursor = queryMain(
                 PhotoTable.Cols.UUID + " = ?",
                 new String[] { id.toString() }
         );
@@ -155,7 +158,6 @@ public class PhotoUtils implements  PhotoDB{
      */
     @Override
     public void setCache(List<Photo> cache) {
-
     }
 
     /**
@@ -192,7 +194,7 @@ public class PhotoUtils implements  PhotoDB{
      * @param whereArgs
      * @return
      */
-    private PhotoDBCursorWrapper queryPhotos(String whereClause, String[] whereArgs) {
+    private PhotoDBCursorWrapper queryMain(String whereClause, String[] whereArgs) {
         Cursor cursor =
                 mDatabase.query(PhotoTable.NAME, null, // columns parameter - null selects all columns
                         whereClause, whereArgs, null, // groupBy
@@ -201,6 +203,24 @@ public class PhotoUtils implements  PhotoDB{
                 );
 
         return new PhotoDBCursorWrapper(cursor);
+    }
+
+    /**
+     *
+     * @param whereClause
+     * @param whereArgs
+     * @return
+     */
+    private PhotoDBCursorWrapper queryCache(String whereClause, String[] whereArgs) {
+        Cursor cursor =
+                mCache.query(PhotoTable.NAME, null, // columns parameter - null selects all columns
+                        whereClause, whereArgs, null, // groupBy
+                        null, // having
+                        null  // orderBy
+                );
+
+        return new PhotoDBCursorWrapper(cursor);
+
     }
 
 
