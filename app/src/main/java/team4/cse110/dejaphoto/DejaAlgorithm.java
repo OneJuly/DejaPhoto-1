@@ -103,7 +103,7 @@ public class DejaAlgorithm implements Algorithm {
 
         // Update album
         album.remove(photo);
-        // TODO db.removePhoto(photo)
+        db.removePhoto(photo);
 
         // Get the next photo to display
         return next();
