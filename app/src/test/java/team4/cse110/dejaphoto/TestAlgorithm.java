@@ -1,9 +1,10 @@
 package team4.cse110.dejaphoto;
 
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static junit.framework.Assert.assertEquals;
 
 /**
  * This class tests the DejaAlgorithm class' methods.
@@ -14,7 +15,6 @@ public class TestAlgorithm {
      */
     @Before
     public void setup() {
-
     }
 
     /**

@@ -22,7 +22,7 @@ public class Photo {
     private double lat;
     private double lon;
     private int karma;
-    private long time;  // see MediaStore.Images.Media.DATE...says it's an int?
+    private long time;
     private double weight;
     private Context context;
 
@@ -152,7 +152,7 @@ public class Photo {
      *
      * @param time
      */
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

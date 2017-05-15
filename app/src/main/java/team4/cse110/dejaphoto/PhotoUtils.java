@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.ExifInterface;
-import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -136,19 +138,26 @@ public class PhotoUtils implements  PhotoDB {
 
         File file = new File(photo.getPath());
         ExifInterface exif = null;
-        String date;
-        double lat;
 
+        /* Date formatter to convert Exif date tags */
+        SimpleDateFormat df = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+
+        Date date = null;
+        double lat;
+        double lon;
+
+        /*  Make sure the photo exists */
         if (file != null) {
             try {
                 exif = new ExifInterface(photo.getPath());
-
                 if (exif != null) {
-                    date = exif.getAttribute(ExifInterface.TAG_DATETIME);
 
-                    if (date != null)
-                        Log.v(TAG, "DATE: " + date.toString());
-
+                    try {
+                        /* Parse the Exif date according to SDF pattern */
+                        date = df.parse(exif.getAttribute(ExifInterface.TAG_DATETIME_DIGITIZED));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
 
             } catch (IOException e1) {
@@ -156,7 +165,12 @@ public class PhotoUtils implements  PhotoDB {
             }
         }
 
+        /* If we received a valid Date object, set the Photo time in millis */
+        if (date != null) {
+           photo.setTime(date.getTime());
+        }
 
+        /* Add the Photo to the Database */
         ContentValues values = getContentValues(photo);
         mDatabase.insert(table, null, values);
     }
