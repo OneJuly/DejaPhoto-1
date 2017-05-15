@@ -11,12 +11,12 @@ import java.util.Calendar;
 import java.util.UUID;
 
 /**
- * Created by Sean on 5/14/2017.
+ * This class handles the information contained in each Photo object.
  */
-
 public class Photo {
 
-    /******************** Photo Attributes (i.e. PhotoTable Columns) ************/
+    /***************** Photo Attributes (i.e. PhotoTable Columns) ************/
+
     private UUID id;
     private String path;
     private double lat;
@@ -33,124 +33,115 @@ public class Photo {
         this.context = context;
     }
 
-
     /******************** Attribute Accessors/Mutators ********************/
 
     /**
-     * Get this photo's unique identifier
-     *
-     * @return
+     * Get a photo's unique identifier.
+     * @return the photo's ID.
      */
     public UUID getId() {
         return id;
     }
 
     /**
-     * Set this photo's unique identifier
-     *
-     * @param id
+     * Set a photo's unique identifier.
+     * @param id - the photo's ID.
      */
     public void setId(UUID id) {
         this.id = id;
     }
 
     /**
-     * Get the absolute file path of this Photo
-     *
-     * @return
+     * Get the absolute file path of this Photo.
+     * @return the photo's file path.
      */
     public String getPath() {
         return path;
     }
 
     /**
-     * Set the absolute file path of this Photo
-     *
-     * @param path
+     * Set the absolute file path of this Photo.
+     * @param path - the photo's file path.
      */
     public void setPath(String path) {
         this.path = path;
     }
 
     /**
-     * Get the latitude info attached to this Photo
-     *
-     * @return
+     * Get the latitude info attached to this Photo.
+     * @return the latitude of the photo's capture location.
      */
     public double getLat() {
         return lat;
     }
 
     /**
-     * Set the latitude info attached to this Photo
-     *
-     * @return
+     * Set the latitude info attached to this Photo.
+     * @param lat - the latitude of the photo's capture location.
      */
     public void setLat(Double lat) {
         this.lat = lat;
     }
 
     /**
-     * Get the longitude info attached to this Photo
-     *
-     * @return
+     * Get the longitude info attached to this Photo.
+     * @return the longitude of the photo's capture location.
      */
     public double getLon() {
         return lon;
     }
 
     /**
-     * Set the longitude info attached to this Photo
-     *
-     * @return
+     * Set the longitude info attached to this Photo.
+     * @param lon - the longitude of the photo's capture location.
      */
     public void setLon(Double lon) {
         this.lon = lon;
     }
 
     /**
-     *
-     * @return
+     * This method checks whether a photo has karma.
+     * @return 1 is the photo has karma; 0 otherwise.
      */
     public int getKarma() {
         return karma;
     }
 
     /**
-     *
-     * @param karma
+     * This method gives or takes karma to or from a photo.
+     * @param karma whether the photo should have karma (1) or not (0).
      */
     public void setKarma(int karma) {
         this.karma = karma;
     }
 
     /**
-     *
-     * @return
+     * This method retrieves the priority of a photo.
+     * @return the priority of the photo.
      */
     public double getWeight() {
         return weight;
     }
 
     /**
-     *
-     * @param weight
+     * This method assigns a priority to a photo.
+     * @param weight the priority of the photo.
      */
     public void setWeight(double weight) {
         this.weight = weight;
     }
 
     /**
-     *
-     * @return
+     * This method retrieves the time of a photo's capture.
+     * @return the time of the photo's capture.
      */
     public long getTime() {
         return time;
     }
 
     /**
-     *
-     * @param time
+     * This method sets the time of a photo's capture.
+     * @param time - the time of the photo's capture.
      */
     public void setTime(int time) {
         this.time = time;
@@ -275,12 +266,10 @@ public class Photo {
     }
 
     /**
-     * Get a Bitmap representation of this Photo Object
-     *
-     * @return
+     * Get a Bitmap representation of this Photo Object.
+     * @return the Bitmap representation of the photo.
      */
     public Bitmap getBitmap() {
         return BitmapFactory.decodeFile(path);
     }
-
 }

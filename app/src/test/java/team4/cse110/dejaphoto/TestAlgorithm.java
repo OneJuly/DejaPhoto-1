@@ -14,7 +14,7 @@ public class TestAlgorithm {
      */
     @Before
     public void setup() {
-
+        Photo testPhoto = new Photo();
     }
 
     /**
