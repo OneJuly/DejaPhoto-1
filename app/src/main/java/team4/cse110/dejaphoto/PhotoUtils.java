@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import team4.cse110.dejaphoto.database.PhotoDBCursorWrapper;
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
+import team4.cse110.dejaphoto.database.PhotoDBSchema.CacheTable;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PrevIndexTable;
 
 import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
@@ -24,8 +25,6 @@ import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
  */
 public class PhotoUtils implements  PhotoDB {
     private static final String TAG = "PhotoUtils";
-    private static final String DB_MAIN= "DejaPhotoMainDB";
-    private static final String DB_CACHE = "DejaPhotoCacheDB";
 
     private static PhotoUtils sPhotoUtils;
 
@@ -36,7 +35,6 @@ public class PhotoUtils implements  PhotoDB {
     private PhotoUtils(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new PhotoDBHelper(mContext).getWritableDatabase();
-//        mCache = new PhotoDBHelper(mContext).getWritableDatabase();
     }
 
     /**
@@ -196,6 +194,14 @@ public class PhotoUtils implements  PhotoDB {
      */
     @Override
     public void setCache(List<Photo> cache) {
+
+        /* Erase all data in current cache */
+        mDatabase.delete(CacheTable.CACHE_NAME, null, null);
+
+        /* Populate cache from Photo list*/
+        for (Photo p : cache) {
+            mDatabase.insert(CacheTable.CACHE_NAME, null, getContentValues(p);
+        }
 
     }
 
