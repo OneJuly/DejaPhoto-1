@@ -7,9 +7,14 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
+/**
+ * This class calculates the weight of a photo, which the app uses to determine
+ * the probability of a photo becoming the phone's wallpaper. It also handles
+ * releasing photos from the display cycle.
+ */
 public class DejaAlgorithm implements Algorithm {
-
-    private static final int CACHE_SIZE = 10;   // max photos in cache
+    // The max photos in the display history.
+    private static final int CACHE_SIZE = 10;
 
     private Context context;
     private PhotoDB db;
@@ -17,7 +22,7 @@ public class DejaAlgorithm implements Algorithm {
     // Database dependent variables
     private List<Photo> album;
     private List<Photo> cache;
-    private int cachePos;   // last returned by prev(), next() or release(). -1 if cache is empty
+    private int cachePos; // last returned by prev(), next() or release(). -1 if cache is empty.
 
     public DejaAlgorithm(Context context) {
         this.context = context;
@@ -67,7 +72,7 @@ public class DejaAlgorithm implements Algorithm {
 
     @Override
     public Bitmap prev() {
-        if (cache.isEmpty()) return null;
+        if (cache.size() <= 1) return null;
 
         cachePos--;
         Photo photo = cache.get(cachePos);
@@ -123,7 +128,7 @@ public class DejaAlgorithm implements Algorithm {
     }
 
     private Photo getCurrentPhoto() {
-        if (0 <= cachePos && cachePos < cache.size()) {
+        if (!cache.isEmpty()) {
             return cache.get(cachePos);
         } else {
             return null;
