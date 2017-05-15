@@ -67,7 +67,7 @@ public class DejaAlgorithm implements Algorithm {
 
     @Override
     public Bitmap prev() {
-        if (cache.isEmpty()) return null;
+        if (cache.size() <= 1) return null;
 
         cachePos--;
         Photo photo = cache.get(cachePos);
