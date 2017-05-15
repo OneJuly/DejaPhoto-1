@@ -5,14 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.ExifInterface;
+import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import team4.cse110.dejaphoto.database.PhotoDBCursorWrapper;
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
+import team4.cse110.dejaphoto.database.PhotoDBSchema.PrevIndexTable;
 
 import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
@@ -84,8 +87,17 @@ public class PhotoUtils implements  PhotoDB {
 
         PhotoDBCursorWrapper cursor = queryCache(null, null);
 
-        return null;
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                cache.add(cursor.getPhoto());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
 
+        return cache;
     }
 
 
@@ -126,23 +138,24 @@ public class PhotoUtils implements  PhotoDB {
         File file = new File(photo.getPath());
         ExifInterface exif = null;
         String date;
+        double lat;
 
-//        if (file != null) {
-//            try {
-//                exif = new ExifInterface(photo.getPath());
-//
-//                if (exif != null) {
-//                    date = exif.getAttribute(ExifInterface.TAG_DATETIME);
-//
-//                    if (date != null)
-//                        Log.v(TAG, "DATE: " + date.toString());
-//
-//                }
-//
-//            } catch (IOException e1) {
-//                e1.printStackTrace();
-//            }
-//        }
+        if (file != null) {
+            try {
+                exif = new ExifInterface(photo.getPath());
+
+                if (exif != null) {
+                    date = exif.getAttribute(ExifInterface.TAG_DATETIME);
+
+                    if (date != null)
+                        Log.v(TAG, "DATE: " + date.toString());
+
+                }
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
 
 
         ContentValues values = getContentValues(photo);
@@ -183,6 +196,7 @@ public class PhotoUtils implements  PhotoDB {
      */
     @Override
     public void setCache(List<Photo> cache) {
+
     }
 
     /**
@@ -191,6 +205,11 @@ public class PhotoUtils implements  PhotoDB {
      */
     @Override
     public void setPosition(int pos) {
+        ContentValues values = new ContentValues();
+        values.put(PrevIndexTable.Cols.IDX, pos);
+
+        mDatabase.update(PrevIndexTable.PREV_NAME,values, PrevIndexTable.Cols.IDX + " = ?",
+                new String[] {String.valueOf(pos)});
     }
 
     /**

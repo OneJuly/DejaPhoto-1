@@ -40,7 +40,7 @@ public class PhotoDBSchema {
         public static final String PREV_NAME = "PrevIndex";
 
         public static final class Cols {
-            public static final String INDEX = "idx";
+            public static final String IDX = "idx";
         }
     }
 }
