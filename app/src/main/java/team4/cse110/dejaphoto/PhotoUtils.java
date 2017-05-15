@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.ExifInterface;
+import android.support.constraint.solver.Cache;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,8 +94,10 @@ public class PhotoUtils implements  PhotoDB {
         try {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                cache.add(cursor.getPhoto());
-                cursor.moveToNext();
+                if (!cursor.isNull(cursor.getColumnIndex(CacheTable.Cols.C_UUID))) {
+                    cache.add(cursor.getPhoto());
+                    cursor.moveToNext();
+                }
             }
         } finally {
             cursor.close();
@@ -175,13 +179,16 @@ public class PhotoUtils implements  PhotoDB {
 
         /* Set the Photo time in millis */
         if (date != null) {
-           photo.setTime(date.getTime());
+            long time = date.getTime();
+           photo.setTime(time);
         }
 
         /* Set latitude and longitude information */
         if (latlon != null) {
+            Log.v(TAG, "lat: " + latlon[0]);
+            Log.v(TAG, "lon: " + latlon[1]);
             photo.setLat((double) latlon[0]);
-            photo.setLat((double) latlon[1]);
+            photo.setLon((double) latlon[1]);
         }
 
         /* Add the Photo to the Database */
@@ -257,6 +264,7 @@ public class PhotoUtils implements  PhotoDB {
         values.put(PhotoTable.Cols.LON, photo.getLon());
         values.put(PhotoTable.Cols.KARMA, photo.getKarma());
         values.put(PhotoTable.Cols.WEIGHT, photo.getWeight());
+        values.put(PhotoTable.Cols.TIME, photo.getTime());
 
         return values;
     }
@@ -286,7 +294,7 @@ public class PhotoUtils implements  PhotoDB {
      */
     private PhotoDBCursorWrapper queryCache(String whereClause, String[] whereArgs) {
         Cursor cursor =
-                mDatabase.query(MAIN_NAME, null, // columns parameter - null selects all columns
+                mDatabase.query(CacheTable.CACHE_NAME, null, // columns parameter - null selects all columns
                         whereClause, whereArgs, null, // groupBy
                         null, // having
                         null  // orderBy

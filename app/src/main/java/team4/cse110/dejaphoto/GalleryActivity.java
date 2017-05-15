@@ -16,6 +16,7 @@ import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
+import team4.cse110.dejaphoto.database.PhotoDBHelper;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
 /**
@@ -52,16 +53,19 @@ public class GalleryActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        /* Get a preference utils reference */
         utils = new PrefUtils();
-
         utils.setPos(this, -1);
+        utils.setDejaVuMode(this, true);
 
+        /* Get a reference to the RecyclerView */
         RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
-        PhotoUtils.getInstance(this);
         photos = new ArrayList<>();
 
+        /* Clear database */
+        deleteDatabase(PhotoDBHelper.DATABASE_NAME);
+
         /* Instantiate an interactive image picker on startup */
-        /* TODO skip this if db is already initialized */
         FilePickerBuilder.getInstance().setMaxCount(10)
                 .setSelectedFiles(paths)
                 .setActivityTheme(R.style.AppTheme)
@@ -72,6 +76,12 @@ public class GalleryActivity extends AppCompatActivity {
         rvPhotos.setAdapter(adapter);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
     }
+
+/*    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PhotoUtils.getInstance(this).mDatabase.close();
+    }*/
 
     /**
      * This method populates an array of photos.

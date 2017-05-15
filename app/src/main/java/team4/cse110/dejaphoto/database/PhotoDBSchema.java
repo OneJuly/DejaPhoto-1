@@ -14,9 +14,10 @@ public class PhotoDBSchema {
             public static final String UUID = "uuid";
             public static final String PATH = "path";
             public static final String LAT = "lat";
-            public static final String LON = "long";
+            public static final String LON = "lon";
             public static final String KARMA = "karma";
             public static final String WEIGHT = "weight";
+            public static final String TIME = "time";
         }
     }
 
@@ -28,9 +29,10 @@ public class PhotoDBSchema {
             public static final String C_UUID = "uuid";
             public static final String C_PATH = "path";
             public static final String C_LAT = "lat";
-            public static final String C_LON = "long";
+            public static final String C_LON = "lon";
             public static final String C_KARMA = "karma";
             public static final String C_WEIGHT = "weight";
+            public static final String C_TIME = "time";
         }
     }
 

@@ -41,13 +41,13 @@ public class DejaAlgorithm implements Algorithm {
      */
     @Override
     public Photo next() {
-        if (album.isEmpty()) return null;
+//        if (album.isEmpty()) return null;
 
         // Handle non DejaVu next
         if (!PrefUtils.dejaVuEnabled(context)) {
             Random random = new Random();
             Photo photo = album.get(random.nextInt(album.size()));
-         //   addToCache(photo);
+            addToCache(photo);
             return photo;
         }
 
@@ -85,16 +85,13 @@ public class DejaAlgorithm implements Algorithm {
      * @return the previous photo, which will be the next to be displayed.
      */
     @Override
-    public Bitmap prev() {
+    public Photo prev() {
         if (cache.size() <= 1) return null;
 
         cachePos--;
-        if (cachePos >= 0) {
-            Photo photo = cache.get(cachePos);
-            db.setPosition(cachePos);
-            return photo.getBitmap();
-        }
-        return null;
+        Photo photo = cache.get(cachePos);
+        db.setPosition(cachePos);
+        return photo;
     }
 
     /**
@@ -178,6 +175,7 @@ public class DejaAlgorithm implements Algorithm {
      * @param photo
      */
     private void setWeight(Photo photo) {
+        photo.setWeight(photo.calcWeight());
         // TODO add time into the calculation. Android has System.currentTimeMillis()
 
     }
@@ -185,7 +183,8 @@ public class DejaAlgorithm implements Algorithm {
     private void addToCache(Photo photo) {
         // Check if we need to remove everything after pointer
         Log.v("cachepos", "pos+ "  + cachePos);
-        if (cachePos != cache.size() -1) {
+        Log.v("cachesize ", "size " + cache.size());
+        if (!cache.isEmpty() && cachePos != cache.size() - 1) {
             ListIterator<Photo> itr = cache.listIterator(cachePos);
             itr.remove(); // remove self
             while (itr.hasNext()) {
@@ -203,6 +202,7 @@ public class DejaAlgorithm implements Algorithm {
         cachePos = cache.size() - 1;
 
         db.setCache(cache);
+        //db.setPosition(cachePos);
         db.setPosition(cachePos);
     }
 }

@@ -68,7 +68,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         } else if (KARMA_CLICKED.equals(intent.getAction())) {
             onKarma(context, intent);
         } else if (RELEASE_CLICKED.equals(intent.getAction())) {
-            //onRelease(context, intent);
+            onRelease(context, intent);
         }
     }
 
@@ -83,10 +83,10 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Algorithm algorithm = getAlgorithm(context);
 
         // Set the previous wallpaper.
-        Bitmap bitmap = algorithm.prev();
-        if (bitmap != null) {
+        Photo photo = algorithm.prev();
+        if (photo != null) {
             Log.v(TAG, "Setting prev bitmap"); // DEBUG
-//            setWallpaper(bitmap, context);
+            setWallpaper(photo, context);
         }
 
         // Enable the karma button if no karma.
@@ -151,21 +151,21 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
      * @param context
      * @param intent
      */
-/*    private void onRelease(Context context, Intent intent) {
+    private void onRelease(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Release button tapped");
 
         Algorithm algorithm = getAlgorithm(context);
 
         // Release image and set replacement
-        Bitmap bitmap = algorithm.release();
-        if (bitmap != null) {
+        Photo photo = algorithm.release();
+        if (photo != null) {
             Log.v(TAG, "Setting release bitmap"); // DEBUG
-            setWallpaper(bitmap, context);
+            setWallpaper(photo, context);
         } else {
             Log.v(TAG, "Setting release default photo"); // DEBUG
             setDefaultWallpaper(context);
         }
-    }*/
+    }
 
     /**
      * Inflates a default view hierarchy.

@@ -19,7 +19,7 @@ public interface Algorithm {
      * @return the bitmap representing the previous image, or null if there
      * are no previous images.
      */
-    Bitmap prev();
+    Photo prev();
 
     /**
      * Set karma for the last image returned by prev(), next() or release().

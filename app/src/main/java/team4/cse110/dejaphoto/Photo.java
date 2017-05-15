@@ -156,19 +156,22 @@ public class Photo {
         if(is_same_time()){
             weight += 100;
         }
-        if(is_same_weekday()){
+/*        if(is_same_weekday()){
             weight += 100;
-        }
+        }*/
         if(is_same_location()){
             weight += 100;
         }
-        if(karma == 1){
+/*        if(karma == 1){
             weight += 200;
-        }
-        if(is_recently_shown()){
+        }*/
+/*        if(is_recently_shown()){
             weight -= 200;
-        }
-        return weight += recentlyTakenWeight();
+        }*/
+        weight += recentlyTakenWeight();
+        Log.v("weight", "weight+ " + weight);
+        return weight;
+
     }
 
     /***************** Helper Methods *********************/
@@ -232,7 +235,7 @@ public class Photo {
         }
 
         float distanceInMeters =  photoLocation.distanceTo(currLocation);
-        return (distanceInMeters < 150);
+        return (distanceInMeters < 5000);
     }
 
     //TODO implement functionality

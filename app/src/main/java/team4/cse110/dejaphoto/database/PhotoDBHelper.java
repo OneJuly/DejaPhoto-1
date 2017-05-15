@@ -34,7 +34,8 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
                 PhotoTable.Cols.LAT + ", " +
                 PhotoTable.Cols.LON + ", " +
                 PhotoTable.Cols.KARMA + ", " +
-                PhotoTable.Cols.WEIGHT + ")"
+                PhotoTable.Cols.WEIGHT + ", " +
+                PhotoTable.Cols.TIME + ")"
         );
 
         /* Create main Photo table*/
@@ -45,7 +46,8 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
                 CacheTable.Cols.C_LAT + ", " +
                 CacheTable.Cols.C_LON + ", " +
                 CacheTable.Cols.C_KARMA + ", " +
-                CacheTable.Cols.C_WEIGHT + ")"
+                CacheTable.Cols.C_WEIGHT + ", " +
+                CacheTable.Cols.C_TIME + ")"
         );
 
         /* Create previous index table  */
