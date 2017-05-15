@@ -21,6 +21,7 @@ import team4.cse110.dejaphoto.database.PhotoDBSchema.CacheTable;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PrevIndexTable;
 
 import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
+import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable.MAIN_NAME;
 
 /**
  * Singleton to store Photos and Photo-related utilities.
@@ -32,7 +33,6 @@ public class PhotoUtils implements  PhotoDB {
 
     private Context mContext;
     SQLiteDatabase mDatabase;
-    SQLiteDatabase mCache;
 
     private PhotoUtils(Context context) {
         mContext = context.getApplicationContext();
@@ -192,7 +192,7 @@ public class PhotoUtils implements  PhotoDB {
     public void removePhoto(Photo photo) {
         String id = photo.getId().toString();
 
-        mDatabase.delete(PhotoTable.MAIN_NAME, PhotoTable.Cols.UUID + " =?",
+        mDatabase.delete(MAIN_NAME, PhotoTable.Cols.UUID + " =?",
                 new String[] { id });
     }
 
@@ -205,7 +205,7 @@ public class PhotoUtils implements  PhotoDB {
         String id = photo.getId().toString();
         ContentValues values = getContentValues(photo);
 
-        int updated = mDatabase.update(PhotoTable.MAIN_NAME, values, PhotoTable.Cols.UUID + " = ?",
+        int updated = mDatabase.update(MAIN_NAME, values, PhotoTable.Cols.UUID + " = ?",
 
                 new String[] { id });
 
@@ -238,7 +238,13 @@ public class PhotoUtils implements  PhotoDB {
         ContentValues values = new ContentValues();
         values.put(PrevIndexTable.Cols.IDX, pos);
 
-        mDatabase.update(PrevIndexTable.PREV_NAME,values, null, null);
+        int updated = mDatabase.update(PrevIndexTable.Cols.IDX, values, null,
+                new String[] { String.valueOf(pos) });
+
+//        mDatabase.update(PrevIndexTable.PREV_NAME,values, null, null);
+
+/*        mDatabase.update(PrevIndexTable.PREV_NAME, values, null, PrevIndexTable.Cols.IDX + " =?",
+                new String[] {String.valueOf(pos)});*/
     }
 
     /**
@@ -267,7 +273,7 @@ public class PhotoUtils implements  PhotoDB {
      */
     private PhotoDBCursorWrapper queryMain(String whereClause, String[] whereArgs) {
         Cursor cursor =
-                mDatabase.query(PhotoTable.MAIN_NAME, null, // columns parameter - null selects all columns
+                mDatabase.query(MAIN_NAME, null, // columns parameter - null selects all columns
                         whereClause, whereArgs, null, // groupBy
                         null, // having
                         null  // orderBy
@@ -284,7 +290,7 @@ public class PhotoUtils implements  PhotoDB {
      */
     private PhotoDBCursorWrapper queryCache(String whereClause, String[] whereArgs) {
         Cursor cursor =
-                mCache.query(PhotoTable.MAIN_NAME, null, // columns parameter - null selects all columns
+                mDatabase.query(MAIN_NAME, null, // columns parameter - null selects all columns
                         whereClause, whereArgs, null, // groupBy
                         null, // having
                         null  // orderBy
