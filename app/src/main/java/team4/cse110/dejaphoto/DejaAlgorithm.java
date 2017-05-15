@@ -79,7 +79,7 @@ public class DejaAlgorithm implements Algorithm {
     public void incKarma() {
         Photo photo = getCurrentPhoto();
         if (photo != null) {
-            photo.setKarma(true);
+            photo.setKarma(1);
             db.updatePhoto(photo);
         }
     }
@@ -87,7 +87,7 @@ public class DejaAlgorithm implements Algorithm {
     @Override
     public boolean hasKarma() {
         Photo photo = getCurrentPhoto();
-        return photo != null && photo.getKarma();
+        return photo != null && photo.getKarma() == 1;
     }
 
     @Override
