@@ -2,7 +2,6 @@ package team4.cse110.dejaphoto;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +46,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             if (pos != RecyclerView.NO_POSITION) {
                 Photo photo = photos.get(pos);
                 toggleCheckbox(checkBox);
-                if (photo.isActive()) {
-                    Log.v(TAG, "Photo is active " + pos);
-                    photo.setPrev(0);
-                } else {
-                    Log.v(TAG, "Photo is inactive " + pos);
-                    photo.setPrev(1);
-                }
             }
         }
 
@@ -89,11 +81,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         Photo photo = photos.get(position);
         ImageView imageView = holder.photo;
-
-        /* Get checkbox info */
-        if (photo.isActive()) {
-            holder.checkBox.setChecked(true);
-        }
 
         /* Load the image */
         Glide
