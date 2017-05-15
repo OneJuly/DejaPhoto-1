@@ -1,9 +1,23 @@
 package team4.cse110.dejaphoto;
 
+import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.util.Log;
+import android.widget.RemoteViews;
+import android.app.WallpaperManager;
+
+import java.io.IOException;
+
+
 /**
  * AppWidgetProvider for the DejaVu class
  */
-/*public class DejaAppWidgetProvider extends AppWidgetProvider {
+public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     public static final String TAG = "DEJA_PROVIDER";
     public static final String TAG_RECV = "Receive: ";
@@ -49,7 +63,7 @@ package team4.cse110.dejaphoto;
     private void onPrev(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Prev button tapped");
 
-        Algorithm algorithm = new ImageAlgorithms(context);
+        Algorithm algorithm = getAlgorithm(context);
 
         // Set the previous wallpaper
         Bitmap bitmap = algorithm.prev();
@@ -70,7 +84,7 @@ package team4.cse110.dejaphoto;
     private void onNext(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Next button tapped");
 
-        Algorithm algorithm = new ImageAlgorithms(context);
+        Algorithm algorithm = getAlgorithm(context);
 
         // Set the next wallpaper or default if none exits
         Bitmap bitmap = algorithm.next();
@@ -94,7 +108,7 @@ package team4.cse110.dejaphoto;
     private void onKarma(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Karma button tapped");
 
-        Algorithm algorithm = new ImageAlgorithms(context);
+        Algorithm algorithm = getAlgorithm(context);
 
         // Set karma and disable button
         algorithm.incKarma();
@@ -106,7 +120,7 @@ package team4.cse110.dejaphoto;
     private void onRelease(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Release button tapped");
 
-        Algorithm algorithm = new ImageAlgorithms(context);
+        Algorithm algorithm = getAlgorithm(context);
 
         // Release image and set replacement
         Bitmap bitmap = algorithm.release();
@@ -119,12 +133,12 @@ package team4.cse110.dejaphoto;
         }
     }
 
-    *//**
+    /**
      * Inflates a default view hierarchy
      *
      * @param context current application context
      * @return the default view hierarchy
-     *//*
+     */
     private RemoteViews getDefaultRemoteViews(Context context) {
         // Inflate view hierarchy
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -159,12 +173,12 @@ package team4.cse110.dejaphoto;
         return remoteViews;
     }
 
-    *//**
+    /**
      * Updates all associated widgets with the given view hierarchy
      *
      * @param context     current application context
      * @param remoteViews view hierarchy
-     *//*
+     */
     private void updateRemoteViews(Context context, RemoteViews remoteViews) {
         // Get widget manager and all associated ids
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -177,32 +191,32 @@ package team4.cse110.dejaphoto;
         }
     }
 
-    *//**
+    /**
      * Enable a view in the given view hierarchy
      *
      * @param id          id of the view
      * @param remoteViews view hierarchy
-     *//*
+     */
     private void enableView(int id, RemoteViews remoteViews) {
         remoteViews.setBoolean(id, "setEnabled", true);
     }
 
-    *//**
+    /**
      * Disable a view in the given view hierarchy
      *
      * @param id          id of the view
      * @param remoteViews view hierarchy
-     *//*
+     */
     private void disableView(int id, RemoteViews remoteViews) {
         remoteViews.setBoolean(id, "setEnabled", false);
     }
 
-    *//**
+    /**
      * Set the wallpaper of the device to the bitmap
      *
      * @param bitmap  bitmap of new wallpaper
      * @param context current application context
-     *//*
+     */
     private void setWallpaper(Bitmap bitmap, Context context) {
         WallpaperManager myWallpaperManager =
                 WallpaperManager.getInstance(context);
@@ -213,10 +227,10 @@ package team4.cse110.dejaphoto;
         }
     }
 
-    *//***
+    /***
      * Set the wallpaper of the device to the default bitmap
      * @param context current application context
-     *//*
+     */
     private void setDefaultWallpaper(Context context) {
         WallpaperManager myWallpaperManager =
                 WallpaperManager.getInstance(context);
@@ -226,4 +240,13 @@ package team4.cse110.dejaphoto;
             e.printStackTrace();
         }
     }
-}*/
+
+    /**
+     * Gets a new algorithm. Convenience methods to ease swapping between algorithm implementations
+     * @param context current application context
+     * @return a new algorithm
+     */
+    private Algorithm getAlgorithm(Context context) {
+        return new DejaAlgorithm(context);
+    }
+}
