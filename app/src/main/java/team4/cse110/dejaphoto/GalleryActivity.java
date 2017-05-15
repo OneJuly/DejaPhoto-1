@@ -81,7 +81,7 @@ public class GalleryActivity extends AppCompatActivity {
 
         /* Populate Photo array */
         for (String path : paths) {
-            Photo photo = new Photo(path);
+            Photo photo = new Photo(this, path);
             photos.add(photo);
             PhotoUtils.getInstance(this).addPhoto(PhotoTable.MAIN_NAME, photo);
         }

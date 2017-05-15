@@ -250,7 +250,7 @@ public class PhotoUtils implements  PhotoDB {
                         null  // orderBy
                 );
 
-        return new PhotoDBCursorWrapper(cursor);
+        return new PhotoDBCursorWrapper(mContext, cursor);
     }
 
     /**
@@ -267,7 +267,7 @@ public class PhotoUtils implements  PhotoDB {
                         null  // orderBy
                 );
 
-        return new PhotoDBCursorWrapper(cursor);
+        return new PhotoDBCursorWrapper(mContext, cursor);
 
     }
 

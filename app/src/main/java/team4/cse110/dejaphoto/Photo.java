@@ -24,11 +24,13 @@ public class Photo {
     private int karma;
     private long time;  // see MediaStore.Images.Media.DATE...says it's an int?
     private double weight;
+    private Context context;
 
     /* Construct a Photo with a specified filepath */
-    public Photo(String path) {
+    public Photo(Context context, String path) {
         this.path = path;
         this.id = UUID.randomUUID();
+        this.context = context;
     }
 
 
@@ -222,8 +224,6 @@ public class Photo {
         if(calendar == null){
             return false;
         }
-
-        return ((calendar.get(Calendar.DAY_OF_WEEK) - 1) == dayOfWeek);
 
 
         return false;
