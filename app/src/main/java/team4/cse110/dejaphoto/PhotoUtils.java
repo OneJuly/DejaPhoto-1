@@ -215,8 +215,7 @@ public class PhotoUtils implements  PhotoDB {
         ContentValues values = new ContentValues();
         values.put(PrevIndexTable.Cols.IDX, pos);
 
-        mDatabase.update(PrevIndexTable.PREV_NAME,values, PrevIndexTable.Cols.IDX + " = ?",
-                new String[] {String.valueOf(pos)});
+        mDatabase.update(PrevIndexTable.PREV_NAME,values, null, null);
     }
 
     /**
@@ -271,6 +270,5 @@ public class PhotoUtils implements  PhotoDB {
         return new PhotoDBCursorWrapper(cursor);
 
     }
-
 
 }
