@@ -90,12 +90,12 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
 
         // Enable the karma button if no karma.
-        if (!algorithm.hasKarma()) {
+/*        if (!algorithm.hasKarma()) {
             Log.v(TAG, "Enabling button karma after prev"); // DEBUG
             RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
-        }
+        }*/
     }
 
     /**
@@ -120,12 +120,12 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
 
         // Enable the karma button if no karma
-        if (!algorithm.hasKarma()) {
+/*        if (!algorithm.hasKarma()) {
             Log.v(TAG, "Enabling button karma after next"); // DEBUG
             RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
-        }
+        }*/
     }
 
     /**

@@ -30,12 +30,15 @@ public class GalleryActivity extends AppCompatActivity {
 
     private List<Photo> photos;
     private ArrayList<String> paths;
+    PrefUtils utils;
 
     /** Create a new directory to store selected folders. */
     static final String dirName = "DejaPhoto";
 
     /** Get the DejaPhoto directory; create if non-existent */
     File dejaAlbum = getDejaAlbumDir(dirName);
+
+    /** Initialize previous index position */
 
     /**
      * This method sets up the app's home page with thumbnails of the photos
@@ -48,6 +51,10 @@ public class GalleryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gallery);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        utils = new PrefUtils();
+
+        utils.setPos(this, -1);
 
         RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
         PhotoUtils.getInstance(this);

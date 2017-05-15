@@ -18,7 +18,6 @@ import java.util.UUID;
 import team4.cse110.dejaphoto.database.PhotoDBCursorWrapper;
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.CacheTable;
-import team4.cse110.dejaphoto.database.PhotoDBSchema.PrevIndexTable;
 
 import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable.MAIN_NAME;
@@ -30,6 +29,7 @@ public class PhotoUtils implements  PhotoDB {
     private static final String TAG = "PhotoUtils";
 
     private static PhotoUtils sPhotoUtils;
+    private PrefUtils prefUtils;
 
     private Context mContext;
     SQLiteDatabase mDatabase;
@@ -37,6 +37,8 @@ public class PhotoUtils implements  PhotoDB {
     private PhotoUtils(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new PhotoDBHelper(mContext).getWritableDatabase();
+        prefUtils = new PrefUtils();
+
     }
 
     /**
@@ -103,7 +105,7 @@ public class PhotoUtils implements  PhotoDB {
 
     @Override
     public int getPosition() {
-        return 0;
+        return prefUtils.getPos(mContext);
     }
 
     /** * Returns a single Photo object according to the supplied UUID.
@@ -153,7 +155,10 @@ public class PhotoUtils implements  PhotoDB {
                 if (exif != null) {
                     try {
                         /* Parse the Exif date according to SDF pattern */
-                        date = df.parse(exif.getAttribute(ExifInterface.TAG_DATETIME_DIGITIZED));
+                        String dateStr = exif.getAttribute(ExifInterface.TAG_DATETIME_DIGITIZED);
+
+                        if (dateStr != null)
+                            date = df.parse(dateStr);
 
                         /* Get latitude/longitude data */
                         exif.getLatLong(latlon);
@@ -235,16 +240,7 @@ public class PhotoUtils implements  PhotoDB {
      */
     @Override
     public void setPosition(int pos) {
-        ContentValues values = new ContentValues();
-        values.put(PrevIndexTable.Cols.IDX, pos);
-
-        int updated = mDatabase.update(PrevIndexTable.Cols.IDX, values, null,
-                new String[] { String.valueOf(pos) });
-
-//        mDatabase.update(PrevIndexTable.PREV_NAME,values, null, null);
-
-/*        mDatabase.update(PrevIndexTable.PREV_NAME, values, null, PrevIndexTable.Cols.IDX + " =?",
-                new String[] {String.valueOf(pos)});*/
+        prefUtils.setPos(mContext, pos);
     }
 
     /**

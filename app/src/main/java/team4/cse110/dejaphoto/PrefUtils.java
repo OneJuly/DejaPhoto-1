@@ -10,9 +10,11 @@ import android.preference.PreferenceManager;
 public class PrefUtils {
 
     private static final String PREF_DEJAVU_MODE = "dejaVuMode";
-    private static final String PREF_INIT = "initialized";
+    private static final String PREF_POS = "PreviousPosition";
+    private static final int DEF_POS = -1;
 
-    /* Determine if DejaVu mode is enabled */
+    public PrefUtils() {}
+
 
     /**
      * This method determines if DejaVu mode is enabled.
@@ -36,15 +38,15 @@ public class PrefUtils {
                 .apply();
     }
 
-    public static boolean isInit(Context context) {
+    public static int getPos(Context context) {
        return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(PREF_INIT, false);
+                .getInt(PREF_POS, DEF_POS);
     }
 
-    public static void setInit(Context context, boolean mode) {
+    public static void setPos(Context context, int pos) {
         PreferenceManager.getDefaultSharedPreferences(context)
                 .edit()
-                .putBoolean(PREF_INIT, mode)
+                .putInt(PREF_POS, pos)
                 .apply();
     }
 }

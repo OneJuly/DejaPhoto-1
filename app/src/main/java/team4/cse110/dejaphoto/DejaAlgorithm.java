@@ -2,6 +2,7 @@ package team4.cse110.dejaphoto;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -46,7 +47,7 @@ public class DejaAlgorithm implements Algorithm {
         if (!PrefUtils.dejaVuEnabled(context)) {
             Random random = new Random();
             Photo photo = album.get(random.nextInt(album.size()));
-            addToCache(photo);
+         //   addToCache(photo);
             return photo.getBitmap();
         }
 
@@ -88,9 +89,12 @@ public class DejaAlgorithm implements Algorithm {
         if (cache.size() <= 1) return null;
 
         cachePos--;
-        Photo photo = cache.get(cachePos);
-        db.setPosition(cachePos);
-        return photo.getBitmap();
+        if (cachePos >= 0) {
+            Photo photo = cache.get(cachePos);
+            db.setPosition(cachePos);
+            return photo.getBitmap();
+        }
+        return null;
     }
 
     /**
@@ -162,7 +166,7 @@ public class DejaAlgorithm implements Algorithm {
      * @return TODO
      */
     private Photo getCurrentPhoto() {
-        if (!cache.isEmpty()) {
+        if (!cache.isEmpty() && cachePos != -1) {
             return cache.get(cachePos);
         } else {
             return null;
@@ -180,7 +184,8 @@ public class DejaAlgorithm implements Algorithm {
 
     private void addToCache(Photo photo) {
         // Check if we need to remove everything after pointer
-        if (!cache.isEmpty() && cachePos != cache.size() - 1) {
+        Log.v("cachepos", "pos+ "  + cachePos);
+        if (cachePos != cache.size() -1) {
             ListIterator<Photo> itr = cache.listIterator(cachePos);
             itr.remove(); // remove self
             while (itr.hasNext()) {
