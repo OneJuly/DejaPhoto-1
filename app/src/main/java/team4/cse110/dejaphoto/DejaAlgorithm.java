@@ -8,13 +8,15 @@ import java.util.ListIterator;
 
 public class DejaAlgorithm implements Algorithm {
 
+    private static final int CACHE_SIZE = 10;   // max photos in cache
+
     private Context context;
     private PhotoDB db;
 
     // Database dependent variables
     private List<Photo> album;
     private List<Photo> cache;
-    private int cachePos;   // last returned by prev() or next() or release(). -1 if cache empty
+    private int cachePos;   // last returned by prev(), next() or release(). -1 if cache is empty
 
     public DejaAlgorithm(Context context) {
         this.context = context;
@@ -50,18 +52,17 @@ public class DejaAlgorithm implements Algorithm {
 
         // Update cache
         addToCache(chosenPhoto);
-        db.setCache(cache);
 
         return chosenPhoto.getBitmap();
     }
 
     @Override
     public Bitmap prev() {
-        if (cachePos < 0) return null;
+        if (cache.isEmpty()) return null;
 
         cachePos--;
         Photo photo = cache.get(cachePos);
-        save();
+        db.setPosition(cachePos);
         return photo.getBitmap();
     }
 
@@ -82,7 +83,23 @@ public class DejaAlgorithm implements Algorithm {
 
     @Override
     public Bitmap release() {
-        return null;
+        Photo photo = getCurrentPhoto();
+        if (photo == null) {
+            return null;
+        }
+
+        // Update cache
+        cache.remove(photo);
+        cachePos = cache.size() - 1;
+        db.setCache(cache);
+        db.setPosition(cachePos);
+
+        // Update album
+        album.remove(photo);
+        // TODO db.removePhoto(photo)
+
+        // Get the next photo to display
+        return next();
     }
 
     @Override
@@ -95,9 +112,6 @@ public class DejaAlgorithm implements Algorithm {
 
     }
 
-    /**
-     * @return photo currently set as the wallpaper
-     */
     private Photo getCurrentPhoto() {
         if (0 <= cachePos && cachePos < cache.size()) {
             return cache.get(cachePos);
@@ -106,9 +120,6 @@ public class DejaAlgorithm implements Algorithm {
         }
     }
 
-    /**
-     * Computes the weight for every photo in the album
-     */
     private void setWeight(Photo photo) {
         // TODO add time into the calculation. Android has System.currentTimeMillis()
 
@@ -125,8 +136,15 @@ public class DejaAlgorithm implements Algorithm {
             }
         }
 
-        // Add photo and reset pointer
         cache.add(photo);
+
+        // Fix if we are over max size
+        while (cache.size() > CACHE_SIZE) {
+            cache.remove(0);
+        }
         cachePos = cache.size() - 1;
+
+        db.setCache(cache);
+        db.setPosition(cachePos);
     }
 }
