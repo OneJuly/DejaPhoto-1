@@ -13,8 +13,8 @@ import java.util.Random;
  * releasing photos from the display cycle.
  */
 public class DejaAlgorithm implements Algorithm {
-
-    private static final int CACHE_SIZE = 10;   // max photos in cache
+    // The max photos in the display history.
+    private static final int CACHE_SIZE = 10;
 
     private Context context;
     private PhotoDB db;
@@ -22,7 +22,9 @@ public class DejaAlgorithm implements Algorithm {
     // Database dependent variables
     private List<Photo> album;
     private List<Photo> cache;
-    private int cachePos;   // last returned by prev(), next() or release(). -1 if cache is empty
+
+    // Last returned by prev(), next() or release(). -1 if cache is empty.
+    private int cachePos;
 
     public DejaAlgorithm(Context context) {
         this.context = context;

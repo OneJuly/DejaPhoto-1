@@ -103,6 +103,5 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             cb.setChecked(true);
         }
     }
-
 }
 

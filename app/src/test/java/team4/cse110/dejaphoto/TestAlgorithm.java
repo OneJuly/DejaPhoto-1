@@ -26,6 +26,18 @@ public class TestAlgorithm {
     }
 
     /**
-     * This method tests the
+     * This method tests the release() method.
      */
+    @Test
+    public void testRelease() {
+
+    }
+
+    /**
+     * This method tests the addToCache() method.
+     */
+    @Test
+    public void testCache() {
+
+    }
 }
