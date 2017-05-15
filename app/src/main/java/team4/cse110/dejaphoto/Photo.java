@@ -270,6 +270,10 @@ public class Photo {
      * @return the Bitmap representation of the photo.
      */
     public Bitmap getBitmap() {
-        return BitmapFactory.decodeFile(path);
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inScaled = true;
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+
+        return BitmapFactory.decodeFile(path, opt);
     }
 }

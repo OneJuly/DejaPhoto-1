@@ -83,7 +83,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Algorithm algorithm = getAlgorithm(context);
 
         // Set the previous wallpaper.
-        Bitmap bitmap = algorithm.prev(;
+        Bitmap bitmap = algorithm.prev();
         if (bitmap != null) {
             Log.v(TAG, "Setting prev bitmap"); // DEBUG
 //            setWallpaper(bitmap, context);
