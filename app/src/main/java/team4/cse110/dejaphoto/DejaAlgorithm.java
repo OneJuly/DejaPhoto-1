@@ -22,9 +22,7 @@ public class DejaAlgorithm implements Algorithm {
     // Database dependent variables
     private List<Photo> album;
     private List<Photo> cache;
-
-    // Last returned by prev(), next() or release(). -1 if cache is empty.
-    private int cachePos;
+    private int cachePos; // last returned by prev(), next() or release(). -1 if cache is empty.
 
     public DejaAlgorithm(Context context) {
         this.context = context;
@@ -130,7 +128,7 @@ public class DejaAlgorithm implements Algorithm {
     }
 
     private Photo getCurrentPhoto() {
-        if (0 <= cachePos && cachePos < cache.size()) {
+        if (!cache.isEmpty()) {
             return cache.get(cachePos);
         } else {
             return null;

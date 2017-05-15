@@ -50,8 +50,8 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
 
         /* Create previous index table  */
         db.execSQL("create table " + PrevIndexTable.PREV_NAME + "(" +
-                "_id integer primary autoIncrement, " +
-                PrevIndexTable.Cols.INDEX + ")"
+                "_id integer primary key autoIncrement, " +
+                PrevIndexTable.Cols.IDX + ")"
         );
     }
 

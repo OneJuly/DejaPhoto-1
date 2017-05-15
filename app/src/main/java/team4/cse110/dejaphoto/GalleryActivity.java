@@ -16,6 +16,7 @@ import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
+import team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
 /**
  * This class sets up the app's homepage, where photos from the phone's camera
@@ -54,10 +55,10 @@ public class GalleryActivity extends AppCompatActivity {
 
         /* Instantiate an interactive image picker on startup */
         /* TODO skip this if db is already initialized */
-            FilePickerBuilder.getInstance().setMaxCount(10)
-                    .setSelectedFiles(paths)
-                    .setActivityTheme(R.style.AppTheme)
-                    .pickPhoto(this);
+        FilePickerBuilder.getInstance().setMaxCount(10)
+                .setSelectedFiles(paths)
+                .setActivityTheme(R.style.AppTheme)
+                .pickPhoto(this);
 
         /* Hook up the adapter to the RecyclerView */
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
@@ -82,7 +83,7 @@ public class GalleryActivity extends AppCompatActivity {
         for (String path : paths) {
             Photo photo = new Photo(path);
             photos.add(photo);
-            PhotoUtils.getInstance(this).addPhoto(photo);
+            PhotoUtils.getInstance(this).addPhoto(PhotoTable.MAIN_NAME, photo);
         }
     }
 

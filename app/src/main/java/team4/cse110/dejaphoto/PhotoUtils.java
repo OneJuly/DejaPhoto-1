@@ -4,13 +4,19 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.ExifInterface;
+import android.util.Log;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import team4.cse110.dejaphoto.database.PhotoDBCursorWrapper;
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
+import team4.cse110.dejaphoto.database.PhotoDBSchema.CacheTable;
+import team4.cse110.dejaphoto.database.PhotoDBSchema.PrevIndexTable;
 
 import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
@@ -19,8 +25,6 @@ import static team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
  */
 public class PhotoUtils implements  PhotoDB {
     private static final String TAG = "PhotoUtils";
-    private static final String DB_MAIN= "DejaPhotoMainDB";
-    private static final String DB_CACHE = "DejaPhotoCacheDB";
 
     private static PhotoUtils sPhotoUtils;
 
@@ -31,7 +35,6 @@ public class PhotoUtils implements  PhotoDB {
     private PhotoUtils(Context context) {
         mContext = context.getApplicationContext();
         mDatabase = new PhotoDBHelper(mContext).getWritableDatabase();
-//        mCache = new PhotoDBHelper(mContext).getWritableDatabase();
     }
 
     /**
@@ -82,8 +85,17 @@ public class PhotoUtils implements  PhotoDB {
 
         PhotoDBCursorWrapper cursor = queryCache(null, null);
 
-        return null;
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                cache.add(cursor.getPhoto());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
 
+        return cache;
     }
 
 
@@ -117,13 +129,36 @@ public class PhotoUtils implements  PhotoDB {
     /**
      * Adds a given Photo to the photo database and DejaPhoto album.
      *
+     * @param table
      * @param photo the photo to be added
      */
-    public void addPhoto(Photo photo) {
-        ContentValues values = getContentValues(photo);
-        mDatabase.insert(PhotoTable.MAIN_NAME, null, values);
+    public void addPhoto(String table, Photo photo) {
 
-        //TODO copy image file to app ext dir
+        File file = new File(photo.getPath());
+        ExifInterface exif = null;
+        String date;
+        double lat;
+
+        if (file != null) {
+            try {
+                exif = new ExifInterface(photo.getPath());
+
+                if (exif != null) {
+                    date = exif.getAttribute(ExifInterface.TAG_DATETIME);
+
+                    if (date != null)
+                        Log.v(TAG, "DATE: " + date.toString());
+
+                }
+
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+
+
+        ContentValues values = getContentValues(photo);
+        mDatabase.insert(table, null, values);
     }
 
     /**
@@ -160,6 +195,15 @@ public class PhotoUtils implements  PhotoDB {
      */
     @Override
     public void setCache(List<Photo> cache) {
+
+        /* Erase all data in current cache */
+        mDatabase.delete(CacheTable.CACHE_NAME, null, null);
+
+        /* Populate cache from Photo list*/
+        for (Photo p : cache) {
+            addPhoto(CacheTable.CACHE_NAME, p);
+        }
+
     }
 
     /**
@@ -168,7 +212,10 @@ public class PhotoUtils implements  PhotoDB {
      */
     @Override
     public void setPosition(int pos) {
+        ContentValues values = new ContentValues();
+        values.put(PrevIndexTable.Cols.IDX, pos);
 
+        mDatabase.update(PrevIndexTable.PREV_NAME,values, null, null);
     }
 
     /**
@@ -223,6 +270,5 @@ public class PhotoUtils implements  PhotoDB {
         return new PhotoDBCursorWrapper(cursor);
 
     }
-
 
 }

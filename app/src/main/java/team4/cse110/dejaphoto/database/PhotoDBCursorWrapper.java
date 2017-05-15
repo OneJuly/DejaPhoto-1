@@ -8,6 +8,8 @@ import java.util.UUID;
 import team4.cse110.dejaphoto.Photo;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
+import static android.media.CamcorderProfile.get;
+
 /**
  * Created by Sean on 5/13/2017.
  */
