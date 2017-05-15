@@ -22,16 +22,19 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
     /* Called when DB is created for the first time */
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        /* Create main Photo table*/
         db.execSQL("create table " + PhotoTable.NAME + "(" +
                 "_id integer primary key autoIncrement, " +
                 PhotoTable.Cols.UUID + ", " +
                 PhotoTable.Cols.PATH+ ", " +
-                PhotoTable.Cols.LAT+ ", " +
+                PhotoTable.Cols.LAT + ", " +
                 PhotoTable.Cols.LON + ", " +
                 PhotoTable.Cols.KARMA + ", " +
                 PhotoTable.Cols.WEIGHT + ")"
         );
 
+        /* Create previous index table  */
         db.execSQL("create table " + PrevIndexTable.NAME + "(" +
                 "_id integer primary key autoIncrement, " +
                 PrevIndexTable.Cols.INDEX + ", " + ")"

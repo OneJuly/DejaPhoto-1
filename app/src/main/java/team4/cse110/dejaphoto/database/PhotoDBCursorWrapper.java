@@ -3,6 +3,8 @@ package team4.cse110.dejaphoto.database;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
+import java.util.UUID;
+
 import team4.cse110.dejaphoto.Photo;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
@@ -24,12 +26,13 @@ public class PhotoDBCursorWrapper extends CursorWrapper {
     public Photo getPhoto() {
         String uuidStr = getString(getColumnIndex(PhotoTable.Cols.UUID));
         String path = getString(getColumnIndex(PhotoTable.Cols.PATH));
-        String lat = getString(getColumnIndex(PhotoTable.Cols.LAT));
-        String lon = getString(getColumnIndex(PhotoTable.Cols.LON));
+        Double lat = getColumnIndex(PhotoTable.Cols.LAT)
+        Double lon = getString(getColumnIndex(PhotoTable.Cols.LON));
         Double weight = getDouble(getColumnIndex(PhotoTable.Cols.WEIGHT));
         int karma = getInt(getColumnIndex(PhotoTable.Cols.KARMA));
 
         Photo photo = new Photo(path);
+        photo.setId(UUID.fromString(uuidStr));
         photo.setPath(path);
         photo.setLat(lat);
         photo.setLon(lon);

@@ -6,6 +6,7 @@ package team4.cse110.dejaphoto.database;
 
 public class PhotoDBSchema {
 
+    /* Main Photo table schema */
     public static final class PhotoTable {
         public static final String NAME = "DejaPhotoDB";
 
@@ -19,6 +20,7 @@ public class PhotoDBSchema {
         }
     }
 
+    /* Cache table schema */
     public static final class PrevIndexTable{
         public static final String NAME = "PrevIndex";
 
