@@ -180,7 +180,7 @@ public class DejaAlgorithm implements Algorithm {
 
     private void addToCache(Photo photo) {
         // Check if we need to remove everything after pointer
-        if (cachePos != cache.size() - 1) {
+        if (!cache.isEmpty() && cachePos != cache.size() - 1) {
             ListIterator<Photo> itr = cache.listIterator(cachePos);
             itr.remove(); // remove self
             while (itr.hasNext()) {
