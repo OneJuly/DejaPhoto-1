@@ -122,8 +122,6 @@ public class PhotoUtils implements  PhotoDB {
     public void addPhoto(Photo photo) {
         ContentValues values = getContentValues(photo);
         mDatabase.insert(PhotoTable.MAIN_NAME, null, values);
-
-        //TODO copy image file to app ext dir
     }
 
     /**
@@ -168,7 +166,6 @@ public class PhotoUtils implements  PhotoDB {
      */
     @Override
     public void setPosition(int pos) {
-
     }
 
     /**
