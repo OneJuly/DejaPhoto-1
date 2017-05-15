@@ -40,7 +40,7 @@ public class DejaAlgorithm implements Algorithm {
      * @return the next photo to be displayed.
      */
     @Override
-    public Bitmap next() {
+    public Photo next() {
         if (album.isEmpty()) return null;
 
         // Handle non DejaVu next
@@ -48,7 +48,7 @@ public class DejaAlgorithm implements Algorithm {
             Random random = new Random();
             Photo photo = album.get(random.nextInt(album.size()));
          //   addToCache(photo);
-            return photo.getBitmap();
+            return photo;
         }
 
         // Compute weight for all images
@@ -76,7 +76,7 @@ public class DejaAlgorithm implements Algorithm {
         // Update cache
         addToCache(chosenPhoto);
 
-        return chosenPhoto.getBitmap();
+        return chosenPhoto;
     }
 
     /**
@@ -124,7 +124,7 @@ public class DejaAlgorithm implements Algorithm {
      * @return the next photo to be displayed.
      */
     @Override
-    public Bitmap release() {
+    public Photo release() {
         Photo photo = getCurrentPhoto();
         if (photo == null) {
             return null;

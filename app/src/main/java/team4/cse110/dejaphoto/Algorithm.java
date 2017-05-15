@@ -11,7 +11,7 @@ public interface Algorithm {
      * @return the bitmap representing the next image, or null if there are no
      * images in the display cycle
      */
-    Bitmap next();
+    Photo next();
 
     /**
      * Get the previous image in the display cycle. save() is called before
@@ -40,7 +40,7 @@ public interface Algorithm {
      * @return the bitmap to display instead, or null if there are no
      * replacement bitmaps.
      */
-    Bitmap release();
+    Photo release();
 
     /**
      * Save state to data base.

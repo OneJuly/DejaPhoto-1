@@ -68,7 +68,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         } else if (KARMA_CLICKED.equals(intent.getAction())) {
             onKarma(context, intent);
         } else if (RELEASE_CLICKED.equals(intent.getAction())) {
-            onRelease(context, intent);
+            //onRelease(context, intent);
         }
     }
 
@@ -83,10 +83,10 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Algorithm algorithm = getAlgorithm(context);
 
         // Set the previous wallpaper.
-        Bitmap bitmap = algorithm.prev();
+        Bitmap bitmap = algorithm.prev(;
         if (bitmap != null) {
             Log.v(TAG, "Setting prev bitmap"); // DEBUG
-            setWallpaper(bitmap, context);
+//            setWallpaper(bitmap, context);
         }
 
         // Enable the karma button if no karma.
@@ -110,10 +110,11 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Algorithm algorithm = getAlgorithm(context);
 
         // Set the next wallpaper or default if none exits
-        Bitmap bitmap = algorithm.next();
-        if (bitmap != null) {
+        //Bitmap bitmap = algorithm.next();
+        Photo photo = algorithm.next();
+        if (photo != null) {
             Log.v(TAG, "Setting next bitmap"); // DEBUG
-            setWallpaper(bitmap, context);
+            setWallpaper(photo, context);
         } else {
             Log.v(TAG, "Setting next default photo"); // DEBUG
             setDefaultWallpaper(context);
@@ -150,7 +151,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
      * @param context
      * @param intent
      */
-    private void onRelease(Context context, Intent intent) {
+/*    private void onRelease(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Release button tapped");
 
         Algorithm algorithm = getAlgorithm(context);
@@ -164,7 +165,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
             Log.v(TAG, "Setting release default photo"); // DEBUG
             setDefaultWallpaper(context);
         }
-    }
+    }*/
 
     /**
      * Inflates a default view hierarchy.
@@ -242,17 +243,12 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     /**
      * Set the wallpaper of the device to the bitmap.
-     * @param bitmap - bitmap of new wallpaper.
+     * @param photo - bitmap of new wallpaper.
      * @param context - current application context.
      */
-    private void setWallpaper(Bitmap bitmap, Context context) {
-        WallpaperManager myWallpaperManager =
-                WallpaperManager.getInstance(context);
-        try {
-            myWallpaperManager.setBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void setWallpaper(Photo photo, Context context) {
+        SetWallpaper sp = new SetWallpaper(context);
+        sp.execute(photo);
     }
 
     /***
