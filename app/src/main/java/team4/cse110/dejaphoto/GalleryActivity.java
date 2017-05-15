@@ -40,7 +40,7 @@ public class GalleryActivity extends AppCompatActivity {
     /**
      * This method sets up the app's home page with thumbnails of the photos
      * from the camera album.
-     * @param savedInstanceState - TODO
+     * @param savedInstanceState - the previously saved state of the app.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +66,12 @@ public class GalleryActivity extends AppCompatActivity {
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
     }
 
+    /**
+     * This method populates an array of photos.
+     * @param requestCode - TODO
+     * @param resultCode - TODO
+     * @param data - TODO
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode)
@@ -87,8 +93,13 @@ public class GalleryActivity extends AppCompatActivity {
         }
     }
 
-    /* Get the external DejaPhoto album and create it if it doesn't exist */
     /* TODO */
+    /**
+     * This method retrieves the external DejaPhoto album, or creates one if it
+     * doesn't exist.
+     * @param name - the name of the album.
+     * @return the directory.
+     */
     private File getDejaAlbumDir(String name) {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(
