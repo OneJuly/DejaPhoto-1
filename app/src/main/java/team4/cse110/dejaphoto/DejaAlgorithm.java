@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Random;
 
 public class DejaAlgorithm implements Algorithm {
 
@@ -27,6 +28,14 @@ public class DejaAlgorithm implements Algorithm {
     @Override
     public Bitmap next() {
         if (album.isEmpty()) return null;
+
+        // Handle non DejaVu next
+        if (!PrefUtils.dejaVuEnabled(context)) {
+            Random random = new Random();
+            Photo photo = album.get(random.nextInt(album.size()));
+            addToCache(photo);
+            return photo.getBitmap();
+        }
 
         // Compute weight for all images
         for (Photo photo : album) {
