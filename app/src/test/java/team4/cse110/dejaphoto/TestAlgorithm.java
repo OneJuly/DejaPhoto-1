@@ -3,18 +3,22 @@ package team4.cse110.dejaphoto;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.InputStream;
+
 import static org.junit.Assert.assertEquals;
 
 /**
  * This class tests the DejaAlgorithm class' methods.
  */
 public class TestAlgorithm {
+    Photo photo1;
+
     /**
      * Standard test fixture - TODO
      */
     @Before
     public void setup() {
-        Photo testPhoto = new Photo();
+        photo1 = new Photo(this, "_Mt_Everest.jpg");
     }
 
     /**
@@ -23,6 +27,7 @@ public class TestAlgorithm {
     @Test
     public void testKarma() {
         assertEquals(2 + 2, 4);  // TODO
+        assertEquals(photo1.hasKarma(), false);
     }
 
     /**
