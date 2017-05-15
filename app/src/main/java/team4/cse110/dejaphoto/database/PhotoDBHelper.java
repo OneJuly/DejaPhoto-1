@@ -27,7 +27,7 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         /* Create main Photo table*/
-        db.execSQL("create table " + PhotoTable.NAME + "(" +
+        db.execSQL("create table " + PhotoTable.MAIN_NAME + "(" +
                 "_id integer primary key autoIncrement, " +
                 PhotoTable.Cols.UUID + ", " +
                 PhotoTable.Cols.PATH+ ", " +
@@ -38,19 +38,19 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
         );
 
         /* Create main Photo table*/
-        db.execSQL("create table " + CacheTable.NAME + "(" +
+        db.execSQL("create table " + CacheTable.CACHE_NAME + "(" +
                 "_id integer primary key autoIncrement, " +
-                CacheTable.Cols.UUID + ", " +
-                CacheTable.Cols.PATH+ ", " +
-                CacheTable.Cols.LAT + ", " +
-                CacheTable.Cols.LON + ", " +
-                CacheTable.Cols.KARMA + ", " +
-                CacheTable.Cols.WEIGHT + ")"
+                CacheTable.Cols.C_UUID + ", " +
+                CacheTable.Cols.C_PATH+ ", " +
+                CacheTable.Cols.C_LAT + ", " +
+                CacheTable.Cols.C_LON + ", " +
+                CacheTable.Cols.C_KARMA + ", " +
+                CacheTable.Cols.C_WEIGHT + ")"
         );
 
         /* Create previous index table  */
-        db.execSQL("create table " + PrevIndexTable.NAME + "(" +
-                "_id integer primary key autoIncrement, " +
+        db.execSQL("create table " + PrevIndexTable.PREV_NAME + "(" +
+                "_id integer primary autoIncrement, " +
                 PrevIndexTable.Cols.INDEX + ")"
         );
     }

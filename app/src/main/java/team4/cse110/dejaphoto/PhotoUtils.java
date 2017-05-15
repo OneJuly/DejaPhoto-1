@@ -121,7 +121,7 @@ public class PhotoUtils implements  PhotoDB {
      */
     public void addPhoto(Photo photo) {
         ContentValues values = getContentValues(photo);
-        mDatabase.insert(PhotoTable.NAME, null, values);
+        mDatabase.insert(PhotoTable.MAIN_NAME, null, values);
 
         //TODO copy image file to app ext dir
     }
@@ -134,7 +134,7 @@ public class PhotoUtils implements  PhotoDB {
     public void removePhoto(Photo photo) {
         String id = photo.getId().toString();
 
-        mDatabase.delete(PhotoTable.NAME, PhotoTable.Cols.UUID + " =?",
+        mDatabase.delete(PhotoTable.MAIN_NAME, PhotoTable.Cols.UUID + " =?",
                 new String[] { id });
     }
 
@@ -147,7 +147,7 @@ public class PhotoUtils implements  PhotoDB {
         String id = photo.getId().toString();
         ContentValues values = getContentValues(photo);
 
-        int updated = mDatabase.update(PhotoTable.NAME, values, PhotoTable.Cols.UUID + " = ?",
+        int updated = mDatabase.update(PhotoTable.MAIN_NAME, values, PhotoTable.Cols.UUID + " = ?",
 
                 new String[] { id });
 
@@ -197,7 +197,7 @@ public class PhotoUtils implements  PhotoDB {
      */
     private PhotoDBCursorWrapper queryMain(String whereClause, String[] whereArgs) {
         Cursor cursor =
-                mDatabase.query(PhotoTable.NAME, null, // columns parameter - null selects all columns
+                mDatabase.query(PhotoTable.MAIN_NAME, null, // columns parameter - null selects all columns
                         whereClause, whereArgs, null, // groupBy
                         null, // having
                         null  // orderBy
@@ -214,7 +214,7 @@ public class PhotoUtils implements  PhotoDB {
      */
     private PhotoDBCursorWrapper queryCache(String whereClause, String[] whereArgs) {
         Cursor cursor =
-                mCache.query(PhotoTable.NAME, null, // columns parameter - null selects all columns
+                mCache.query(PhotoTable.MAIN_NAME, null, // columns parameter - null selects all columns
                         whereClause, whereArgs, null, // groupBy
                         null, // having
                         null  // orderBy
