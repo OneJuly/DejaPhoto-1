@@ -88,11 +88,9 @@ public class DejaAlgorithm implements Algorithm {
             return null;
         }
 
-        // Update cache
+        // Update cache. db update done in next()
         cache.remove(photo);
         cachePos = cache.size() - 1;
-        db.setCache(cache);
-        db.setPosition(cachePos);
 
         // Update album
         album.remove(photo);
@@ -104,12 +102,15 @@ public class DejaAlgorithm implements Algorithm {
 
     @Override
     public void save() {
-
+        db.setCache(cache);
+        db.setPosition(cachePos);
     }
 
     @Override
     public void load() {
-
+        album = db.getPhotos();
+        cache = db.getCache();
+        cachePos = db.getPosition();
     }
 
     private Photo getCurrentPhoto() {
