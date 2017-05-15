@@ -26,8 +26,8 @@ public class PhotoDBCursorWrapper extends CursorWrapper {
     public Photo getPhoto() {
         String uuidStr = getString(getColumnIndex(PhotoTable.Cols.UUID));
         String path = getString(getColumnIndex(PhotoTable.Cols.PATH));
-        Double lat = getColumnIndex(PhotoTable.Cols.LAT)
-        Double lon = getString(getColumnIndex(PhotoTable.Cols.LON));
+        Double lat = getDouble(getColumnIndex(PhotoTable.Cols.LAT));
+        Double lon = getDouble(getColumnIndex(PhotoTable.Cols.LAT));
         Double weight = getDouble(getColumnIndex(PhotoTable.Cols.WEIGHT));
         int karma = getInt(getColumnIndex(PhotoTable.Cols.KARMA));
 
