@@ -82,6 +82,8 @@ public class PhotoUtils implements  PhotoDB {
 
         PhotoDBCursorWrapper cursor = queryCache(null, null);
 
+        return null;
+
     }
 
 
@@ -181,9 +183,8 @@ public class PhotoUtils implements  PhotoDB {
         values.put(PhotoTable.Cols.PATH, photo.getPath());
         values.put(PhotoTable.Cols.LAT, photo.getLat());
         values.put(PhotoTable.Cols.LON, photo.getLon());
-        values.put(PhotoTable.Cols.KARMA, photo.hasKarma() ? 1 : 0);
+        values.put(PhotoTable.Cols.KARMA, photo.getKarma());
         values.put(PhotoTable.Cols.WEIGHT, photo.getWeight());
-        values.put(PhotoTable.Cols.PREV, photo.isActive() ? 1 : 0);
 
         return values;
     }
