@@ -72,12 +72,4 @@ public class Photo {
     public void setWeight(double weight) {
         this.weight = weight;
     }
-
-    public int getActive() {
-        return active;
-    }
-
-    public void setActive(int active) {
-        this.active = active;
-    }
 }

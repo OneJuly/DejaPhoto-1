@@ -29,8 +29,7 @@ public class PhotoDBHelper extends SQLiteOpenHelper {
                 PhotoTable.Cols.LAT+ ", " +
                 PhotoTable.Cols.LON + ", " +
                 PhotoTable.Cols.KARMA + ", " +
-                PhotoTable.Cols.WEIGHT + ", " +
-                PhotoTable.Cols.PREV + ")"
+                PhotoTable.Cols.WEIGHT + ")"
         );
 
         db.execSQL("create table " + PrevIndexTable.NAME + "(" +

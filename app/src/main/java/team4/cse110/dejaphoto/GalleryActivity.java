@@ -52,20 +52,14 @@ public class GalleryActivity extends AppCompatActivity {
         PhotoUtils.getInstance(this);
         photos = new ArrayList<>();
 
-        FilePickerBuilder.getInstance().setMaxCount(10)
-                .setSelectedFiles(paths)
-                .setActivityTheme(R.style.AppTheme)
-                .pickPhoto(this);
-
-        /* Initialize database if necessary */
-//        if (!getDatabasePath(PhotoDBHelper.DATABASE_NAME).exists()) {
-//            Log.v(TAG, "Initializing DB!\n");
-//            PhotoUtils.getInstance(this).initFromCameraRoll();
-//        }
-//        PhotoUtils.getInstance(this).initFromCameraRoll();
-
-        /* Get active photos */
-//        photos = PhotoUtils.getInstance(this).getPhotos();
+        /* Instantiate an interactive image picker on startup */
+        /* TODO skip this if db is already initialized */
+        if (PhotoUtils.getInstance(this).mDatabase == null) {
+            FilePickerBuilder.getInstance().setMaxCount(10)
+                    .setSelectedFiles(paths)
+                    .setActivityTheme(R.style.AppTheme)
+                    .pickPhoto(this);
+        }
 
         /* Hook up the adapter to the RecyclerView */
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
