@@ -9,6 +9,8 @@ import android.preference.PreferenceManager;
  */
 public class PrefUtils {
 
+    private static final String TAG = "PrefUtils";
+
     private static final String PREF_DEJAVU_MODE = "dejaVuMode";
     private static final String PREF_POS = "PreviousPosition";
     private static final int DEF_POS = -1;

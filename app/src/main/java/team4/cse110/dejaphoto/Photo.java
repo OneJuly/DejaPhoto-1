@@ -15,6 +15,8 @@ import java.util.UUID;
  */
 public class Photo {
 
+    private static final String TAG = "Photo";
+
     /***************** Photo Attributes (i.e. PhotoTable Columns) ************/
 
     private UUID id;

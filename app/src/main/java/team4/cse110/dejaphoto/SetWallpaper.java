@@ -13,6 +13,8 @@ import java.io.IOException;
 
 public class SetWallpaper extends AsyncTask<Photo, Void, Bitmap> {
 
+    private static final String TAG = "SetWallpaper";
+
     private Context mContext;
 
     public SetWallpaper(Context context) {

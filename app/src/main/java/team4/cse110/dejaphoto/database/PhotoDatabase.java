@@ -1,8 +1,10 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.database;
 
 import java.util.List;
 
-public interface PhotoDB {
+import team4.cse110.dejaphoto.Photo;
+
+public interface PhotoDatabase {
 
     /**
      * @return all the photos in the main database
@@ -12,9 +14,14 @@ public interface PhotoDB {
     /**
      * Removes an entry in the database
      * @param p photo to update
-     * @return true if the update was succesful, false otherwise
      */
     void removePhoto(Photo p);
+
+    /**
+     * Adds a Photo to the database
+     * @param p the Photo to add
+     */
+    void addPhoto(Photo p);
 
     /**
      *

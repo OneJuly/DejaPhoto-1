@@ -1,12 +1,13 @@
 package team4.cse110.dejaphoto;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+
+import team4.cse110.dejaphoto.database.PhotoDatabase;
 
 /**
  * This class calculates the weight of a photo, which the app uses to determine
@@ -18,7 +19,7 @@ public class DejaAlgorithm implements Algorithm {
     private static final int CACHE_SIZE = 10;
 
     private Context context;
-    private PhotoDB db;
+    private PhotoDatabase db;
 
     // Database dependent variables.
     private List<Photo> album;
@@ -31,7 +32,6 @@ public class DejaAlgorithm implements Algorithm {
      */
     public DejaAlgorithm(Context context) {
         this.context = context;
-        this.db = PhotoUtils.getInstance(context);
         load();
     }
 
