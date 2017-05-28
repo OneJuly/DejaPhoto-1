@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -6,12 +6,17 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.app.WallpaperManager;
 
 import java.io.IOException;
+
+import team4.cse110.dejaphoto.R;
+import team4.cse110.dejaphoto.photo.Photo;
+import team4.cse110.dejaphoto.utilities.Algorithm;
+import team4.cse110.dejaphoto.utilities.DejaAlgorithm;
+import team4.cse110.dejaphoto.utilities.SetWallpaper;
 
 
 /**

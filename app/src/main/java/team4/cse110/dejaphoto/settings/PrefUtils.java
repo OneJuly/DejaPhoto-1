@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.settings;
 
 
 import android.content.Context;

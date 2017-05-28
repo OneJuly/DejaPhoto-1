@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.utilities;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,8 @@ import java.util.ListIterator;
 import java.util.Random;
 
 import team4.cse110.dejaphoto.database.PhotoDatabase;
+import team4.cse110.dejaphoto.photo.Photo;
+import team4.cse110.dejaphoto.settings.PrefUtils;
 
 /**
  * This class calculates the weight of a photo, which the app uses to determine

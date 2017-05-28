@@ -6,7 +6,7 @@ import android.database.CursorWrapper;
 
 import java.util.UUID;
 
-import team4.cse110.dejaphoto.Photo;
+import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.database.PhotoDBSchema.PhotoTable;
 
 /**

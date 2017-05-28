@@ -3,6 +3,8 @@ package team4.cse110.dejaphoto;
 import org.junit.Before;
 import org.junit.Test;
 
+import team4.cse110.dejaphoto.photo.Photo;
+
 import static org.junit.Assert.assertEquals;
 
 /**

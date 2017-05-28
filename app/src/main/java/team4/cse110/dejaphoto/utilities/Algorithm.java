@@ -1,6 +1,6 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.utilities;
 
-import android.graphics.Bitmap;
+import team4.cse110.dejaphoto.photo.Photo;
 
 /**
  * This is an interface for the DejaAlgorithm class.

@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.photo;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+
+import team4.cse110.dejaphoto.R;
 
 /**
  * This is the adapter for the RecyclerView thumbnails in GalleryActivity.

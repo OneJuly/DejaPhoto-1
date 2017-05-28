@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.utilities;
 
 import android.app.WallpaperManager;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import java.io.IOException;
+
+import team4.cse110.dejaphoto.photo.Photo;
 
 /**
  * Created by Sean on 5/15/2017.

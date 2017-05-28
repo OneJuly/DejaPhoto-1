@@ -5,7 +5,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-import team4.cse110.dejaphoto.Photo;
+import team4.cse110.dejaphoto.photo.Photo;
 
 /**
  * Created by Sean on 5/21/2017.

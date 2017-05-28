@@ -2,7 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".GalleryActivity">
+    tools:context=".gallery.GalleryActivity">
+
+    <item
+        android:id="@+id/action_add_photos"
+        android:title="@string/pick_photos"
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        />
 
 
     <item

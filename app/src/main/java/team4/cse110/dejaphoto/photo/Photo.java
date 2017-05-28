@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.photo;
 
 import android.content.Context;
 import android.graphics.Bitmap;

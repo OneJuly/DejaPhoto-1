@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'dejaphoto-key'
-            keyPassword 'team4-dejaphoto'
-            storeFile file('C:/Users/Sean/keystores/android.jks')
-            storePassword 'team4-cse110'
-        }
-    }
     compileSdkVersion 25
     buildToolsVersion '25.0.2'
     defaultConfig {
@@ -23,7 +15,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
     }
     productFlavors {
@@ -40,20 +31,16 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+<<<<<<< HEAD
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support:support-core-utils:25.3.1'
     compile 'com.android.support:design:25.3.1'
-    compile 'com.gordonwong:material-sheet-fab:1.2.1'
-    compile 'com.droidninja:filepicker:2.0.3'
-    compile 'com.google.firebase:firebase-database:10.0.1'
-    compile 'com.google.firebase:firebase-auth:10.0.1'
-    compile 'com.google.android.gms:play-services-auth:10.0.1'
+=======
+    compile 'com.google.code.gson:gson:2.7'
+>>>>>>> origin/T4-1
     testCompile 'junit:junit:4.12'
+    compile 'com.snappydb:snappydb-lib:0.4.0'
+    compile 'com.esotericsoftware.kryo:kryo:2.24.0'
 }
-
-
-
-apply plugin: 'com.google.gms.google-services'

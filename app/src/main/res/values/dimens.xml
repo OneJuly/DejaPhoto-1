@@ -1,5 +1,10 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_item_spacing">16dp</dimen>
+
     <dimen name="photo_width">120dp</dimen>
     <dimen name="photo_height">120dp</dimen>
+    <dimen name="sheet_width">210dp</dimen>
+    <dimen name="sheet_height">300dp</dimen>
+
 </resources>

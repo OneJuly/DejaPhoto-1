@@ -1,11 +1,10 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.gallery;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,55 +13,60 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.gordonwong.materialsheetfab.MaterialSheetFab;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
+import team4.cse110.dejaphoto.BaseActivity;
+import team4.cse110.dejaphoto.R;
+import team4.cse110.dejaphoto.database.FirebasePhotoDatabase;
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
+import team4.cse110.dejaphoto.photo.Photo;
+import team4.cse110.dejaphoto.photo.PhotoAdapter;
+import team4.cse110.dejaphoto.settings.PrefUtils;
 
 /**
  * This class sets up the app's homepage, where photos from the phone's camera
  * album will be displayed in a scrollable grid.
  */
-public class GalleryActivity extends AppCompatActivity {
+public class GalleryActivity extends BaseActivity {
 
     private static final String TAG = "GalleryActivity";
 
     private static final int REQUEST_PHOTO = 0;
-
     private static final int GRID_SPAN = 3; // number of columns for ImageViews
 
     private List<Photo> photos;
     private ArrayList<String> paths;
-    private PrefUtils utils;
+    private PrefUtils prefUtils;
+    private MaterialSheetFab materialSheetFab;
+    private FirebasePhotoDatabase firebasePhotoDatabase;
 
-    /** Create a new directory to store selected folders. */
-    static final String dirName = "DejaPhoto";
-
-    /** Get the DejaPhoto directory; create if non-existent */
-    private File dejaAlbum = getDejaAlbumDir(dirName);
-
-
-    /** Initialize previous index position */
 
     /**
      * This method sets up the app's home page with thumbnails of the photos
      * from the camera album.
+     *
      * @param savedInstanceState - the previously saved state of the app.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /* Get a preference utils reference */
-        utils = new PrefUtils();
-        utils.setPos(this, -1);
-        utils.setDejaVuMode(this, true);
+        /* Get a reference to the Firebase database */
+        firebasePhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
+
+        /* Get a preference prefUtils reference */
+        prefUtils = new PrefUtils();
 
         /* Get a reference to the RecyclerView */
         RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
@@ -71,19 +75,22 @@ public class GalleryActivity extends AppCompatActivity {
         /* Clear database */
         deleteDatabase(PhotoDBHelper.DATABASE_NAME);
 
-        /* Instantiate an interactive image picker on startup */
-        FilePickerBuilder.getInstance().setMaxCount(10)
-                .setSelectedFiles(paths)
-                .setActivityTheme(R.style.AppTheme)
-                .pickPhoto(this);
 
         /* Hook up the adapter to the RecyclerView */
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
         rvPhotos.setAdapter(adapter);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
 
+        /* Get reference to FAB, sheet, and overlay */
+        Fab fab = (Fab) findViewById(R.id.fab_gallery);
+        View sheet = findViewById(R.id.fab_sheet);
+        View overlay = findViewById(R.id.fab_overlay);
+        int sheetColor = getResources().getColor(R.color.fab_sheet_color);
+        int fabColor = getResources().getColor(R.color.colorAccent);
+
+
         /* FAB button launches camera app */
-        findViewById(R.id.fab_add_photo).setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -91,6 +98,9 @@ public class GalleryActivity extends AppCompatActivity {
                 startActivityForResult(takePhoto, REQUEST_PHOTO);
             }
         });
+
+        /* Hook up the custom animated FAB */
+        materialSheetFab = new MaterialSheetFab<>(fab, sheet, overlay, sheetColor, fabColor);
     }
 
     /**
@@ -118,13 +128,24 @@ public class GalleryActivity extends AppCompatActivity {
             case R.id.action_settings:
                 break;
 
+            case R.id.action_add_photos:
+
+                /* Instantiate an interactive image picker */
+                FilePickerBuilder.getInstance().setMaxCount(10)
+                        .setSelectedFiles(paths)
+                        .setActivityTheme(R.style.AppTheme)
+                        .pickPhoto(this);
+
+                break;
+
         }
 
         return super.onOptionsItemSelected(item);
     }
 
     /**
-     * This method populates an array of photos.
+     * Get incoming activity results.
+     *
      * @param requestCode - TODO
      * @param resultCode - TODO
      * @param data - TODO
@@ -136,6 +157,7 @@ public class GalleryActivity extends AppCompatActivity {
             case FilePickerConst.REQUEST_CODE_PHOTO:
                 if (resultCode == Activity.RESULT_OK && data != null)
                 {
+                    firebasePhotoDatabase.addPhoto(new Photo(this, data.toString()));
                     paths = new ArrayList<>();
                     paths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
                 }

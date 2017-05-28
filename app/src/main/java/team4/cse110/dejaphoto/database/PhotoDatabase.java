@@ -2,7 +2,7 @@ package team4.cse110.dejaphoto.database;
 
 import java.util.List;
 
-import team4.cse110.dejaphoto.Photo;
+import team4.cse110.dejaphoto.photo.Photo;
 
 public interface PhotoDatabase {
 
