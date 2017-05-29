@@ -138,6 +138,8 @@ public class GalleryActivity extends BaseActivity {
 
                 break;
 
+            case R.id.action_google_login:
+
         }
 
         return super.onOptionsItemSelected(item);

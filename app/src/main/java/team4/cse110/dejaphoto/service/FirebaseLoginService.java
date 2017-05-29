@@ -11,7 +11,6 @@ public class FirebaseLoginService {
      * @param id
      */
     public void googleLogin(String id) {
-//        Intent loginIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogle
 
     }
 

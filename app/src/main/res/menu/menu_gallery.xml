@@ -5,18 +5,17 @@
     tools:context=".gallery.GalleryActivity">
 
     <item
-        android:id="@+id/action_add_photos"
-        android:title="@string/pick_photos"
-        android:visible="true"
-        app:showAsAction="ifRoom"
-        />
-
-
-    <item
         android:id="@+id/action_settings"
         android:title="@string/menu_gallery_settings"
         android:visible="true"
         app:showAsAction="never"
+        />
+
+    <item
+        android:id="@+id/action_google_login"
+        android:title="@string/menu_gallery_login"
+        android:visible="true"
+        app:showAsAction="ifRoom"
         />
 
 </menu>

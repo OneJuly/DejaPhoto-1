@@ -12,12 +12,9 @@ public enum Dependencies {
 
 
     private void init(Context context) {
-
-        if (!isInitialized()) {
-
-        }
-
     }
+
+
 
 
     private boolean isInitialized() {
