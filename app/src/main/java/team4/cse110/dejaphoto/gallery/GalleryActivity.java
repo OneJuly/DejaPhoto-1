@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,12 +21,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
 import team4.cse110.dejaphoto.BaseActivity;
 import team4.cse110.dejaphoto.R;
 import team4.cse110.dejaphoto.database.FirebasePhotoDatabase;
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
+import team4.cse110.dejaphoto.login.LoginDialogFragment;
 import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.photo.PhotoAdapter;
 import team4.cse110.dejaphoto.settings.PrefUtils;
@@ -128,17 +129,21 @@ public class GalleryActivity extends BaseActivity {
             case R.id.action_settings:
                 break;
 
-            case R.id.action_add_photos:
 
-                /* Instantiate an interactive image picker */
+/*                // Instantiate an interactive image picker
                 FilePickerBuilder.getInstance().setMaxCount(10)
                         .setSelectedFiles(paths)
                         .setActivityTheme(R.style.AppTheme)
                         .pickPhoto(this);
 
-                break;
+                break;*/
 
             case R.id.action_google_login:
+
+                // Display Google login DialogFragment
+                DialogFragment loginFragment = new LoginDialogFragment();
+                loginFragment.show(getSupportFragmentManager(), TAG);
+
 
         }
 
