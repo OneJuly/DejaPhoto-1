@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +25,7 @@ import team4.cse110.dejaphoto.BaseActivity;
 import team4.cse110.dejaphoto.R;
 import team4.cse110.dejaphoto.database.FirebasePhotoDatabase;
 import team4.cse110.dejaphoto.database.PhotoDBHelper;
-import team4.cse110.dejaphoto.login.LoginDialogFragment;
+import team4.cse110.dejaphoto.login.LoginActivity;
 import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.photo.PhotoAdapter;
 import team4.cse110.dejaphoto.settings.PrefUtils;
@@ -140,9 +139,9 @@ public class GalleryActivity extends BaseActivity {
 
             case R.id.action_google_login:
 
-                // Display Google login DialogFragment
-                DialogFragment loginFragment = new LoginDialogFragment();
-                loginFragment.show(getSupportFragmentManager(), TAG);
+                // Start the Google login activity
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
 
 
         }

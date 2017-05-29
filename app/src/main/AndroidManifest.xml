@@ -20,6 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- Gallery activity -->
         <activity
             android:name=".gallery.GalleryActivity"
             android:label="@string/title_activity_gallery"
@@ -31,6 +33,12 @@
             </intent-filter>
         </activity>
 
+        <!-- Login activity -->
+        <activity
+            android:name=".login.LoginActivity" />
+
+
+        <!-- Receiver -->
         <receiver android:name=".widget.DejaAppWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
