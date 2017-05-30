@@ -14,9 +14,9 @@
     <string name="sign_in_with_google">Sign in with Google</string>
 
     <!-- OAuth 2.0 client ID for Google sign in -->
-    <string name="web_client_id">
-          191591831587-ve32i00qg6u5ifg52qh3nsnut5rc4hv1.apps.googleusercontent.com
-    </string>
+    <string name="web_client_id">191591831587-7rlounkpflgv3abk2eh23ad8v5pn93s4.apps.googleusercontent.com</string>
     <string name="title_activity_login">Login</string>
+    <string name="progress_loading">Loading</string>
+    <string name="sign_in_success">Sign in successful!</string>
 
 </resources>

@@ -1,6 +1,6 @@
 package team4.cse110.dejaphoto;
 
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +16,17 @@ import android.support.v7.widget.Toolbar;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private Context context;
+    public ProgressDialog progressDialog;
+
+    /**
+     * Get the layout resource id of the child activity
+     * @return
+     */
+    protected abstract int getLayoutResource();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = BaseActivity.this;
         setContentView(getLayoutResource());
         initToolbar();
     }
@@ -38,9 +43,29 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Get the layout resource id of the child activity
-     * @return
+     *
      */
-    protected abstract int getLayoutResource();
+    public void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(getString(R.string.progress_loading));
+            progressDialog.setIndeterminate(true);
+        }
+        progressDialog.show();
+    }
 
+    /**
+     *
+     */
+    public void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        hideProgressDialog();
+    }
 }
