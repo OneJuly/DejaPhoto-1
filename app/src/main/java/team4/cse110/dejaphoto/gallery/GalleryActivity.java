@@ -7,7 +7,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,11 +55,7 @@ public class GalleryActivity extends BaseActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_gallery);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         /* Get a reference to the Firebase database */
         firebasePhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
@@ -103,6 +98,11 @@ public class GalleryActivity extends BaseActivity {
         materialSheetFab = new MaterialSheetFab<>(fab, sheet, overlay, sheetColor, fabColor);
     }
 
+    @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_gallery;
+    }
+
     /**
      *
      * @param menu
@@ -110,7 +110,7 @@ public class GalleryActivity extends BaseActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_gallery, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

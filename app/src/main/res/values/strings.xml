@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">DejaPhoto</string>
-    <string name="title_activity_gallery">DejaPhoto Gallery</string>
+    <string name="title_activity_gallery">Gallery</string>
     <string name="text_prev">Prev</string>
     <string name="text_next">Next</string>
     <string name="text_karma">Karma</string>
@@ -11,4 +11,12 @@
     <string name="take_picture">Take a Photo</string>
     <string name="dialog_google_login">Sign in with Google</string>
     <string name="menu_gallery_login">Login</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+
+    <!-- OAuth 2.0 client ID for Google sign in -->
+    <string name="web_client_id">
+          191591831587-ve32i00qg6u5ifg52qh3nsnut5rc4hv1.apps.googleusercontent.com
+    </string>
+    <string name="title_activity_login">Login</string>
+
 </resources>
