@@ -26,5 +26,8 @@
     <string name="pref_show_own_key">pref_show_own_key</string>
     <string name="pref_show_friends_key">pref_show_friends_key</string>
     <string name="pref_dejavu_mode_key">pref_dejavu_mode_key</string>
+    <string name="button_allow">Allow</string>
+    <string name="button_deny">Deny</string>
+    <string name="permissions_read_storage_rationale">Allow DejaPhoto to read external device storage?</string>
 
 </resources>

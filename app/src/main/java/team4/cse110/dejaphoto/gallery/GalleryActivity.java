@@ -1,13 +1,16 @@
 package team4.cse110.dejaphoto.gallery;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,12 +19,15 @@ import android.widget.TextView;
 import com.google.firebase.database.FirebaseDatabase;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 import team4.cse110.dejaphoto.BaseActivity;
 import team4.cse110.dejaphoto.R;
 import team4.cse110.dejaphoto.database.FirebasePhotoDatabase;
@@ -36,6 +42,7 @@ import team4.cse110.dejaphoto.settings.SettingsActivity;
  * This class sets up the app's homepage, where photos from the phone's camera
  * album will be displayed in a scrollable grid.
  */
+@RuntimePermissions
 public class GalleryActivity extends BaseActivity {
 
     private static final String TAG = "GalleryActivity";
@@ -144,16 +151,15 @@ public class GalleryActivity extends BaseActivity {
             case FilePickerConst.REQUEST_CODE_PHOTO:
                 if (resultCode == Activity.RESULT_OK && data != null)
                 {
-                    firebasePhotoDatabase.addPhoto(new Photo(this, data.toString()));
                     paths = new ArrayList<>();
                     paths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
+
+                    for (String path : paths) {
+                        Photo photo = new Photo(this, path);
+                        firebasePhotoDatabase.addPhoto(photo);
+                    }
                 }
 
-                /* Populate Photo array */
-                for (String path : paths) {
-                    Photo photo = new Photo(this, path);
-                    photos.add(photo);
-                }
                 break;
 
             case REQUEST_GOOGLE_LOGIN:
@@ -161,6 +167,7 @@ public class GalleryActivity extends BaseActivity {
         }
 
     }
+
 
     /**
      *  Initialize the Floating Action Button
@@ -183,7 +190,8 @@ public class GalleryActivity extends BaseActivity {
         pickPhotosTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pickPhotos();
+                // Delegate to compiled permissions handling method
+                GalleryActivityPermissionsDispatcher.pickPhotosWithCheck(GalleryActivity.this);
             }
         });
 
@@ -191,24 +199,73 @@ public class GalleryActivity extends BaseActivity {
         startCameraTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePhoto, REQUEST_PHOTO);
-
+                GalleryActivityPermissionsDispatcher.showCameraWithCheck(GalleryActivity.this);
             }
         });
+    }
+
+    @NeedsPermission(Manifest.permission.CAMERA)
+    protected void showCamera() {
+        final Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePhoto, REQUEST_PHOTO);
     }
 
     /**
      *
      */
-    private void pickPhotos() {
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+    protected void pickPhotos() {
         // Instantiate an interactive photo picker
         FilePickerBuilder.getInstance()
                 .setSelectedFiles(paths)
                 .setActivityTheme(R.style.AppTheme)
-                .pickPhoto(this);
+                .pickPhoto(GalleryActivity.this);
     }
 
+    /****************************** Permissions Handling ******************************/
+
+    @OnShowRationale(Manifest.permission.READ_EXTERNAL_STORAGE)
+    void showRationaleForReadStorage(final PermissionRequest request) {
+        showRationaleDialog(R.string.permissions_read_storage_rationale, request);
+    }
+
+    @OnShowRationale(Manifest.permission.CAMERA)
+    void showRationaleForCamera(final PermissionRequest request) {
+        showRationaleDialog(R.string.permission_camera_rationale, request);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        GalleryActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    /**
+     * Helper to show permissions rationale dialogs
+     *
+     * @param messageResId
+     * @param request
+     */
+    private void showRationaleDialog(@StringRes int messageResId, final PermissionRequest request) {
+        new AlertDialog.Builder(this)
+                .setPositiveButton(R.string.button_allow, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.proceed();
+                    }
+                })
+                .setNegativeButton(R.string.button_deny, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        request.cancel();
+                    }
+                })
+                .setCancelable(false)
+                .setMessage(messageResId)
+                .show();
+
+    }
 
     /**
      * This method retrieves the external DejaPhoto album, or creates one if it
@@ -216,7 +273,7 @@ public class GalleryActivity extends BaseActivity {
      * @param name - the name of the album.
      * @return the directory.
      */
-    private File getDejaAlbumDir(String name) {
+/*    protected File getDejaAlbumDir(String name) {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), name);
@@ -224,5 +281,5 @@ public class GalleryActivity extends BaseActivity {
             Log.e(TAG, "Directory not created");
         }
         return file;
-    }
+    }*/
 }

@@ -7,6 +7,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -192,6 +194,7 @@ public class Photo {
         }
     }
 
+    @Exclude
     public Calendar getCurrentDate() {
         try {
             Calendar calendar = Calendar.getInstance();
@@ -204,6 +207,7 @@ public class Photo {
         }
     }
 
+    @Exclude
     public boolean is_same_time(){
         //7,200,000 = milliseconds in 2 hours
         Calendar calendar = getCurrentDate();
@@ -214,7 +218,7 @@ public class Photo {
                 (calendar.getTimeInMillis() - time) > -7200000);
     }
 
-    //TODO implement functionality
+    @Exclude
     public boolean is_same_weekday(){
         Calendar calendar = getCurrentDate();
         if(calendar == null){
@@ -240,7 +244,7 @@ public class Photo {
         return (distanceInMeters < 5000);
     }
 
-    //TODO implement functionality
+    @Exclude
     public boolean is_recently_shown(){
         return false;
     }

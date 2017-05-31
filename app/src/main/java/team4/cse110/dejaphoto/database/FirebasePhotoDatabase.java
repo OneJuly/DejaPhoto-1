@@ -13,10 +13,12 @@ import team4.cse110.dejaphoto.photo.Photo;
 
 public class FirebasePhotoDatabase implements PhotoDatabase {
 
-    private final DatabaseReference photosDB;
+    private final DatabaseReference localPhotosDB;
+    private final DatabaseReference friendPhotosDB;
 
     public FirebasePhotoDatabase(FirebaseDatabase firebaseDatabase) {
-        photosDB = firebaseDatabase.getReference("photos");
+        localPhotosDB = firebaseDatabase.getReference("local-photos");
+        friendPhotosDB = firebaseDatabase.getReference("friend-photos");
     }
 
     @Override
@@ -31,7 +33,7 @@ public class FirebasePhotoDatabase implements PhotoDatabase {
 
     @Override
     public void addPhoto(Photo p) {
-        photosDB.child(String.valueOf(p.getId())).setValue(p);
+        localPhotosDB.child(String.valueOf(p.getId())).setValue(p);
     }
 
     @Override
