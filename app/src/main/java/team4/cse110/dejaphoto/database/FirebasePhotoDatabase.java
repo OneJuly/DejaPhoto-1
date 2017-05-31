@@ -33,7 +33,7 @@ public class FirebasePhotoDatabase implements PhotoDatabase {
 
     @Override
     public void addPhoto(Photo p) {
-        localPhotosDB.child(String.valueOf(p.getId())).setValue(p);
+        localPhotosDB.child(String.valueOf(p.hashCode())).setValue(p);
     }
 
     @Override

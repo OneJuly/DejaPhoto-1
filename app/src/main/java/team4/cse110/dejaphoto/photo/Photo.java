@@ -33,8 +33,8 @@ public class Photo {
     /* Construct a Photo with a specified filepath */
     public Photo(Context context, String path) {
         this.path = path;
-        this.id = UUID.randomUUID();
         this.context = context;
+        this.id = UUID.randomUUID();
     }
 
     /******************** Attribute Accessors/Mutators ********************/
@@ -284,5 +284,32 @@ public class Photo {
         opt.inPreferredConfig = Bitmap.Config.RGB_565;
 
         return BitmapFactory.decodeFile(path, opt);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Photo photo = (Photo) o;
+
+        if (Double.compare(photo.lat, lat) != 0) return false;
+        if (Double.compare(photo.lon, lon) != 0) return false;
+        if (time != photo.time) return false;
+        return path != null ? path.equals(photo.path) : photo.path == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = path != null ? path.hashCode() : 0;
+        temp = Double.doubleToLongBits(lat);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(lon);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (int) (time ^ (time >>> 32));
+        return result;
     }
 }

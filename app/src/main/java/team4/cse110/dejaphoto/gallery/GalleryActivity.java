@@ -31,7 +31,6 @@ import permissions.dispatcher.RuntimePermissions;
 import team4.cse110.dejaphoto.BaseActivity;
 import team4.cse110.dejaphoto.R;
 import team4.cse110.dejaphoto.database.FirebasePhotoDatabase;
-import team4.cse110.dejaphoto.database.PhotoDBHelper;
 import team4.cse110.dejaphoto.login.LoginActivity;
 import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.photo.PhotoAdapter;
@@ -83,10 +82,6 @@ public class GalleryActivity extends BaseActivity {
         // Get a reference to the RecyclerView
         RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
         photos = new ArrayList<>();
-
-        // Clear database */
-        deleteDatabase(PhotoDBHelper.DATABASE_NAME);
-
 
         // Hook up the adapter to the RecyclerView
         PhotoAdapter adapter = new PhotoAdapter(this, photos);
