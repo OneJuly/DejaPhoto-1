@@ -30,4 +30,5 @@ public class SettingsActivity extends BaseActivity {
         setTitle(R.string.title_activity_settings);
     }
 
+
 }

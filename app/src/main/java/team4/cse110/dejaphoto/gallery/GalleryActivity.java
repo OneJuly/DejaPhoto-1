@@ -170,7 +170,7 @@ public class GalleryActivity extends BaseActivity {
         Fab fab = (Fab) findViewById(R.id.fab_gallery);
         View sheet = findViewById(R.id.fab_sheet);
         View overlay = findViewById(R.id.fab_overlay);
-        int sheetColor = getResources().getColor(R.color.fab_sheet_color);
+        int sheetColor = getResources().getColor(R.color.colorFabSheet);
         int fabColor = getResources().getColor(R.color.colorAccent);
 
         materialSheetFab = new MaterialSheetFab<>(fab, sheet, overlay, sheetColor, fabColor);

@@ -3,13 +3,13 @@
 
     <PreferenceCategory
         android:key="@string/pref_category_behavior"
-        android:title="@string/pref_category_behavior" >
+        android:title="@string/pref_category_behavior">
 
     <SwitchPreference
         android:key="@string/pref_dejavu_mode_key"
         android:title="@string/pref_dejavu_mode"
-        android:defaultValue="true"
-        />
+        android:defaultValue="true" />
+        <!--TODO dynamic summaries -->
 
     <SwitchPreference
         android:key="@string/pref_show_friends_key"
