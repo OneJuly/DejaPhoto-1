@@ -45,6 +45,11 @@ public class LoginActivity extends BaseActivity
     private TextView signInTextView;
 
     @Override
+    protected int getLayoutResource() {
+        return R.layout.activity_login;
+    }
+
+    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -86,11 +91,6 @@ public class LoginActivity extends BaseActivity
 
 
     @Override
-    protected int getLayoutResource() {
-        return R.layout.activity_login;
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -108,6 +108,7 @@ public class LoginActivity extends BaseActivity
 
 
     /**
+     * Update the login UI depending on if the user logged in successfully
      *
      * @param currentUser
      */
@@ -124,7 +125,7 @@ public class LoginActivity extends BaseActivity
     }
 
     /**
-     *
+     * Start the Google sign in Intent
      */
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -132,6 +133,7 @@ public class LoginActivity extends BaseActivity
     }
 
     /**
+     * Authorize Firebase instance with Google account
      *
      * @param acct
      */
@@ -148,12 +150,13 @@ public class LoginActivity extends BaseActivity
                         if (task.isSuccessful() || task.isComplete()) {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            setResult(RESULT_OK);
                             updateUI(user);
                         } else {
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failure",
                                     Toast.LENGTH_SHORT).show();
-
+                            setResult(RESULT_CANCELED);
                             updateUI(null);
 
                         }
@@ -161,9 +164,8 @@ public class LoginActivity extends BaseActivity
                 });
     }
 
-
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        //TODO
     }
 }

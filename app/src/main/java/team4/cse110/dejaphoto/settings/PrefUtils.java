@@ -4,6 +4,8 @@ package team4.cse110.dejaphoto.settings;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import team4.cse110.dejaphoto.R;
+
 /**
  * Convenience class for interfacing with application preferences.
  */
@@ -11,11 +13,12 @@ public class PrefUtils {
 
     private static final String TAG = "PrefUtils";
 
-    private static final String PREF_DEJAVU_MODE = "dejaVuMode";
-    private static final String PREF_POS = "PreviousPosition";
-    private static final int DEF_POS = -1;
+    private static Context context;
 
-    public PrefUtils() {}
+    public PrefUtils(Context context) {
+        this.context = context;
+    }
+
 
 
     /**
@@ -25,31 +28,37 @@ public class PrefUtils {
      */
     public static boolean dejaVuEnabled(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(PREF_DEJAVU_MODE, false);
+                .getBoolean(getString(R.string.pref_dejavu_mode_key), false);
     }
 
     /**
-     * This method sets DejaVu mode preferences.
+     *
      * @param context
-     * @param mode
+     * @return
      */
-    public static void setDejaVuMode(Context context, boolean mode) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(PREF_DEJAVU_MODE, mode)
-                .apply();
+    public static boolean showFriendsPhotosEnabled(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(getString(R.string.pref_show_friends_key), false);
     }
 
-    public static int getPos(Context context) {
-       return PreferenceManager.getDefaultSharedPreferences(context)
-                .getInt(PREF_POS, DEF_POS);
+    /**
+     *
+     * @param context
+     * @return
+     */
+    public static boolean showOwnPhotos(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(getString(R.string.pref_show_own_key), true);
     }
 
-    public static void setPos(Context context, int pos) {
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putInt(PREF_POS, pos)
-                .apply();
+    /**
+     * Get string from resource ID helper
+     * @param resID
+     * @return
+     */
+    private static String getString(int resID) {
+        return context.getString(resID);
     }
+
 }
 

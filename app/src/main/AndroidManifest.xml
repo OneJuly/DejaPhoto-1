@@ -3,14 +3,12 @@
     package="team4.cse110.dejaphoto">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
 
-    <!-- To access Google+ APIs: -->
+    <!-- To access Google APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -29,9 +27,11 @@
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
+
+
         </activity>
 
         <!-- Login activity -->
@@ -39,6 +39,15 @@
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".gallery.GalleryActivity"
+            />
+
+        <!-- Settings activity -->
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".gallery.GalleryActivity"
             />
 
 
@@ -52,6 +61,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/deja_appwidget_info" />
         </receiver>
+
     </application>
 
 </manifest>
