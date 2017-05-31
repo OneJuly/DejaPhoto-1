@@ -19,19 +19,19 @@ import team4.cse110.dejaphoto.R;
  * Implementation from: https://github.com/gowong/material-sheet-fab (MIT license)
  */
 
-public class Fab extends FloatingActionButton implements AnimatedFab {
+public class GalleryFab extends FloatingActionButton implements AnimatedFab {
 
     private static final int FAB_ANIM_DURATION = 200;
 
-    public Fab(Context context) {
+    public GalleryFab(Context context) {
         super(context);
     }
 
-    public Fab(Context context, AttributeSet attrs) {
+    public GalleryFab(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public Fab(Context context, AttributeSet attrs, int defStyleAttr) {
+    public GalleryFab(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
