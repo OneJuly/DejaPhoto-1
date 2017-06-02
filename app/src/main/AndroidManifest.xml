@@ -14,8 +14,8 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -23,7 +23,6 @@
         <!-- Gallery activity -->
         <activity
             android:name=".gallery.GalleryActivity"
-            android:label="@string/title_activity_gallery"
             android:theme="@style/AppTheme.NoActionBar"
             >
             <intent-filter>

@@ -53,6 +53,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             progressDialog.setMessage(getString(R.string.progress_loading));
             progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         }
+
+        progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
