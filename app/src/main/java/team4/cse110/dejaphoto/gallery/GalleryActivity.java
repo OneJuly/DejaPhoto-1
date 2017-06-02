@@ -73,7 +73,12 @@ public class GalleryActivity extends BaseActivity {
     private StorageReference storageRef;
     private DatabaseReference fbRef;
     private RecyclerView.Adapter fbAdapter;
-    private FirebaseUser user;
+    private RecyclerView rvPhotos;
+    private GalleryFab fab;
+    private TextView startCameraTextView;
+    private TextView pickPhotosTextView;
+    FirebaseUser user;
+
 
     @Override
     protected int getLayoutResource() {
@@ -92,56 +97,29 @@ public class GalleryActivity extends BaseActivity {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user != null) {
+        prefUtils = new PrefUtils(this);
 
-            // Get the Firebase database
-            fbPhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
+        fbPhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
+
+        if (user == null) {
+            fbRef = FirebaseDatabase.getInstance().getReference().child("anonymous-photos");
+        } else {
             fbRef = FirebaseDatabase.getInstance().getReference().child("local-photos").child(user.getUid());
-
-            // Get the cloud storage reference for remote photos
-            storageRef = FirebaseStorage.getInstance().getReference();
-
-
-            // Get a preference prefUtils reference
-            prefUtils = new PrefUtils(this);
-
-            // Get a reference to the RecyclerView
-            RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
-            rvPhotos.setHasFixedSize(false);
-            rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
-
-            fbAdapter = new FirebaseRecyclerAdapter<Photo, PhotoHolder>(Photo.class, R.layout.photo_viewholder,
-                    PhotoHolder.class, fbRef) {
-
-                @Override
-                protected void populateViewHolder(PhotoHolder holder, Photo photo, int position) {
-                    // Load images
-                    // TODO handle the case where file doesn't exist; currently adds empty view
-                    Glide
-                            .with(GalleryActivity.this)
-                            .load(photo.getPath())
-                            .into(holder.photo);
-
-                }
-
-                @Override
-                protected void onDataChanged() {
-                    if (progressDialog != null && progressDialog.isShowing()) {
-                        hideProgressDialog();
-                    }
-
-                }
-            };
-
-            // Hook up the adapter
-            showProgressDialog();
-            rvPhotos.setAdapter(fbAdapter);
         }
 
-        // Setup the floating action button
-        initFAB();
+        storageRef = FirebaseStorage.getInstance().getReference();
 
+        rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
+
+        fab = (GalleryFab) findViewById(R.id.fab_gallery);
+        pickPhotosTextView = (TextView) findViewById(R.id.fab_sheet_pick_photos);
+        startCameraTextView = (TextView) findViewById(R.id.fab_sheet_camera);
+
+        initFAB(fab);
+        initRecyclerView(rvPhotos);
+        updateUI();
     }
+
 
     /**
      * Custom Photo PhotoHolder
@@ -252,7 +230,8 @@ public class GalleryActivity extends BaseActivity {
                         fbPhotoDatabase.addPhoto(photo);
 
                         // TODO enable this only if user wants to share photos?
-                        addToRemoteStorage(photo);
+                        // TODO should be in the DB class
+                        //addToRemoteStorage(photo);
                     }
                 }
 
@@ -271,7 +250,11 @@ public class GalleryActivity extends BaseActivity {
 
     }
 
-    // Get absolute filepath from image URI returned from camera intent
+    /**
+     * Get absolute filepath from uri
+     * @param uri
+     * @return
+     */
     private String getPathFromUri(Uri uri) {
         Cursor cursor = getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
@@ -279,23 +262,72 @@ public class GalleryActivity extends BaseActivity {
         return cursor.getString(index);
     }
 
+    /**
+     *
+     * @return
+     */
+    private FirebaseRecyclerAdapter<Photo, PhotoHolder> getFbAdapter() {
+        return new FirebaseRecyclerAdapter<Photo, PhotoHolder>(Photo.class, R.layout.photo_viewholder,
+                PhotoHolder.class, fbRef) {
+            @Override
+            protected void populateViewHolder(PhotoHolder holder, Photo photo, int position) {
+                // Load images
+                // TODO handle the case where file doesn't exist; currently adds empty view
+                Glide
+                        .with(GalleryActivity.this)
+                        .load(photo.getPath())
+                        .into(holder.photo);
+
+            }
+
+            @Override
+            protected void onDataChanged() {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    hideProgressDialog();
+                }
+
+            }
+        };
+
+    }
+
+    /**
+     * TODO why is this needed? learn more about recyclerview
+     */
+    private void updateUI() {
+        if (fbAdapter == null) {
+            fbAdapter = getFbAdapter();
+            rvPhotos.setAdapter(fbAdapter);
+        }
+    }
+
+    /**
+     *
+     * @param rv
+     */
+    private void initRecyclerView(RecyclerView rv) {
+        rv.setHasFixedSize(false);
+        rv.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
+        fbAdapter = getFbAdapter();
+        showProgressDialog();
+        rv.setAdapter(fbAdapter);
+    }
+
 
     /**
      *  Initialize the Floating Action Button
+     * @param fab
      */
-    private void initFAB() {
+    private void initFAB(GalleryFab fab) {
         // Get reference to FAB, sheet, and overlay
-        GalleryFab fab = (GalleryFab) findViewById(R.id.fab_gallery);
         View sheet = findViewById(R.id.fab_sheet);
         View overlay = findViewById(R.id.fab_overlay);
         int sheetColor = getResources().getColor(R.color.colorFabSheet);
         int fabColor = getResources().getColor(R.color.colorAccent);
 
-        materialSheetFab = new MaterialSheetFab<>(fab, sheet, overlay, sheetColor, fabColor);
+        materialSheetFab = new MaterialSheetFab<>(this.fab, sheet, overlay, sheetColor, fabColor);
 
         // Hook up FAB action click listeners
-        TextView pickPhotosTextView = (TextView) findViewById(R.id.fab_sheet_pick_photos);
-        TextView startCameraTextView = (TextView) findViewById(R.id.fab_sheet_camera);
 
         // Pick photos
         pickPhotosTextView.setOnClickListener(new View.OnClickListener() {
