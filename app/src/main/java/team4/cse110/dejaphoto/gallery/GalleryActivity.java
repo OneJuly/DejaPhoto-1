@@ -22,8 +22,12 @@ import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +68,7 @@ public class GalleryActivity extends BaseActivity {
     private MaterialSheetFab materialSheetFab;
 
     private FirebasePhotoDatabase fbPhotoDatabase;
+    private StorageReference storageRef;
     private DatabaseReference fbRef;
     private RecyclerView.Adapter fbAdapter;
 
@@ -86,6 +91,10 @@ public class GalleryActivity extends BaseActivity {
         fbPhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
         fbRef = FirebaseDatabase.getInstance().getReference().child("local-photos");
 
+        // Get the cloud storage reference for remote photos
+        storageRef = FirebaseStorage.getInstance().getReference();
+
+
         // Get a preference prefUtils reference
         prefUtils = new PrefUtils(this);
 
@@ -100,6 +109,7 @@ public class GalleryActivity extends BaseActivity {
             @Override
             protected void populateViewHolder(PhotoHolder holder, Photo photo, int position) {
                 // Load images
+                // TODO handle the case where file doesn't exist; currently adds empty view
                 Glide
                         .with(GalleryActivity.this)
                         .load(photo.getPath())
@@ -147,10 +157,8 @@ public class GalleryActivity extends BaseActivity {
                 @Override
                 public void onCheckedChanged(SmoothCheckBox cb, boolean isChecked) {
                     toggleSelected(cb, isChecked);
-//                    itemView.setBackgroundResource(isChecked ?
-//                            R.color.bg_gray : android.R.color.white);
 
-                    // dim/undim photo depending on selection
+                    // dim/undim photo if selected/unselected
                     if (isChecked) {
                         photo.setColorFilter(R.color.bg_gray);
                     } else {
@@ -176,9 +184,6 @@ public class GalleryActivity extends BaseActivity {
         }
 
     }
-
-
-
 
     /**
      *
@@ -364,6 +369,20 @@ public class GalleryActivity extends BaseActivity {
                 .setCancelable(false)
                 .setMessage(messageResId)
                 .show();
+
+    }
+
+    /**
+     *
+     * @param photo
+     */
+    private void addToRemoteStorage(Photo photo) {
+        Uri file = Uri.fromFile(new File(photo.getPath()));
+        StorageReference remote =
+                storageRef.child(photo.getUserUID() + "/photos/"  + file.getLastPathSegment());
+
+        UploadTask uploadTask = remote.putFile(file);
+
 
     }
 }

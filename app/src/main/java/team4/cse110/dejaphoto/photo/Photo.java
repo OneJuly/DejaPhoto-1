@@ -7,6 +7,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Exclude;
 
 import java.util.Calendar;
@@ -28,34 +30,35 @@ public class Photo {
     private long time;
     private double weight;
     private Context context;
+    private String userUID;
 
-    /* Keep Firebase happy */
+    /* Keep Firebase happy :) */
     public Photo() {}
 
     /* Construct a Photo with a specified filepath */
     public Photo(Context context, String path) {
         this.path = path;
         this.context = context;
-//        this.id = UUID.randomUUID();
+        this.userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     /******************** Attribute Accessors/Mutators ********************/
 
     /**
-     * Get a photo's unique identifier.
-     * @return the photo's ID.
+     *
+     * @return
      */
-//    public UUID getId() {
-//        return id;
-//    }
+    public String getUserUID() {
+        return userUID;
+    }
 
     /**
-     * Set a photo's unique identifier.
-     * @param id - the photo's ID.
+     *
+     * @param user
      */
-//    public void setId(UUID id) {
-//        this.id = id;
-//    }
+    public void setUserUID(FirebaseUser user) {
+        this.userUID = user.getUid();
+    }
 
     /**
      * Get the absolute file path of this Photo.
