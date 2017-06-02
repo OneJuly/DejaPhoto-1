@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.photo;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,17 +7,22 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.Exclude;
+
 import java.util.Calendar;
-import java.util.UUID;
 
 /**
  * This class handles the information contained in each Photo object.
  */
 public class Photo {
 
+    private static final String TAG = "Photo";
+
     /***************** Photo Attributes (i.e. PhotoTable Columns) ************/
 
-    private UUID id;
+//    private UUIDid;
     private String path;
     private double lat;
     private double lon;
@@ -25,30 +30,34 @@ public class Photo {
     private long time;
     private double weight;
     private Context context;
+    private String userUID;
+
+    /* Keep Firebase happy :) */
+    public Photo() {}
 
     /* Construct a Photo with a specified filepath */
     public Photo(Context context, String path) {
         this.path = path;
-        this.id = UUID.randomUUID();
         this.context = context;
+        this.userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
     /******************** Attribute Accessors/Mutators ********************/
 
     /**
-     * Get a photo's unique identifier.
-     * @return the photo's ID.
+     *
+     * @return
      */
-    public UUID getId() {
-        return id;
+    public String getUserUID() {
+        return userUID;
     }
 
     /**
-     * Set a photo's unique identifier.
-     * @param id - the photo's ID.
+     *
+     * @param user
      */
-    public void setId(UUID id) {
-        this.id = id;
+    public void setUserUID(FirebaseUser user) {
+        this.userUID = user.getUid();
     }
 
     /**
@@ -103,6 +112,7 @@ public class Photo {
      * This method checks whether a photo has karma.
      * @return 1 is the photo has karma; 0 otherwise.
      */
+    @Exclude
     public int getKarma() {
         return karma;
     }
@@ -119,6 +129,7 @@ public class Photo {
      * This method retrieves the priority of a photo.
      * @return the priority of the photo.
      */
+    @Exclude
     public double getWeight() {
         return weight;
     }
@@ -156,23 +167,27 @@ public class Photo {
         if(is_same_time()){
             weight += 100;
         }
-        if(is_same_weekday()){
+/*        if(is_same_weekday()){
             weight += 100;
-        }
+        }*/
         if(is_same_location()){
             weight += 100;
         }
-        if(karma == 1){
+/*        if(karma == 1){
             weight += 200;
-        }
-        if(is_recently_shown()){
+        }*/
+/*        if(is_recently_shown()){
             weight -= 200;
-        }
-        return weight += recentlyTakenWeight();
+        }*/
+        weight += recentlyTakenWeight();
+        Log.v("weight", "weight+ " + weight);
+        return weight;
+
     }
 
     /***************** Helper Methods *********************/
 
+    @Exclude
     public Location getCurrentLocation() {
         // http://stackoverflow.com/questions/32491960/android-check-permission-for-locationmanager
         try {
@@ -182,11 +197,12 @@ public class Photo {
         }
         catch (SecurityException e) {
             Log.v("ImageAlgorithms", "getCurrentLocation(): SecurityException caught.");
-            System.out.println("getCurrentLocation(): SecurityException caught.");
+            System.out.println("getCurrentLocajtion(): SecurityException caught.");
             return null;
         }
     }
 
+    @Exclude
     public Calendar getCurrentDate() {
         try {
             Calendar calendar = Calendar.getInstance();
@@ -199,6 +215,7 @@ public class Photo {
         }
     }
 
+    @Exclude
     public boolean is_same_time(){
         //7,200,000 = milliseconds in 2 hours
         Calendar calendar = getCurrentDate();
@@ -209,7 +226,7 @@ public class Photo {
                 (calendar.getTimeInMillis() - time) > -7200000);
     }
 
-    //TODO implement functionality
+    @Exclude
     public boolean is_same_weekday(){
         Calendar calendar = getCurrentDate();
         if(calendar == null){
@@ -220,6 +237,7 @@ public class Photo {
         return false;
     }
 
+    @Exclude
     public boolean is_same_location(){
 
         Location photoLocation = new Location("");
@@ -232,14 +250,15 @@ public class Photo {
         }
 
         float distanceInMeters =  photoLocation.distanceTo(currLocation);
-        return (distanceInMeters < 150);
+        return (distanceInMeters < 5000);
     }
 
-    //TODO implement functionality
+    @Exclude
     public boolean is_recently_shown(){
         return false;
     }
 
+    @Exclude
     public double recentlyTakenWeight(){
 
         //creates a calendar object and error checks
@@ -269,7 +288,39 @@ public class Photo {
      * Get a Bitmap representation of this Photo Object.
      * @return the Bitmap representation of the photo.
      */
+    @Exclude
     public Bitmap getBitmap() {
-        return BitmapFactory.decodeFile(path);
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inScaled = true;
+        opt.inPreferredConfig = Bitmap.Config.RGB_565;
+
+        return BitmapFactory.decodeFile(path, opt);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Photo photo = (Photo) o;
+
+        if (Double.compare(photo.lat, lat) != 0) return false;
+        if (Double.compare(photo.lon, lon) != 0) return false;
+        if (time != photo.time) return false;
+        return path != null ? path.equals(photo.path) : photo.path == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = path != null ? path.hashCode() : 0;
+        temp = Double.doubleToLongBits(lat);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(lon);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (int) (time ^ (time >>> 32));
+        return result;
     }
 }

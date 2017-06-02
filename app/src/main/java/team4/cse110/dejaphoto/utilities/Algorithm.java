@@ -1,6 +1,6 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.utilities;
 
-import android.graphics.Bitmap;
+import team4.cse110.dejaphoto.photo.Photo;
 
 /**
  * This is an interface for the DejaAlgorithm class.
@@ -11,7 +11,7 @@ public interface Algorithm {
      * @return the bitmap representing the next image, or null if there are no
      * images in the display cycle
      */
-    Bitmap next();
+    Photo next();
 
     /**
      * Get the previous image in the display cycle. save() is called before
@@ -19,7 +19,7 @@ public interface Algorithm {
      * @return the bitmap representing the previous image, or null if there
      * are no previous images.
      */
-    Bitmap prev();
+    Photo prev();
 
     /**
      * Set karma for the last image returned by prev(), next() or release().
@@ -40,7 +40,7 @@ public interface Algorithm {
      * @return the bitmap to display instead, or null if there are no
      * replacement bitmaps.
      */
-    Bitmap release();
+    Photo release();
 
     /**
      * Save state to data base.

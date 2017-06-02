@@ -1,8 +1,33 @@
 <resources>
+    <!-- OAuth 2.0 client ID for Google sign in -->
+    <string name="web_client_id">191591831587-7rlounkpflgv3abk2eh23ad8v5pn93s4.apps.googleusercontent.com</string>
+
     <string name="app_name">DejaPhoto</string>
-    <string name="title_activity_gallery">DejaPhoto Gallery</string>
+    <string name="title_activity_gallery">Gallery</string>
     <string name="text_prev">Prev</string>
     <string name="text_next">Next</string>
     <string name="text_karma">Karma</string>
     <string name="text_release">Release</string>
+    <string name="menu_gallery_logout">Logout</string>
+    <string name="menu_gallery_settings">Settings</string>
+    <string name="pick_photos">Pick Photos</string>
+    <string name="take_picture">Take a Photo</string>
+    <string name="dialog_google_login">Sign in with Google</string>
+    <string name="menu_gallery_login">Login</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="title_activity_login">Login</string>
+    <string name="progress_loading">Loading</string>
+    <string name="sign_in_success">Sign in successful!</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_show_friends">Display Friend Photos</string>
+    <string name="pref_dejavu_mode">DejaVu Mode</string>
+    <string name="pref_show_own">Display Own Photos</string>
+    <string name="pref_category_behavior">Behavior</string>
+    <string name="pref_show_own_key">pref_show_own_key</string>
+    <string name="pref_show_friends_key">pref_show_friends_key</string>
+    <string name="pref_dejavu_mode_key">pref_dejavu_mode_key</string>
+    <string name="button_allow">Allow</string>
+    <string name="button_deny">Deny</string>
+    <string name="permissions_read_storage_rationale">Allow DejaPhoto to read external device storage?</string>
+
 </resources>

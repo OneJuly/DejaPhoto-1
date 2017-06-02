@@ -1,13 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.v7.widget.RecyclerView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rv_gallery"
-    android:layout_marginTop="?attr/actionBarSize"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
-</android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"/>
+
+    <team4.cse110.dejaphoto.gallery.GalleryFab
+        android:id="@+id/fab_gallery"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_create_white_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"  />
+
+    <com.gordonwong.materialsheetfab.DimOverlayFrameLayout
+        android:id="@+id/fab_overlay"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+    <io.codetail.widget.RevealLinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:gravity="end|bottom"
+        android:orientation="vertical" >
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/fab_sheet"
+            android:layout_width="@dimen/sheet_width"
+            android:layout_height="@dimen/sheet_height" >
+
+            <!-- Insert sheet items here -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation = "vertical" >
+
+                <!-- Photo picker action -->
+                <TextView
+                    android:id="@+id/fab_sheet_pick_photos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/sheet_icon_padding"
+                    android:drawableLeft="@drawable/ic_add_to_photos_black_24dp"
+                    android:drawableStart="@drawable/ic_add_to_photos_black_24dp"
+                    android:layout_margin="@dimen/fab_item_spacing"
+                    android:text="@string/pick_photos"
+                    />
+
+                <!-- Camera action -->
+                <TextView
+                    android:id="@+id/fab_sheet_camera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/sheet_icon_padding"
+                    android:drawableLeft="@drawable/ic_add_a_photo_black_24dp"
+                    android:drawableStart="@drawable/ic_add_a_photo_black_24dp"
+                    android:layout_margin="@dimen/fab_item_spacing"
+                    android:text="@string/take_picture"
+                    />
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </io.codetail.widget.RevealLinearLayout>
+
+
+</RelativeLayout>
+
+
+
+
 
 

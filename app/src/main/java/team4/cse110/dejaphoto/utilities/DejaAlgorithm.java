@@ -1,11 +1,15 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.utilities;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+
+import team4.cse110.dejaphoto.database.PhotoDatabase;
+import team4.cse110.dejaphoto.photo.Photo;
+import team4.cse110.dejaphoto.settings.PrefUtils;
 
 /**
  * This class calculates the weight of a photo, which the app uses to determine
@@ -17,7 +21,7 @@ public class DejaAlgorithm implements Algorithm {
     private static final int CACHE_SIZE = 10;
 
     private Context context;
-    private PhotoDB db;
+    private PhotoDatabase db;
 
     // Database dependent variables.
     private List<Photo> album;
@@ -30,7 +34,6 @@ public class DejaAlgorithm implements Algorithm {
      */
     public DejaAlgorithm(Context context) {
         this.context = context;
-        this.db = PhotoUtils.getInstance(context);
         load();
     }
 
@@ -39,15 +42,15 @@ public class DejaAlgorithm implements Algorithm {
      * @return the next photo to be displayed.
      */
     @Override
-    public Bitmap next() {
-        if (album.isEmpty()) return null;
+    public Photo next() {
+//        if (album.isEmpty()) return null;
 
         // Handle non DejaVu next
         if (!PrefUtils.dejaVuEnabled(context)) {
             Random random = new Random();
             Photo photo = album.get(random.nextInt(album.size()));
             addToCache(photo);
-            return photo.getBitmap();
+            return photo;
         }
 
         // Compute weight for all images
@@ -75,7 +78,7 @@ public class DejaAlgorithm implements Algorithm {
         // Update cache
         addToCache(chosenPhoto);
 
-        return chosenPhoto.getBitmap();
+        return chosenPhoto;
     }
 
     /**
@@ -84,13 +87,13 @@ public class DejaAlgorithm implements Algorithm {
      * @return the previous photo, which will be the next to be displayed.
      */
     @Override
-    public Bitmap prev() {
+    public Photo prev() {
         if (cache.size() <= 1) return null;
 
         cachePos--;
         Photo photo = cache.get(cachePos);
         db.setPosition(cachePos);
-        return photo.getBitmap();
+        return photo;
     }
 
     /**
@@ -120,7 +123,7 @@ public class DejaAlgorithm implements Algorithm {
      * @return the next photo to be displayed.
      */
     @Override
-    public Bitmap release() {
+    public Photo release() {
         Photo photo = getCurrentPhoto();
         if (photo == null) {
             return null;
@@ -162,7 +165,7 @@ public class DejaAlgorithm implements Algorithm {
      * @return TODO
      */
     private Photo getCurrentPhoto() {
-        if (!cache.isEmpty()) {
+        if (!cache.isEmpty() && cachePos != -1) {
             return cache.get(cachePos);
         } else {
             return null;
@@ -174,12 +177,15 @@ public class DejaAlgorithm implements Algorithm {
      * @param photo
      */
     private void setWeight(Photo photo) {
+        photo.setWeight(photo.calcWeight());
         // TODO add time into the calculation. Android has System.currentTimeMillis()
 
     }
 
     private void addToCache(Photo photo) {
         // Check if we need to remove everything after pointer
+        Log.v("cachepos", "pos+ "  + cachePos);
+        Log.v("cachesize ", "size " + cache.size());
         if (!cache.isEmpty() && cachePos != cache.size() - 1) {
             ListIterator<Photo> itr = cache.listIterator(cachePos);
             itr.remove(); // remove self
@@ -198,6 +204,7 @@ public class DejaAlgorithm implements Algorithm {
         cachePos = cache.size() - 1;
 
         db.setCache(cache);
+        //db.setPosition(cachePos);
         db.setPosition(cachePos);
     }
 }

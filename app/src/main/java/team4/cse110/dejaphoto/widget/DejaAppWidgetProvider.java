@@ -1,4 +1,4 @@
-package team4.cse110.dejaphoto;
+package team4.cse110.dejaphoto.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -6,12 +6,17 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.app.WallpaperManager;
 
 import java.io.IOException;
+
+import team4.cse110.dejaphoto.R;
+import team4.cse110.dejaphoto.photo.Photo;
+import team4.cse110.dejaphoto.utilities.Algorithm;
+import team4.cse110.dejaphoto.utilities.DejaAlgorithm;
+import team4.cse110.dejaphoto.utilities.SetWallpaper;
 
 
 /**
@@ -83,19 +88,19 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Algorithm algorithm = getAlgorithm(context);
 
         // Set the previous wallpaper.
-        Bitmap bitmap = algorithm.prev();
-        if (bitmap != null) {
+        Photo photo = algorithm.prev();
+        if (photo != null) {
             Log.v(TAG, "Setting prev bitmap"); // DEBUG
-            setWallpaper(bitmap, context);
+            setWallpaper(photo, context);
         }
 
         // Enable the karma button if no karma.
-        if (!algorithm.hasKarma()) {
+/*        if (!algorithm.hasKarma()) {
             Log.v(TAG, "Enabling button karma after prev"); // DEBUG
             RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
-        }
+        }*/
     }
 
     /**
@@ -110,22 +115,23 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Algorithm algorithm = getAlgorithm(context);
 
         // Set the next wallpaper or default if none exits
-        Bitmap bitmap = algorithm.next();
-        if (bitmap != null) {
+        //Bitmap bitmap = algorithm.next();
+        Photo photo = algorithm.next();
+        if (photo != null) {
             Log.v(TAG, "Setting next bitmap"); // DEBUG
-            setWallpaper(bitmap, context);
+            setWallpaper(photo, context);
         } else {
             Log.v(TAG, "Setting next default photo"); // DEBUG
             setDefaultWallpaper(context);
         }
 
         // Enable the karma button if no karma
-        if (!algorithm.hasKarma()) {
+/*        if (!algorithm.hasKarma()) {
             Log.v(TAG, "Enabling button karma after next"); // DEBUG
             RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
-        }
+        }*/
     }
 
     /**
@@ -156,10 +162,10 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Algorithm algorithm = getAlgorithm(context);
 
         // Release image and set replacement
-        Bitmap bitmap = algorithm.release();
-        if (bitmap != null) {
+        Photo photo = algorithm.release();
+        if (photo != null) {
             Log.v(TAG, "Setting release bitmap"); // DEBUG
-            setWallpaper(bitmap, context);
+            setWallpaper(photo, context);
         } else {
             Log.v(TAG, "Setting release default photo"); // DEBUG
             setDefaultWallpaper(context);
@@ -242,17 +248,12 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
 
     /**
      * Set the wallpaper of the device to the bitmap.
-     * @param bitmap - bitmap of new wallpaper.
+     * @param photo - bitmap of new wallpaper.
      * @param context - current application context.
      */
-    private void setWallpaper(Bitmap bitmap, Context context) {
-        WallpaperManager myWallpaperManager =
-                WallpaperManager.getInstance(context);
-        try {
-            myWallpaperManager.setBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void setWallpaper(Photo photo, Context context) {
+        SetWallpaper sp = new SetWallpaper(context);
+        sp.execute(photo);
     }
 
     /***
