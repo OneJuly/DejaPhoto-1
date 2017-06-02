@@ -17,12 +17,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,7 +33,6 @@ import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
@@ -65,7 +65,6 @@ public class GalleryActivity extends BaseActivity {
     private static final int GRID_SPAN = 3; // number of columns for ImageViews
     private static final int MAX_COUNT_PICKER = 20;  // max number of photos selectable in filepicker
 
-    private List<Photo> photos;
     private ArrayList<String> paths;
     private PrefUtils prefUtils;
     private MaterialSheetFab materialSheetFab;
@@ -74,6 +73,7 @@ public class GalleryActivity extends BaseActivity {
     private StorageReference storageRef;
     private DatabaseReference fbRef;
     private RecyclerView.Adapter fbAdapter;
+    private FirebaseUser user;
 
     @Override
     protected int getLayoutResource() {
@@ -90,50 +90,53 @@ public class GalleryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get the Firebase database
-        fbPhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
-        fbRef = FirebaseDatabase.getInstance().getReference().child("local-photos");
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Get the cloud storage reference for remote photos
-        storageRef = FirebaseStorage.getInstance().getReference();
+        if (user != null) {
+
+            // Get the Firebase database
+            fbPhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
+            fbRef = FirebaseDatabase.getInstance().getReference().child("local-photos").child(user.getUid());
+
+            // Get the cloud storage reference for remote photos
+            storageRef = FirebaseStorage.getInstance().getReference();
 
 
-        // Get a preference prefUtils reference
-        prefUtils = new PrefUtils(this);
+            // Get a preference prefUtils reference
+            prefUtils = new PrefUtils(this);
 
-        // Get a reference to the RecyclerView
-        RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
-        rvPhotos.setHasFixedSize(false);
-        rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
+            // Get a reference to the RecyclerView
+            RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
+            rvPhotos.setHasFixedSize(false);
+            rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
 
-        fbAdapter = new FirebaseRecyclerAdapter<Photo, PhotoHolder>(Photo.class, R.layout.photo_viewholder,
-                PhotoHolder.class, fbRef) {
+            fbAdapter = new FirebaseRecyclerAdapter<Photo, PhotoHolder>(Photo.class, R.layout.photo_viewholder,
+                    PhotoHolder.class, fbRef) {
 
-            @Override
-            protected void populateViewHolder(PhotoHolder holder, Photo photo, int position) {
-                // Load images
-                // TODO handle the case where file doesn't exist; currently adds empty view
-                Glide
-                        .with(GalleryActivity.this)
-                        .load(photo.getPath())
-                        .into(holder.photo);
+                @Override
+                protected void populateViewHolder(PhotoHolder holder, Photo photo, int position) {
+                    // Load images
+                    // TODO handle the case where file doesn't exist; currently adds empty view
+                    Glide
+                            .with(GalleryActivity.this)
+                            .load(photo.getPath())
+                            .into(holder.photo);
 
-            }
-
-            @Override
-            protected void onDataChanged() {
-                if (progressDialog != null && progressDialog.isShowing()) {
-                    hideProgressDialog();
                 }
 
-            }
-        };
+                @Override
+                protected void onDataChanged() {
+                    if (progressDialog != null && progressDialog.isShowing()) {
+                        hideProgressDialog();
+                    }
 
-        // Hook up the adapter
-        showProgressDialog();
-        rvPhotos.setAdapter(fbAdapter);
+                }
+            };
 
-        photos = new ArrayList<>();
+            // Hook up the adapter
+            showProgressDialog();
+            rvPhotos.setAdapter(fbAdapter);
+        }
 
         // Setup the floating action button
         initFAB();
@@ -400,7 +403,7 @@ public class GalleryActivity extends BaseActivity {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 //                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                Toast.makeText(GalleryActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(GalleryActivity.this, "Success!", Toast.LENGTH_SHORT).show();
 
             }
         });

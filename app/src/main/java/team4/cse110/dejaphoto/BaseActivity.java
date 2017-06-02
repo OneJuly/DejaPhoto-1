@@ -72,4 +72,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onStop();
         hideProgressDialog();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+    }
 }
