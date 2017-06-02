@@ -17,9 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -244,6 +247,9 @@ public class GalleryActivity extends BaseActivity {
                     for (String path : paths) {
                         Photo photo = new Photo(this, path);
                         fbPhotoDatabase.addPhoto(photo);
+
+                        // TODO enable this only if user wants to share photos?
+                        addToRemoteStorage(photo);
                     }
                 }
 
@@ -381,7 +387,23 @@ public class GalleryActivity extends BaseActivity {
         StorageReference remote =
                 storageRef.child(photo.getUserUID() + "/photos/"  + file.getLastPathSegment());
 
+        // see firebase.google.com/docs/storage/android/upload-files
         UploadTask uploadTask = remote.putFile(file);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+                // TODO handle failed upload
+
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Toast.makeText(GalleryActivity.this, "Success!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
 
     }
