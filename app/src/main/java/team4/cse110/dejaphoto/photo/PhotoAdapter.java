@@ -2,31 +2,56 @@ package team4.cse110.dejaphoto.photo;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-
-import java.util.List;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.Query;
 
 import team4.cse110.dejaphoto.R;
 
 /**
- * This is the adapter for the RecyclerView thumbnails in GalleryActivity.
+ * RecyclerView the adapter for the thumbnails in GalleryActivity.
  */
 
 
-public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
+public class PhotoAdapter extends FirebaseRecyclerAdapter<Photo, PhotoAdapter.ViewHolder> {
 
     private static final String TAG = "PhotoAdapter";
-
-    private List<Photo> photos;
     private Context context;
 
-    /* Internal clickable photo viewholder */
+    /**
+     * @param modelClass      Firebase will marshall the data at a location into
+     *                        an instance of a class that you provide
+     * @param modelLayout     This is the layout used to represent a single item in the list.
+     *                        You will be responsible for populating an instance of the corresponding
+     *                        view with the data from an instance of modelClass.
+     * @param viewHolderClass The class that hold references to all sub-views in an instance modelLayout.
+     * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location,
+     *                        using some combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
+     */
+    public PhotoAdapter(Context context, Class<Photo> modelClass, int modelLayout,
+                        Class<ViewHolder> viewHolderClass, Query ref) {
+        super(modelClass, modelLayout, viewHolderClass, ref);
+        this.context = context;
+    }
+
+    @Override
+    protected void populateViewHolder(ViewHolder viewHolder, Photo model, int position) {
+        // Load images
+        Glide
+                .with(context)
+                .load(model.getPath())
+                .into(viewHolder.photo);
+
+    }
+
+
+    /**
+     * Custome Photo PhotoHolder
+     */
     public class ViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener {
 
@@ -45,55 +70,12 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             int pos = getAdapterPosition();
 
             if (pos != RecyclerView.NO_POSITION) {
-                Photo photo = photos.get(pos);
                 toggleCheckbox(checkBox);
             }
         }
 
     }
 
-    /* PhotoAdapter constructor */
-    public PhotoAdapter(Context context, List<Photo> photos) {
-        this.context = context;
-        this.photos = photos;
-    }
-
-    private Context getContext() {
-        return context;
-    }
-
-    // Inflate the gallery_photo layout into a new viewholder
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context c = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(c);
-
-        // Inflate the gallery_photo layout
-        View photoView = inflater.inflate(R.layout.gallery_photo, parent, false);
-
-        // Return the new viewholder
-        ViewHolder holder = new ViewHolder(photoView);
-        return holder;
-    }
-
-    // Attach photo data to the viewholder
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Photo photo = photos.get(position);
-        ImageView imageView = holder.photo;
-
-        /* Load the image */
-        Glide
-                .with(context)
-                .load(photo.getPath())
-                .into(imageView);
-    }
-
-    // Get the number of photos in the photo list
-    @Override
-    public int getItemCount() {
-        return photos.size();
-    }
 
     /* Toggle imageview checkbox */
     private void toggleCheckbox(CheckBox cb) {
@@ -103,5 +85,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             cb.setChecked(true);
         }
     }
+
+
 }
 

@@ -1,9 +1,10 @@
 package team4.cse110.dejaphoto.gallery;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -14,8 +15,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
@@ -24,6 +29,7 @@ import java.util.List;
 
 import droidninja.filepicker.FilePickerBuilder;
 import droidninja.filepicker.FilePickerConst;
+import droidninja.filepicker.views.SmoothCheckBox;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
@@ -33,7 +39,6 @@ import team4.cse110.dejaphoto.R;
 import team4.cse110.dejaphoto.database.FirebasePhotoDatabase;
 import team4.cse110.dejaphoto.login.LoginActivity;
 import team4.cse110.dejaphoto.photo.Photo;
-import team4.cse110.dejaphoto.photo.PhotoAdapter;
 import team4.cse110.dejaphoto.settings.PrefUtils;
 import team4.cse110.dejaphoto.settings.SettingsActivity;
 
@@ -46,17 +51,21 @@ public class GalleryActivity extends BaseActivity {
 
     private static final String TAG = "GalleryActivity";
 
-    private static final int REQUEST_PHOTO = 9000;
+    private static final int REQUEST_CAMERA = 9000;
     private static final int REQUEST_SETTINGS = 9001;
     private static final int REQUEST_GOOGLE_LOGIN = 9002;
 
     private static final int GRID_SPAN = 3; // number of columns for ImageViews
+    private static final int MAX_COUNT_PICKER = 20;  // max number of photos selectable in filepicker
 
     private List<Photo> photos;
     private ArrayList<String> paths;
     private PrefUtils prefUtils;
     private MaterialSheetFab materialSheetFab;
-    private FirebasePhotoDatabase firebasePhotoDatabase;
+
+    private FirebasePhotoDatabase fbPhotoDatabase;
+    private DatabaseReference fbRef;
+    private RecyclerView.Adapter fbAdapter;
 
     @Override
     protected int getLayoutResource() {
@@ -73,25 +82,103 @@ public class GalleryActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get a reference to the Firebase database
-        firebasePhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
+        // Get the Firebase database
+        fbPhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
+        fbRef = FirebaseDatabase.getInstance().getReference().child("local-photos");
 
         // Get a preference prefUtils reference
         prefUtils = new PrefUtils(this);
 
         // Get a reference to the RecyclerView
         RecyclerView rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
-        photos = new ArrayList<>();
-
-        // Hook up the adapter to the RecyclerView
-        PhotoAdapter adapter = new PhotoAdapter(this, photos);
-        rvPhotos.setAdapter(adapter);
+        rvPhotos.setHasFixedSize(false);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, GRID_SPAN));
+
+        fbAdapter = new FirebaseRecyclerAdapter<Photo, PhotoHolder>(Photo.class, R.layout.photo_viewholder,
+                PhotoHolder.class, fbRef) {
+
+            @Override
+            protected void populateViewHolder(PhotoHolder holder, Photo photo, int position) {
+                // Load images
+                Glide
+                        .with(GalleryActivity.this)
+                        .load(photo.getPath())
+                        .into(holder.photo);
+
+            }
+
+            @Override
+            protected void onDataChanged() {
+                if (progressDialog != null && progressDialog.isShowing()) {
+                    hideProgressDialog();
+                }
+
+            }
+        };
+
+        // Hook up the adapter
+        showProgressDialog();
+        rvPhotos.setAdapter(fbAdapter);
+
+        photos = new ArrayList<>();
 
         // Setup the floating action button
         initFAB();
 
     }
+
+    /**
+     * Custom Photo PhotoHolder
+     */
+    public static class PhotoHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener{
+
+        private ImageView photo;
+        private SmoothCheckBox checkBox;
+
+        public PhotoHolder(final View itemView) {
+            super(itemView);
+            photo = (ImageView) itemView.findViewById(R.id.gallery_photo);
+            checkBox = (SmoothCheckBox) itemView.findViewById(R.id.gallery_checkbox);
+
+            // TODO Save the checkBox/selection overlay on rotation!
+            itemView.setOnClickListener(this);
+            checkBox.setOnCheckedChangeListener(new SmoothCheckBox.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(SmoothCheckBox cb, boolean isChecked) {
+                    toggleSelected(cb, isChecked);
+//                    itemView.setBackgroundResource(isChecked ?
+//                            R.color.bg_gray : android.R.color.white);
+
+                    // dim/undim photo depending on selection
+                    if (isChecked) {
+                        photo.setColorFilter(R.color.bg_gray);
+                    } else {
+                        photo.clearColorFilter();
+                    }
+                }
+            });
+
+        }
+
+        @Override
+        public void onClick(View view) {
+            int pos = getAdapterPosition();
+
+            if (pos != RecyclerView.NO_POSITION) {
+                checkBox.setChecked(!checkBox.isChecked(), true);
+            }
+        }
+
+        private void toggleSelected(SmoothCheckBox cb, boolean isChecked) {
+            cb.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            itemView.setBackgroundResource(isChecked? R.color.bg_gray : android.R.color.white);
+        }
+
+    }
+
+
+
 
     /**
      *
@@ -144,23 +231,38 @@ public class GalleryActivity extends BaseActivity {
         switch(requestCode)
         {
             case FilePickerConst.REQUEST_CODE_PHOTO:
-                if (resultCode == Activity.RESULT_OK && data != null)
+                if (resultCode == RESULT_OK && data != null)
                 {
                     paths = new ArrayList<>();
                     paths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
 
                     for (String path : paths) {
                         Photo photo = new Photo(this, path);
-                        firebasePhotoDatabase.addPhoto(photo);
+                        fbPhotoDatabase.addPhoto(photo);
                     }
                 }
 
                 break;
 
-            case REQUEST_GOOGLE_LOGIN:
+            case REQUEST_CAMERA:
+                if (resultCode == RESULT_OK && data != null) {
+                    Uri image = data.getData();
+                    if (image != null) {
+                        String path = getPathFromUri(image);
+                        fbPhotoDatabase.addPhoto(new Photo(this, path));
+                    }
+                }
                 break;
         }
 
+    }
+
+    // Get absolute filepath from image URI returned from camera intent
+    private String getPathFromUri(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int index = cursor.getColumnIndex(MediaStore.MediaColumns.DATA);
+        return cursor.getString(index);
     }
 
 
@@ -202,7 +304,7 @@ public class GalleryActivity extends BaseActivity {
     @NeedsPermission(Manifest.permission.CAMERA)
     protected void showCamera() {
         final Intent takePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePhoto, REQUEST_PHOTO);
+        startActivityForResult(takePhoto, REQUEST_CAMERA);
     }
 
     /**
@@ -210,11 +312,14 @@ public class GalleryActivity extends BaseActivity {
      */
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     protected void pickPhotos() {
+
         // Instantiate an interactive photo picker
         FilePickerBuilder.getInstance()
                 .setSelectedFiles(paths)
                 .setActivityTheme(R.style.AppTheme)
+                .setMaxCount(MAX_COUNT_PICKER)
                 .pickPhoto(GalleryActivity.this);
+
     }
 
     /****************************** Permissions Handling ******************************/
@@ -261,20 +366,4 @@ public class GalleryActivity extends BaseActivity {
                 .show();
 
     }
-
-    /**
-     * This method retrieves the external DejaPhoto album, or creates one if it
-     * doesn't exist.
-     * @param name - the name of the album.
-     * @return the directory.
-     */
-/*    protected File getDejaAlbumDir(String name) {
-        // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), name);
-        if (!file.mkdirs()) {
-            Log.e(TAG, "Directory not created");
-        }
-        return file;
-    }*/
 }

@@ -8,5 +8,10 @@
     <dimen name="sheet_width">210dp</dimen>
     <dimen name="sheet_height">300dp</dimen>
     <dimen name="sheet_icon_padding">16dp</dimen>
+    <dimen name="checkbox_margin">5dp</dimen>
+    <dimen name="photo_margin">16dp</dimen>
+    <dimen name="photo_padding">1dip</dimen>
+    <dimen name="checkbox_width">25dp</dimen>
+    <dimen name="checkbox_height">25dp</dimen>
 
 </resources>

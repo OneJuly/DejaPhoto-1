@@ -10,7 +10,6 @@ import android.util.Log;
 import com.google.firebase.database.Exclude;
 
 import java.util.Calendar;
-import java.util.UUID;
 
 /**
  * This class handles the information contained in each Photo object.
@@ -21,7 +20,7 @@ public class Photo {
 
     /***************** Photo Attributes (i.e. PhotoTable Columns) ************/
 
-    private UUID id;
+//    private UUIDid;
     private String path;
     private double lat;
     private double lon;
@@ -30,11 +29,14 @@ public class Photo {
     private double weight;
     private Context context;
 
+    /* Keep Firebase happy */
+    public Photo() {}
+
     /* Construct a Photo with a specified filepath */
     public Photo(Context context, String path) {
         this.path = path;
         this.context = context;
-        this.id = UUID.randomUUID();
+//        this.id = UUID.randomUUID();
     }
 
     /******************** Attribute Accessors/Mutators ********************/
@@ -43,17 +45,17 @@ public class Photo {
      * Get a photo's unique identifier.
      * @return the photo's ID.
      */
-    public UUID getId() {
-        return id;
-    }
+//    public UUID getId() {
+//        return id;
+//    }
 
     /**
      * Set a photo's unique identifier.
      * @param id - the photo's ID.
      */
-    public void setId(UUID id) {
-        this.id = id;
-    }
+//    public void setId(UUID id) {
+//        this.id = id;
+//    }
 
     /**
      * Get the absolute file path of this Photo.
@@ -107,6 +109,7 @@ public class Photo {
      * This method checks whether a photo has karma.
      * @return 1 is the photo has karma; 0 otherwise.
      */
+    @Exclude
     public int getKarma() {
         return karma;
     }
@@ -123,6 +126,7 @@ public class Photo {
      * This method retrieves the priority of a photo.
      * @return the priority of the photo.
      */
+    @Exclude
     public double getWeight() {
         return weight;
     }
@@ -180,6 +184,7 @@ public class Photo {
 
     /***************** Helper Methods *********************/
 
+    @Exclude
     public Location getCurrentLocation() {
         // http://stackoverflow.com/questions/32491960/android-check-permission-for-locationmanager
         try {
@@ -189,7 +194,7 @@ public class Photo {
         }
         catch (SecurityException e) {
             Log.v("ImageAlgorithms", "getCurrentLocation(): SecurityException caught.");
-            System.out.println("getCurrentLocation(): SecurityException caught.");
+            System.out.println("getCurrentLocajtion(): SecurityException caught.");
             return null;
         }
     }
@@ -229,6 +234,7 @@ public class Photo {
         return false;
     }
 
+    @Exclude
     public boolean is_same_location(){
 
         Location photoLocation = new Location("");
@@ -249,6 +255,7 @@ public class Photo {
         return false;
     }
 
+    @Exclude
     public double recentlyTakenWeight(){
 
         //creates a calendar object and error checks
@@ -278,6 +285,7 @@ public class Photo {
      * Get a Bitmap representation of this Photo Object.
      * @return the Bitmap representation of the photo.
      */
+    @Exclude
     public Bitmap getBitmap() {
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inScaled = true;
