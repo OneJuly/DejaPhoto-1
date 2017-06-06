@@ -77,7 +77,7 @@ public class GalleryActivity extends BaseActivity {
     private GalleryFab fab;
     private TextView startCameraTextView;
     private TextView pickPhotosTextView;
-    FirebaseUser user;
+    private FirebaseUser user;
 
 
     @Override
@@ -246,7 +246,12 @@ public class GalleryActivity extends BaseActivity {
                     }
                 }
                 break;
+
+/*            case REQUEST_GOOGLE_LOGIN:
+                if (resultCode == RESULT_OK && data != null) {
+                }*/
         }
+
 
     }
 
