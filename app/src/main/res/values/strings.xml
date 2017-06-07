@@ -29,5 +29,7 @@
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
     <string name="permissions_read_storage_rationale">Allow DejaPhoto to read external device storage?</string>
+    <string name="pref_share_own">Share Photos</string>
+    <string name="pref_share_own_key">Share Photos</string>
 
 </resources>
