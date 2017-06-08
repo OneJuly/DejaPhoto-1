@@ -1,7 +1,11 @@
 package team4.cse110.dejaphoto.database;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -13,12 +17,21 @@ import team4.cse110.dejaphoto.photo.Photo;
 
 public class FirebasePhotoDatabase implements PhotoDatabase {
 
-    private final DatabaseReference localPhotosDB;
-    private final DatabaseReference friendPhotosDB;
+    private static final String TAG = "FirebasePhotoDatabase";
+
+    private static final String LOCAL_DIR = "local-photos";
+
+    private DatabaseReference localPhotos;
+    private StorageReference fbStorageRef;
+    private FirebaseUser user;
 
     public FirebasePhotoDatabase(FirebaseDatabase firebaseDatabase) {
-        localPhotosDB = firebaseDatabase.getReference("local-photos");
-        friendPhotosDB = firebaseDatabase.getReference("friend-photos");
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uid = user.getUid();
+            localPhotos = firebaseDatabase.getReference().child(LOCAL_DIR).child(uid);
+            fbStorageRef = FirebaseStorage.getInstance().getReference();
+        }
     }
 
     @Override
@@ -33,7 +46,10 @@ public class FirebasePhotoDatabase implements PhotoDatabase {
 
     @Override
     public void addPhoto(Photo p) {
-        localPhotosDB.child(String.valueOf(p.hashCode())).setValue(p);
+        localPhotos.child(String.valueOf(p.hashCode())).setValue(p);
+
+        // TODO add to remote storage? only if sharing enabled?
+        // fbStorageRef.putFile(...)
     }
 
     @Override

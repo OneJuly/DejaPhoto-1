@@ -23,6 +23,12 @@
         android:defaultValue="true"
         />
 
+        <SwitchPreference
+            android:key="@string/pref_share_own_key"
+            android:title="@string/pref_share_own"
+            android:defaultValue="false"
+            />
+
     </PreferenceCategory>
 
 

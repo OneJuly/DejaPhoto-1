@@ -8,7 +8,6 @@ import android.location.LocationManager;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.Exclude;
 
 import java.util.Calendar;
@@ -54,10 +53,9 @@ public class Photo {
 
     /**
      *
-     * @param user
      */
-    public void setUserUID(FirebaseUser user) {
-        this.userUID = user.getUid();
+    public void setUserUID(String id) {
+        this.userUID = id;
     }
 
     /**
