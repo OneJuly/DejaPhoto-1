@@ -44,6 +44,13 @@ public class Photo {
         this.userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 
+    /**
+     * Constructor for testing purposes. Because we don't know how to mock
+     * Firebase in JUnit.
+     * @param context - the environment data of the app.
+     * @param path - the file path for the photo.
+     * @param test - whether testing is occurring (true).
+     */
     public Photo(Context context, String path, boolean test)
     {
         this.path = path;

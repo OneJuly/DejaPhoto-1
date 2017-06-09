@@ -54,6 +54,19 @@ public class TestAlgorithm {
     }
 
     /**
+     *
+     */
+    @Test
+    public void testID() {
+
+    }
+
+    @Test
+    public void testPath() {
+        assertEquals(photo1.getPath(), "2_Mt_Everest.jpg");
+    }
+
+    /**
      * This method tests the release() method.
      */
     @Test
