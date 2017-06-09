@@ -38,7 +38,6 @@ public class FriendsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         usersdb = FirebaseDatabase.getInstance().getReference().child("Friends");
         friendsNameView = (ListView)findViewById(R.id.friendList);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friendsNames);
