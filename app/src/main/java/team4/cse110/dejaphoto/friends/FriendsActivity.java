@@ -3,13 +3,11 @@ package team4.cse110.dejaphoto.friends;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +27,7 @@ public class FriendsActivity extends BaseActivity {
     private DatabaseReference friendsID;
     private ListView friendsNameView;
     private List<String> friendsNames = new ArrayList<>();
+    private List<String> usersNames = new ArrayList<>();
 
     @Override
     protected int getLayoutResource() {
@@ -38,9 +37,7 @@ public class FriendsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //to store the names
-
-
+        //Banner for the available users interface
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -57,17 +54,43 @@ public class FriendsActivity extends BaseActivity {
         friendsNameView.setAdapter(arrayAdapter);
 
 
+        //String user;
+
+/*
+        //creates an arrayList of friends represented as strings
+        FirebaseDatabase.getInstance().getReference().child("A87fcgB4XOdlla7IiiN4pMC4FUy1")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            String friend = dataSnapshot.getKey();
+                            friendsNames.add(friend);
+                            arrayAdapter.notifyDataSetChanged();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });*/
+
+
         usersdb.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                friendsNames.clear();
+                usersNames.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    String friend = postSnapshot.getKey();
-                    friendsNames.add(friend);
+                    String user = postSnapshot.getKey();
+/*
+                    for(int i = 0; i < friendsNames.size(); ++i){
+                        if(friendsNames.get(i).equals(user)){
+                            user = user + "(friend)";
+                        }
+                    }*/
+
+                    usersNames.add(user);
                     arrayAdapter.notifyDataSetChanged();
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
