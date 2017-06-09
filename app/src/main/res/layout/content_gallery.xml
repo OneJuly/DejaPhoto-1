@@ -66,6 +66,17 @@
                     android:text="@string/take_picture"
                     />
 
+                <!-- Friends action -->
+                <TextView
+                    android:id="@+id/fab_sheet_friends"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/sheet_icon_padding"
+                    android:drawableLeft="@android:drawable/ic_menu_myplaces"
+                    android:drawableStart="@android:drawable/ic_menu_myplaces"
+                    android:layout_margin="@dimen/fab_item_spacing"
+                    android:text="@string/open_friends_list"
+                    />
 
             </LinearLayout>
 

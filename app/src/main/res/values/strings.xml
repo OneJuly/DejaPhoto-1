@@ -32,5 +32,6 @@
     <string name="pref_share_own">Share Photos</string>
     <string name="pref_share_own_key">Share Photos</string>
     <string name="title_activity_friends">FriendsActivity</string>
+    <string name="open_friends_list">View Friends</string>
 
 </resources>

@@ -31,6 +31,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -44,6 +46,7 @@ import permissions.dispatcher.RuntimePermissions;
 import team4.cse110.dejaphoto.BaseActivity;
 import team4.cse110.dejaphoto.R;
 import team4.cse110.dejaphoto.database.FirebasePhotoDatabase;
+import team4.cse110.dejaphoto.friends.FriendsActivity;
 import team4.cse110.dejaphoto.login.LoginActivity;
 import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.settings.PrefUtils;
@@ -77,6 +80,7 @@ public class GalleryActivity extends BaseActivity {
     private GalleryFab fab;
     private TextView startCameraTextView;
     private TextView pickPhotosTextView;
+    private TextView openFriendsView;
     private FirebaseUser user;
 
 
@@ -114,7 +118,7 @@ public class GalleryActivity extends BaseActivity {
         fab = (GalleryFab) findViewById(R.id.fab_gallery);
         pickPhotosTextView = (TextView) findViewById(R.id.fab_sheet_pick_photos);
         startCameraTextView = (TextView) findViewById(R.id.fab_sheet_camera);
-
+        openFriendsView = (TextView) findViewById(R.id.fab_sheet_friends);
         initFAB(fab);
         initRecyclerView(rvPhotos);
         updateUI();
@@ -348,6 +352,15 @@ public class GalleryActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 GalleryActivityPermissionsDispatcher.showCameraWithCheck(GalleryActivity.this);
+            }
+        });
+
+        // Launch friend page
+        openFriendsView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent openFriendsIntent = new Intent(GalleryActivity.this, FriendsActivity.class);
+                startActivity(openFriendsIntent);
             }
         });
     }
