@@ -1,9 +1,13 @@
 package team4.cse110.dejaphoto;
 
+import android.content.Context;
+import android.test.mock.MockContext;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import team4.cse110.dejaphoto.photo.Photo;
+import team4.cse110.dejaphoto.utilities.DejaAlgorithm;
 
 import static org.junit.Assert.assertEquals;
 
@@ -11,14 +15,23 @@ import static org.junit.Assert.assertEquals;
  * This class tests the DejaAlgorithm class' methods.
  */
 public class TestAlgorithm {
+    private DejaAlgorithm dejaAlgorithm;
+
     Photo photo1;
+
+    Context context;
 
     /**
      * Standard test fixture - TODO
      */
     @Before
     public void setup() {
-//        photo1 = new Photo(this, "_Mt_Everest.jpg");
+        context = new MockContext();
+
+        dejaAlgorithm = new DejaAlgorithm(context);
+
+
+        photo1 = new Photo(context, "2_Mt_Everest.jpg");
     }
 
     /**
@@ -26,8 +39,10 @@ public class TestAlgorithm {
      */
     @Test
     public void testKarma() {
-        assertEquals(2 + 2, 4);  // TODO
-//        assertEquals(photo1.hasKarma(), false);
+        photo1.setKarma(1);
+        assertEquals(photo1.getKarma(), 1);
+        photo1.setKarma(0);
+        assertEquals(photo1.getKarma(), 0);
     }
 
     /**
