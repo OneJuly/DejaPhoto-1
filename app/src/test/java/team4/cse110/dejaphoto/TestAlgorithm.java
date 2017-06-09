@@ -3,6 +3,9 @@ package team4.cse110.dejaphoto;
 import android.content.Context;
 import android.test.mock.MockContext;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,6 +20,8 @@ import static org.junit.Assert.assertEquals;
 public class TestAlgorithm {
     private DejaAlgorithm dejaAlgorithm;
 
+    private FirebaseAuth auth;
+
     Photo photo1;
 
     Context context;
@@ -28,10 +33,13 @@ public class TestAlgorithm {
     public void setup() {
         context = new MockContext();
 
-        dejaAlgorithm = new DejaAlgorithm(context);
+        //dejaAlgorithm = new DejaAlgorithm(context);
+        //auth = FirebaseAuth.getInstance();
+        //auth.createUserWithEmailAndPassword("boc024@ucsd.edu", "$DL@2020");
 
 
-        photo1 = new Photo(context, "2_Mt_Everest.jpg");
+        //photo1 = new Photo(context, "2_Mt_Everest.jpg");
+        photo1 = new Photo(context, "2_Mt_Everest.jpg", true);
     }
 
     /**

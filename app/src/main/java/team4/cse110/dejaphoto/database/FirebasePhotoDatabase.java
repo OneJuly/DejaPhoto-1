@@ -37,7 +37,7 @@ public class FirebasePhotoDatabase implements PhotoDatabase {
     @Override
     public List<Photo> getPhotos() {
         return null;
-    }
+    }  // TODO - ?????
 
     @Override
     public void removePhoto(Photo p) {
