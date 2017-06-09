@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'release-key'
             keyPassword 'cse110team4'
-            storeFile file('C:/Users/Sean/.keystore/android.jks')
+            storeFile file('C:/Users/j2yun/StudioProjects/DejaPhoto/keystore/android.jks')
             storePassword 'cse110team4'
         }
     }
@@ -47,18 +47,17 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     // Animated Material FAB
-    compile 'com.gordonwong:material-sheet-fab:1.2.1'
-
     // Interactive filepicker
-    compile 'com.droidninja:filepicker:2.0.3'
-
     // Permissiona handling
-    compile 'com.github.hotchemi:permissionsdispatcher:2.4.0'
-    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
-
     // Support
+    // Glide image loader
+    // Firebase
+    // Google services
+    // Testing
+    compile 'com.gordonwong:material-sheet-fab:1.2.1'
+    compile 'com.droidninja:filepicker:2.0.3'
+    compile 'com.github.hotchemi:permissionsdispatcher:2.4.0'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
@@ -66,25 +65,17 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:support-core-utils:25.3.1'
     compile 'com.android.support:design:25.3.1'
-
-    // Glide image loader
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
-    // Firebase
     compile 'com.google.firebase:firebase-database:10.2.0'
     compile 'com.firebaseui:firebase-ui-database:1.2.0'
     compile 'com.google.firebase:firebase-auth:10.2.0'
     compile 'com.google.firebase:firebase-storage:10.2.0'
     compile 'com.firebaseui:firebase-ui-storage:1.2.0'
-
-
-    // Google services
     compile 'com.google.android.gms:play-services-auth:10.2.0'
-
-    // Testing
     testCompile 'junit:junit:4.12'
-
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 }
+
 
 
 

@@ -3,8 +3,8 @@
     package="team4.cse110.dejaphoto">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS" />
@@ -14,8 +14,8 @@
 
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -23,33 +23,28 @@
         <!-- Gallery activity -->
         <activity
             android:name=".gallery.GalleryActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
-
-
         </activity>
 
         <!-- Login activity -->
         <activity
             android:name=".login.LoginActivity"
             android:label="@string/title_activity_login"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".gallery.GalleryActivity"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Settings activity -->
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".gallery.GalleryActivity"
-            />
-
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Receiver -->
         <receiver android:name=".widget.DejaAppWidgetProvider">
@@ -62,6 +57,10 @@
                 android:resource="@xml/deja_appwidget_info" />
         </receiver>
 
+        <activity
+            android:name=".friends.FriendsActivity"
+            android:label="@string/title_activity_friends"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

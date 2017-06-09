@@ -252,6 +252,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
      * @param context - current application context.
      */
     private void setWallpaper(Photo photo, Context context) {
+
         SetWallpaper sp = new SetWallpaper(context);
         sp.execute(photo);
     }

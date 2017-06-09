@@ -31,5 +31,6 @@
     <string name="permissions_read_storage_rationale">Allow DejaPhoto to read external device storage?</string>
     <string name="pref_share_own">Share Photos</string>
     <string name="pref_share_own_key">Share Photos</string>
+    <string name="title_activity_friends">FriendsActivity</string>
 
 </resources>
