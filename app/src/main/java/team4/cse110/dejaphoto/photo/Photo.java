@@ -31,6 +31,9 @@ public class Photo {
     private Context context;
     private String userUID;
 
+    // Mock Firebase for testing purposes.
+    FirebaseAuth auth;
+
     /* Keep Firebase happy :) */
     public Photo() {}
 
@@ -39,6 +42,12 @@ public class Photo {
         this.path = path;
         this.context = context;
         this.userUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    }
+
+    public Photo(Context context, String path, boolean test)
+    {
+        this.path = path;
+        this.context = context;
     }
 
     /******************** Attribute Accessors/Mutators ********************/
