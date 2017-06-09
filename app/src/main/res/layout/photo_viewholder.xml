@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<droidninja.filepicker.views.SquareRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+
+    <ImageView
+        android:id="@+id/gallery_photo"
+        android:padding="@dimen/photo_padding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:saveEnabled="true"
+        android:scaleType="centerCrop"
+        />
+
+    <droidninja.filepicker.views.SmoothCheckBox
+        android:id="@+id/gallery_checkbox"
+        android:layout_width="@dimen/checkbox_width"
+        android:layout_height="@dimen/checkbox_height"
+        android:layout_margin="@dimen/checkbox_margin"
+        android:visibility="gone"
+        android:saveEnabled="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true" />
+
+</droidninja.filepicker.views.SquareRelativeLayout>

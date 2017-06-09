@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="@string/pref_category_behavior"
+        android:title="@string/pref_category_behavior">
+
+    <SwitchPreference
+        android:key="@string/pref_dejavu_mode_key"
+        android:title="@string/pref_dejavu_mode"
+        android:defaultValue="true" />
+        <!--TODO dynamic summaries -->
+
+    <SwitchPreference
+        android:key="@string/pref_show_friends_key"
+        android:title="@string/pref_show_friends"
+        android:defaultValue="false"
+        />
+
+    <SwitchPreference
+        android:key="@string/pref_show_own_key"
+        android:title="@string/pref_show_own"
+        android:defaultValue="true"
+        />
+
+        <SwitchPreference
+            android:key="@string/pref_share_own_key"
+            android:title="@string/pref_share_own"
+            android:defaultValue="false"
+            />
+
+    </PreferenceCategory>
+
+
+
+</PreferenceScreen>
