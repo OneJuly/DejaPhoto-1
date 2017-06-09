@@ -155,9 +155,9 @@ public class DejaAlgorithm implements Algorithm {
      */
     @Override
     public void load() {
-        album = db.getPhotos();
-        cache = db.getCache();
-        cachePos = db.getPosition();
+//        album = db.getPhotos();
+  //      cache = db.getCache();
+    //    cachePos = db.getPosition();
     }
 
     /**
