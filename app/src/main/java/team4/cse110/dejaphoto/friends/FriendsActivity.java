@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import team4.cse110.dejaphoto.BaseActivity;
 import team4.cse110.dejaphoto.R;
@@ -24,7 +25,7 @@ public class FriendsActivity extends BaseActivity {
     /* private member variables */
     private DatabaseReference usersdb;
     private ListView friendsNameView;
-    private ArrayList<String> friendsNames = new ArrayList<>();
+    private List<String> friendsNames = new ArrayList<>();
 
     @Override
     protected int getLayoutResource() {
@@ -40,7 +41,8 @@ public class FriendsActivity extends BaseActivity {
 
         usersdb = FirebaseDatabase.getInstance().getReference().child("Friends");
         friendsNameView = (ListView)findViewById(R.id.friendList);
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friendsNames);
+        final ArrayAdapter<String> arrayAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friendsNames);
         friendsNameView.setAdapter(arrayAdapter);
 
         usersdb.addValueEventListener(new ValueEventListener() {
