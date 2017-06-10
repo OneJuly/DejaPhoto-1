@@ -3,10 +3,12 @@ package team4.cse110.dejaphoto.utilities;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
+import team4.cse110.dejaphoto.database.DatabaseInterface;
 import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.settings.PrefUtils;
 
@@ -20,29 +22,23 @@ public class DejaAlgorithm implements Algorithm {
     private static final int CACHE_SIZE = 10;
 
     private Context context;
-    private PhotoDatabase db;
+    private DatabaseInterface db;
 
     // Database dependent variables.
     private List<Photo> album;
-    private List<Photo> cache;
+    private ArrayList<Photo> cache;
     private int cachePos; // last returned by prev(), next() or release(). -1 if cache is empty.
 
-    /**
-     * This constructor TODO
-     * @param context - environment data of the app.
-     */
-    public DejaAlgorithm(Context context) {
+    public DejaAlgorithm(Context context, DatabaseInterface db) {
+        // TODO add a database to field
         this.context = context;
+        this.db = db;
         load();
     }
 
-    /**
-     * This method selects the next photo to be displayed.
-     * @return the next photo to be displayed.
-     */
     @Override
     public Photo next() {
-//        if (album.isEmpty()) return null;
+        if (album.isEmpty()) return null;
 
         // Handle non DejaVu next
         if (!PrefUtils.dejaVuEnabled(context)) {
@@ -60,13 +56,13 @@ public class DejaAlgorithm implements Algorithm {
         // Pick an image randomly while factoring in weights
         double totalWeight = 0.0;
         for (Photo photo : album) {
-            totalWeight += photo.getWeight();
+            totalWeight += photo.weight;
         }
 
         Photo chosenPhoto = null;
         double random = totalWeight * Math.random();
         for (Photo photo : album) {
-            random -= photo.getWeight();
+            random -= photo.weight;
             if (random <= 0) {
                 chosenPhoto = photo;
                 break;
@@ -80,47 +76,33 @@ public class DejaAlgorithm implements Algorithm {
         return chosenPhoto;
     }
 
-    /**
-     * This method displays the previous photo in the display history to set as
-     * the phone's wallpaper.
-     * @return the previous photo, which will be the next to be displayed.
-     */
     @Override
     public Photo prev() {
         if (cache.size() <= 1) return null;
 
         cachePos--;
         Photo photo = cache.get(cachePos);
-        db.setPosition(cachePos);
+        db.storePreviousIndex(cachePos);
         return photo;
     }
 
-    /**
-     * This method gives a photo karma.
-     */
     @Override
     public void incKarma() {
-        Photo photo = getCurrentPhoto();
-        if (photo != null) {
-            photo.setKarma(1);
-            db.updatePhoto(photo);
-        }
+//        Photo photo = getCurrentPhoto();
+//        if (photo != null) {
+//            photo.setKarma(1);
+//            db.updatePhoto(photo);
+//        }
+        // TODO implement
     }
 
-    /**
-     * This method checks if a photo has karma.
-     * @return 1 if the photo has karma, 0 otherwise.
-     */
     @Override
     public boolean hasKarma() {
-        Photo photo = getCurrentPhoto();
-        return photo != null && photo.getKarma() == 1;
+//        Photo photo = getCurrentPhoto();
+//        return photo != null && photo.getKarma() == 1;
+        return false; // TODO implement
     }
 
-    /**
-     * This method deletes a photo from the app's display cycle.
-     * @return the next photo to be displayed.
-     */
     @Override
     public Photo release() {
         Photo photo = getCurrentPhoto();
@@ -134,35 +116,25 @@ public class DejaAlgorithm implements Algorithm {
 
         // Update album
         album.remove(photo);
-        db.removePhoto(photo);
+        db.deletePhoto(photo);
 
         // Get the next photo to display
         return next();
     }
 
-    /**
-     * This method TODO
-     */
     @Override
     public void save() {
-        db.setCache(cache);
-        db.setPosition(cachePos);
+        db.storePreviousList(cache);
+        db.storePreviousIndex(cachePos);
     }
 
-    /**
-     * This method TODO
-     */
     @Override
     public void load() {
-//        album = db.getPhotos();
-  //      cache = db.getCache();
-    //    cachePos = db.getPosition();
+        album = db.getPhotoList();
+        cache = db.getPreviousList();
+        cachePos = db.getPreviousIndex();
     }
 
-    /**
-     * This method TODO
-     * @return TODO
-     */
     private Photo getCurrentPhoto() {
         if (!cache.isEmpty() && cachePos != -1) {
             return cache.get(cachePos);
@@ -171,20 +143,14 @@ public class DejaAlgorithm implements Algorithm {
         }
     }
 
-    /**
-     * This method
-     * @param photo
-     */
     private void setWeight(Photo photo) {
-        photo.setWeight(photo.calcWeight());
-        // TODO add time into the calculation. Android has System.currentTimeMillis()
+        // TODO calculate weight
+//        photo.setWeight(photo.calcWeight());
 
     }
 
     private void addToCache(Photo photo) {
         // Check if we need to remove everything after pointer
-        Log.v("cachepos", "pos+ "  + cachePos);
-        Log.v("cachesize ", "size " + cache.size());
         if (!cache.isEmpty() && cachePos != cache.size() - 1) {
             ListIterator<Photo> itr = cache.listIterator(cachePos);
             itr.remove(); // remove self
@@ -202,8 +168,8 @@ public class DejaAlgorithm implements Algorithm {
         }
         cachePos = cache.size() - 1;
 
-        db.setCache(cache);
+        db.storePreviousList(cache);
         //db.setPosition(cachePos);
-        db.setPosition(cachePos);
+        db.storePreviousIndex(cachePos);
     }
 }
