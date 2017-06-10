@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +26,6 @@ import team4.cse110.dejaphoto.R;
 public class FriendsActivity extends BaseActivity {
     /* private member variables */
     private DatabaseReference usersdb;
-    private DatabaseReference usersID;
     private DatabaseReference friendsID;
     private ListView friendsNameView;
     private List<String> friendsNames = new ArrayList<>();
@@ -54,19 +54,20 @@ public class FriendsActivity extends BaseActivity {
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, usersNames);
         friendsNameView.setAdapter(arrayAdapter);
 
+        //gets the current user's Uid in user
+        final String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        System.out.println("user: " + user);
 
         //defines list view's button funcionality
         AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
 
                 String name = (String) parent.getAdapter().getItem(position);
-                System.out.println("position:" + Integer.toString(position));
-                System.out.println("name:" + name);
+             //   System.out.println("position:" + Integer.toString(position));
+             //   System.out.println("name:" + name);
+
 
                 if (name.indexOf("(friend)") >= 0) {
-                    //friendsNames.remove(position-1);
-                    //name = name.replace(" (friend)","");
-                    //usersNames.set(position, name);
                     name = name.replace(" (friend)","");
                     usersNames.set(position, name);
                     System.out.println("new entry: " + name);
@@ -74,7 +75,7 @@ public class FriendsActivity extends BaseActivity {
 
                 }
                 else{
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Sam").child("friendsList");
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(user).child("friendsList");
                     mDatabase.child(name).setValue(name);
                 }
 
@@ -84,7 +85,7 @@ public class FriendsActivity extends BaseActivity {
         friendsNameView.setOnItemClickListener(mMessageClickedHandler);
 
 
-        friendsID = FirebaseDatabase.getInstance().getReference().child("Sam").child("friendsList");
+        friendsID = FirebaseDatabase.getInstance().getReference().child(user).child("friendsList");
         friendsID.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -123,19 +124,20 @@ public class FriendsActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 usersNames.clear();
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    String user = postSnapshot.getKey();
+                    String appUser = postSnapshot.getKey();
 
-                    System.out.println(Integer.toString(friendsNames.size()));
+                    if (appUser.equals(user)){
+                        continue;
+                    }
 
                     //concatenates a flag onto users that are already friends
                     for(int i = 0; i < friendsNames.size(); ++i){
-                        System.out.println("comparing " + friendsNames.get(i) + " and " + user);
-                        if(friendsNames.get(i).equals(user)){
-                            user = user + " (friend)";
+                        if(friendsNames.get(i).equals(appUser)){
+                            appUser = appUser + " (friend)";
                             break;
                         }
                     }
-                    usersNames.add(user);
+                    usersNames.add(appUser);
                     arrayAdapter.notifyDataSetChanged();
                 }
             }
@@ -143,102 +145,6 @@ public class FriendsActivity extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-//
-//        friendsNameView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position,
-//                                    long id) {
-//                String entry = (String) parent.getAdapter().getItem(position);
-//                System.out.println("entry is: " + entry);
-//                //concatenates a flag onto users that are already friends
-//                if (entry.indexOf("(friend)") >= 0){
-//                    entry = entry.replace(" (friend)","");
-//                    usersNames.set(position, entry);
-//                    System.out.println("new entry: " + entry);
-//                    friendsID.child(entry).removeValue();
-//                }
-//                else{
-//                    // friendsID.child(entry).push();
-//                    friendsID.push().setValue(entry);
-//                }
-//
-//                arrayAdapter.notifyDataSetChanged();
-//            }
-//        });
-
-
-        /*
-        usersdb.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    String friend = postSnapshot.getKey();
-                    friendsNames.add(friend);
-                    arrayAdapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                //String value = dataSnapshot.getValue(String.class);
-                //String key = dataSnapshot.getKey();
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-        */
-
-/*
-        friendsNameView = (ListView)findViewById(R.id.friendList);
-        final ArrayAdapter<String> arrayAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friendsNames);
-        friendsNameView.setAdapter(arrayAdapter);
-
-        //loop through users
-        usersID = FirebaseDatabase.getInstance().getReference();
-        usersID.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot1) {
-                for (DataSnapshot postSnapshot1: dataSnapshot1.getChildren()) {
-
-                    //loop through user's friends
-                    friendsID = FirebaseDatabase.getInstance().getReference();
-                    friendsID.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot2) {
-                            for (DataSnapshot postSnapshot2 : dataSnapshot2.getChildren()) {
-                                String friend = postSnapshot2.getValue(String.class);
-                                friendsNames.add(friend);
-                                arrayAdapter.notifyDataSetChanged();
-                            }
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            //...
-                        }
-                    });
-
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                //...
-            }
-        });
-*/
 
         //adds functionality to he FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
