@@ -40,10 +40,6 @@ public class FriendsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-        //links tap/tap functionality to each item in the list view
- //       friendsNameView.setOnItemClickListener(mMessageClickedHandler);
-
         //Banner for the available users interface
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -86,7 +82,6 @@ public class FriendsActivity extends BaseActivity {
             }
         };
         friendsNameView.setOnItemClickListener(mMessageClickedHandler);
-
 
 
         friendsID = FirebaseDatabase.getInstance().getReference().child("Sam").child("friendsList");
@@ -134,15 +129,12 @@ public class FriendsActivity extends BaseActivity {
 
                     //concatenates a flag onto users that are already friends
                     for(int i = 0; i < friendsNames.size(); ++i){
-
                         System.out.println("comparing " + friendsNames.get(i) + " and " + user);
-
                         if(friendsNames.get(i).equals(user)){
                             user = user + " (friend)";
                             break;
                         }
                     }
-
                     usersNames.add(user);
                     arrayAdapter.notifyDataSetChanged();
                 }
@@ -173,28 +165,6 @@ public class FriendsActivity extends BaseActivity {
 //                arrayAdapter.notifyDataSetChanged();
 //            }
 //        });
-
-        friendsNameView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
-                String entry = (String) parent.getAdapter().getItem(position);
-                System.out.println("entry is: " + entry);
-                //concatenates a flag onto users that are already friends
-                if (entry.indexOf("(friend)") >= 0){
-                    entry = entry.replace(" (friend)","");
-                    usersNames.set(position, entry);
-                    System.out.println("new entry: " + entry);
-                    friendsID.child(entry).removeValue();
-                }
-                else{
-                   // friendsID.child(entry).push();
-
-                }
-
-                arrayAdapter.notifyDataSetChanged();
-            }
-        });
 
 
         /*
