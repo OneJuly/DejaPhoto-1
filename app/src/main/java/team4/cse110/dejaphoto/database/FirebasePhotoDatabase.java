@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,15 +35,16 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
 
     private static final String TAG = "FirebasePhotoDatabase";
     private static final String PHOTOS_CHILD = "photosList";
+    private static final String USERS_CHILD = "users";
 
     private DatabaseReference dbRef;
     private StorageReference storageRef;
     private FirebaseUser user;
 
     public FirebasePhotoDatabase() {
-        this.dbRef = FirebaseDatabase.getInstance().getReference();
-        this.storageRef = FirebaseStorage.getInstance().getReference();
         this.user = FirebaseAuth.getInstance().getCurrentUser();
+        this.dbRef = FirebaseDatabase.getInstance().getReference().child(USERS_CHILD);
+        this.storageRef = FirebaseStorage.getInstance().getReference().child(USERS_CHILD);
     }
 
     @Override
