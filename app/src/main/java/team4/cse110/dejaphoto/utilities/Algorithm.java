@@ -1,5 +1,6 @@
 package team4.cse110.dejaphoto.utilities;
 
+import team4.cse110.dejaphoto.database.DatabaseInterface;
 import team4.cse110.dejaphoto.photo.Photo;
 
 /**
@@ -52,4 +53,8 @@ public interface Algorithm {
      */
     void load();
 
+    /**
+     * @return database of this algorithm
+     */
+    DatabaseInterface getDatabase();
 }

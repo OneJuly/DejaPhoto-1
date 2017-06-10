@@ -1,6 +1,7 @@
 package team4.cse110.dejaphoto.widget;
 
 import android.app.PendingIntent;
+import android.app.WallpaperManager;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -8,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.app.WallpaperManager;
 
 import java.io.IOException;
 
@@ -33,12 +33,6 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
     private static final String KARMA_CLICKED = "KARMA_BUTTON_CLICK";
     private static final String RELEASE_CLICKED = "RELEASE_BUTTON_CLICK";
 
-    /**
-     * This method TODO
-     * @param context - environment data of the app.
-     * @param appWidgetManager - TODO
-     * @param appWidgetIds - TODO
-     */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.v(TAG, "In update function");
@@ -54,11 +48,6 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    /**
-     * This method handles actions sensed by the app.
-     * @param context - environment data of the app.
-     * @param intent - TODO
-     */
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
@@ -77,11 +66,6 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    /**
-     * This method executes the "previous" button's actions.
-     * @param context - environment data of the app.
-     * @param intent - TODO
-     */
     private void onPrev(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Prev button tapped");
 
@@ -95,20 +79,14 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
 
         // Enable the karma button if no karma.
-/*        if (!algorithm.hasKarma()) {
-            Log.v(TAG, "Enabling button karma after prev"); // DEBUG
-            RemoteViews remoteViews = getDefaultRemoteViews(context);
-            enableView(R.id.button_karma, remoteViews);
-            updateRemoteViews(context, remoteViews);
-        }*/
+//        if (!algorithm.hasKarma()) {
+//            Log.v(TAG, "Enabling button karma after prev"); // DEBUG
+//            RemoteViews remoteViews = getDefaultRemoteViews(context);
+//            enableView(R.id.button_karma, remoteViews);
+//            updateRemoteViews(context, remoteViews);
+//        }
     }
 
-    /**
-     * This method executes the "next" button's actions.
-     * @param context - environment data of the app.
-     * @param intent - an abstract description of the operation to be
-     * performed.
-     */
     private void onNext(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Next button tapped");
 
@@ -126,19 +104,14 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
 
         // Enable the karma button if no karma
-/*        if (!algorithm.hasKarma()) {
+        if (!algorithm.hasKarma()) {
             Log.v(TAG, "Enabling button karma after next"); // DEBUG
             RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
-        }*/
+        }
     }
 
-    /**
-     * This method TODO
-     * @param context - environment data of the app.
-     * @param intent - abstract description of the operation to be performed.
-     */
     private void onKarma(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Karma button tapped");
 
@@ -151,11 +124,6 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         updateRemoteViews(context, remoteViews);
     }
 
-    /**
-     * This method TODO
-     * @param context
-     * @param intent
-     */
     private void onRelease(Context context, Intent intent) {
         Log.v(TAG, TAG_RECV + "Release button tapped");
 
@@ -172,11 +140,6 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
     }
 
-    /**
-     * Inflates a default view hierarchy.
-     * @param context current application context.
-     * @return the default view hierarchy.
-     */
     private RemoteViews getDefaultRemoteViews(Context context) {
         // Inflate view hierarchy
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -252,7 +215,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
      * @param context - current application context.
      */
     private void setWallpaper(Photo photo, Context context) {
-
+        // TODO
         SetWallpaper sp = new SetWallpaper(context);
         sp.execute(photo);
     }
@@ -278,6 +241,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
      * @return a new algorithm.
      */
     private Algorithm getAlgorithm(Context context) {
-        return new DejaAlgorithm(context);
+//        return new DejaAlgorithm(context, db); // TODO pass in a db
+        return null;
     }
 }

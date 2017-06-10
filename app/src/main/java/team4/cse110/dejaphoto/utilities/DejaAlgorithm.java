@@ -1,7 +1,6 @@
 package team4.cse110.dejaphoto.utilities;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,6 @@ public class DejaAlgorithm implements Algorithm {
     private int cachePos; // last returned by prev(), next() or release(). -1 if cache is empty.
 
     public DejaAlgorithm(Context context, DatabaseInterface db) {
-        // TODO add a database to field
         this.context = context;
         this.db = db;
         load();
@@ -39,6 +37,13 @@ public class DejaAlgorithm implements Algorithm {
     @Override
     public Photo next() {
         if (album.isEmpty()) return null;
+
+        // See if we can just move forward in the cache
+        if (cachePos < cache.size() - 1 && cachePos != -1) {
+            cachePos++;
+            db.storePreviousIndex(cachePos);
+            return cache.get(cachePos);
+        }
 
         // Handle non DejaVu next
         if (!PrefUtils.dejaVuEnabled(context)) {
@@ -50,7 +55,7 @@ public class DejaAlgorithm implements Algorithm {
 
         // Compute weight for all images
         for (Photo photo : album) {
-            setWeight(photo);
+            photo.weight = photo.calcWeight();
         }
 
         // Pick an image randomly while factoring in weights
@@ -112,11 +117,12 @@ public class DejaAlgorithm implements Algorithm {
 
         // Update cache. db update done in next()
         cache.remove(photo);
-        cachePos = cache.size() - 1;
+        if (cache.isEmpty()) cachePos = -1;
 
         // Update album
         album.remove(photo);
         db.deletePhoto(photo);
+        save();
 
         // Get the next photo to display
         return next();
@@ -135,6 +141,11 @@ public class DejaAlgorithm implements Algorithm {
         cachePos = db.getPreviousIndex();
     }
 
+    @Override
+    public DatabaseInterface getDatabase() {
+        return db;
+    }
+
     private Photo getCurrentPhoto() {
         if (!cache.isEmpty() && cachePos != -1) {
             return cache.get(cachePos);
@@ -143,23 +154,7 @@ public class DejaAlgorithm implements Algorithm {
         }
     }
 
-    private void setWeight(Photo photo) {
-        // TODO calculate weight
-//        photo.setWeight(photo.calcWeight());
-
-    }
-
     private void addToCache(Photo photo) {
-        // Check if we need to remove everything after pointer
-        if (!cache.isEmpty() && cachePos != cache.size() - 1) {
-            ListIterator<Photo> itr = cache.listIterator(cachePos);
-            itr.remove(); // remove self
-            while (itr.hasNext()) {
-                itr.next();
-                itr.remove();
-            }
-        }
-
         cache.add(photo);
 
         // Fix if we are over max size
@@ -168,8 +163,6 @@ public class DejaAlgorithm implements Algorithm {
         }
         cachePos = cache.size() - 1;
 
-        db.storePreviousList(cache);
-        //db.setPosition(cachePos);
-        db.storePreviousIndex(cachePos);
+        save();
     }
 }
