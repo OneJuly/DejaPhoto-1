@@ -169,3 +169,6 @@ fabric.properties
 # Google Services plugin
 
 !/gradle/wrapper/gradle-wrapper.jar
+
+## User additions
+/build.gradle
