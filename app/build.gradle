@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'release-key'
             keyPassword 'cse110team4'
-            storeFile file('C:/Users/Azianese/AndroidStudioProjects/DejaPhoto/keystore/android.jks')
+            storeFile file('/Users/Tango/AndroidStudioProjects/DejaPhoto/keystore/android.jks')
             storePassword 'cse110team4'
         }
     }

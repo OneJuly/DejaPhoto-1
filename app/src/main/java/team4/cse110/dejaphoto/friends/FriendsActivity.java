@@ -36,22 +36,22 @@ public class FriendsActivity extends BaseActivity {
         return R.layout.activity_friends;
     }
 
-    //gives the list view tap.click functionality
-    private AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView parent, View v, int position, long id) {
-
-
-
-
-        }
-    };
+//    //gives the list view tap.click functionality
+//    private AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
+//        public void onItemClick(AdapterView parent, View v, int position, long id) {
+//
+//
+//
+//
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
 
         //links tap/tap functionality to each item in the list view
-        friendsNameView.setOnItemClickListener(mMessageClickedHandler);
+ //       friendsNameView.setOnItemClickListener(mMessageClickedHandler);
 
 
 
@@ -150,6 +150,29 @@ public class FriendsActivity extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
+        friendsNameView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                String entry = (String) parent.getAdapter().getItem(position);
+                System.out.println("entry is: " + entry);
+                //concatenates a flag onto users that are already friends
+                if (entry.indexOf("(friend)") >= 0){
+                    entry = entry.replace(" (friend)","");
+                    usersNames.set(position, entry);
+                    System.out.println("new entry: " + entry);
+                    friendsID.child(entry).removeValue();
+                }
+                else{
+                   // friendsID.child(entry).push();
+
+                }
+
+                arrayAdapter.notifyDataSetChanged();
+            }
+        });
+
 
         /*
         usersdb.addChildEventListener(new ChildEventListener() {
