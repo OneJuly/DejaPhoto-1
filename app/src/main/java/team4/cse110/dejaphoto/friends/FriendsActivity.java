@@ -36,15 +36,6 @@ public class FriendsActivity extends BaseActivity {
         return R.layout.activity_friends;
     }
 
-//    //gives the list view tap.click functionality
-//    private AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
-//        public void onItemClick(AdapterView parent, View v, int position, long id) {
-//
-//
-//
-//
-//        }
-//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +43,6 @@ public class FriendsActivity extends BaseActivity {
 
         //links tap/tap functionality to each item in the list view
  //       friendsNameView.setOnItemClickListener(mMessageClickedHandler);
-
-
-
 
         //Banner for the available users interface
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,8 +52,6 @@ public class FriendsActivity extends BaseActivity {
         setContentView(R.layout.activity_friends);
 
         usersdb = FirebaseDatabase.getInstance().getReference();
-        //usersdb.getKey();
-        //usersdb = FirebaseDatabase.getInstance().getReference().child("A87fcgB4XOdlla7IiiN4pMC4FUy1").child("friendsList");
         friendsNameView = (ListView)findViewById(R.id.friendList);
 
         final ArrayAdapter<String> arrayAdapter =
@@ -73,22 +59,32 @@ public class FriendsActivity extends BaseActivity {
         friendsNameView.setAdapter(arrayAdapter);
 
 
-        //creates an arrayList of friends represented as strings
-        /*
-        FirebaseDatabase.getInstance().getReference().child("Sam").child("friendsList")
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getValue()) {
-                            String friend = dataSnapshot.getValue().toString();
-                            friendsNames.add(friend);
-                            arrayAdapter.notifyDataSetChanged();
-                        }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });*/
+        //defines list view's button funcionality
+        AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView parent, View v, int position, long id) {
+
+                String name = (String) parent.getAdapter().getItem(position);
+                System.out.println("position:" + Integer.toString(position));
+                System.out.println("name:" + name);
+
+                if (name.indexOf("(friend)") >= 0) {
+                    //friendsNames.remove(position-1);
+                    //name = name.replace(" (friend)","");
+                    //usersNames.set(position, name);
+
+                }
+                else{
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Sam").child("friendsList");
+                    mDatabase.push().setValue(name);
+                }
+
+                arrayAdapter.notifyDataSetChanged();
+            }
+        };
+        friendsNameView.setOnItemClickListener(mMessageClickedHandler);
+
+
+
         friendsID = FirebaseDatabase.getInstance().getReference().child("Sam").child("friendsList");
         friendsID.addChildEventListener(new ChildEventListener() {
             @Override
@@ -139,6 +135,7 @@ public class FriendsActivity extends BaseActivity {
 
                         if(friendsNames.get(i).equals(user)){
                             user = user + " (friend)";
+                            break;
                         }
                     }
 
