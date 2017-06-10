@@ -12,7 +12,6 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -277,13 +276,14 @@ public class GalleryActivity extends BaseActivity {
             @Override
             protected void populateViewHolder(PhotoHolder holder, Photo photo, int position) {
                 // Load images
-                StorageReference image = storageRef.getStorage()
-                        .getReferenceFromUrl(photo.getDownloadUrl());
-                Log.v(TAG, image.toString());
+
+                StorageReference imageRef = storageRef
+                        .child(photo.getRefPath());
+
 
                 Glide.with(GalleryActivity.this)
                         .using(new FirebaseImageLoader())
-                        .load(image)
+                        .load(imageRef)
                         .into(holder.photo);
             }
 

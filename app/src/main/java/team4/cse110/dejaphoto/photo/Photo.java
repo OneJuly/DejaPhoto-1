@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
 
@@ -17,8 +16,9 @@ public class Photo {
     @SuppressWarnings("unused")
     public static final String TAG = "Photo";
 
-    private String downloadUrl;
     private String customLoc;
+    private String refPath;
+    private String uid;
     private String localPath;
     public double weight;
     private double lat;
@@ -27,6 +27,22 @@ public class Photo {
 
     private Context context;
 
+    public String getRefPath() {
+        return refPath;
+    }
+
+    public void setRefPath(String refPath) {
+        this.refPath = refPath;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     @Exclude
     public String getLocalPath() {
         return localPath;
@@ -34,14 +50,6 @@ public class Photo {
 
     public void setLocalPath(String localPath) {
         this.localPath = localPath;
-    }
-
-    public String getDownloadUrl() {
-        return downloadUrl;
-    }
-
-    public void setDownloadUrl(StorageReference downloadUrl) {
-        this.downloadUrl = downloadUrl.getDownloadUrl().toString();
     }
 
     public String getCustomLoc() {
@@ -203,9 +211,10 @@ public class Photo {
         if (Double.compare(photo.lat, lat) != 0) return false;
         if (Double.compare(photo.lon, lon) != 0) return false;
         if (time != photo.time) return false;
-        if (!downloadUrl.equals(photo.downloadUrl)) return false;
-        if (!localPath.equals(photo.localPath)) return false;
-        return context.equals(photo.context);
+        if (customLoc != null ? !customLoc.equals(photo.customLoc) : photo.customLoc != null)
+            return false;
+        if (refPath != null ? !refPath.equals(photo.refPath) : photo.refPath != null) return false;
+        return localPath != null ? localPath.equals(photo.localPath) : photo.localPath == null;
 
     }
 
@@ -213,14 +222,14 @@ public class Photo {
     public int hashCode() {
         int result;
         long temp;
-        result = downloadUrl.hashCode();
-        result = 31 * result + localPath.hashCode();
+        result = customLoc != null ? customLoc.hashCode() : 0;
+        result = 31 * result + (refPath != null ? refPath.hashCode() : 0);
+        result = 31 * result + (localPath != null ? localPath.hashCode() : 0);
         temp = Double.doubleToLongBits(lat);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(lon);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (int) (time ^ (time >>> 32));
-//        result = 31 * result + context.hashCode();
         return result;
     }
 }

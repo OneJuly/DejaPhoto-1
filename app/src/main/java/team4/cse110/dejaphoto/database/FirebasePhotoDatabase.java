@@ -44,13 +44,14 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
     }
 
     @Override
-    public void addPhoto(Photo photo) {
+    public void addPhoto(final Photo photo) {
         // Store photo in cloud and get pointer
         Uri file = Uri.fromFile(new File(photo.getLocalPath()));
-        StorageReference photoRef = storageRef.child(user.getUid()
+        final StorageReference photoRef = storageRef.child(user.getUid()
                 + "/" + file.getLastPathSegment());
         photoRef.putFile(file);
-        photo.setDownloadUrl(photoRef);
+        photo.setUid(user.getUid());
+        photo.setRefPath(photo.getUid() + file.getLastPathSegment());
 
         // see firebase.google.com/docs/storage/android/upload-files
         UploadTask uploadTask = storageRef.putFile(file);
@@ -74,8 +75,10 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
     @Override
     public void deletePhoto(Photo photo) {
         // Delete from the cloud
-        String photoRef = photo.getDownloadUrl();
-        storageRef.child(photoRef).delete();
+
+        StorageReference photoRef = storageRef.child(user.getUid()
+                + "/" + photo.getRefPath());
+        photoRef.delete();
 
         // Remove photo info from database
         dbRef.child(user.getUid()).child(PHOTOS_CHILD)
@@ -119,8 +122,11 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
 
     @Override
     public Bitmap fetchBitmap(Photo photo) {
+        StorageReference ref =
+                storageRef.child(photo.getRefPath());
+
         StreamDownloadTask streamTask =
-                storageRef.child(photo.getDownloadUrl()).getStream();
+                storageRef.child(String.valueOf(ref)).getStream();
 
         streamTask.addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
             @Override
