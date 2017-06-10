@@ -171,4 +171,3 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 ## User additions
-/build.gradle
