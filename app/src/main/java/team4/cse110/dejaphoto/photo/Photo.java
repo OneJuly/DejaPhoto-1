@@ -6,6 +6,7 @@ import android.location.LocationManager;
 import android.util.Log;
 
 import com.google.firebase.database.Exclude;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
 
@@ -16,14 +17,53 @@ public class Photo {
 
     @Exclude
     public double weight;
-
-    private String storageURI;
+    private StorageReference storageRef;
     private String customLoc;
     private double lat;
     private double lon;
     private long time;
 
     private Context context;
+
+    public StorageReference getStorageRef() {
+        return storageRef;
+    }
+
+    public void setStorageRef(StorageReference storageRef) {
+        this.storageRef = storageRef;
+    }
+
+    public String getCustomLoc() {
+        return customLoc;
+    }
+
+    public void setCustomLoc(String customLoc) {
+        this.customLoc = customLoc;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
 
     /**
      * @return double representing the weight of the photo
@@ -48,7 +88,6 @@ public class Photo {
         weight += recentlyTakenWeight();
         Log.v("weight", "weight+ " + weight);
         return weight;
-
     }
 
     @Exclude
@@ -92,7 +131,6 @@ public class Photo {
         if (calendar == null) {
             return false;
         }
-
 
         return false;
     }

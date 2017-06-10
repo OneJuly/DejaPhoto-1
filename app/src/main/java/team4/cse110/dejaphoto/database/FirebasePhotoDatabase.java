@@ -17,6 +17,7 @@ import team4.cse110.dejaphoto.photo.Photo;
 
 public class FirebasePhotoDatabase implements PhotoDatabase {
 
+    
     private static final String TAG = "FirebasePhotoDatabase";
 
     private static final String LOCAL_DIR = "local-photos";
