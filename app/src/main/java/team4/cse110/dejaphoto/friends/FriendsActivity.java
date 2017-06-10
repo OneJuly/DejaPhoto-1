@@ -81,7 +81,8 @@ public class FriendsActivity extends BaseActivity {
                     Log.v("Deleting friend: ", name);
                 }
                 else{
-                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(user).child("friendsList");
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance()
+                            .getReference().child(user).child("friendsList");
                     mDatabase.child(name).setValue(name);
                     Log.v("Adding friend: ", name);
                 }

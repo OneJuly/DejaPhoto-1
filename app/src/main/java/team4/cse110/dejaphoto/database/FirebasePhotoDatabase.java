@@ -1,6 +1,7 @@
 package team4.cse110.dejaphoto.database;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -19,6 +20,7 @@ import com.google.firebase.storage.StreamDownloadTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,9 +92,9 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                // nasty jank shit
+                // nasty jank
                 if (dataSnapshot.hasChildren()) {
-                    for (DataSnapshot user : dataSnapshot.getChildren()){
+                   for (DataSnapshot user : dataSnapshot.getChildren()){
                         if (user.hasChildren()) {
 
                             for (DataSnapshot photo : user.getChildren()) {
@@ -116,15 +118,17 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
     @Override
     public Bitmap fetchBitmap(Photo photo) {
         StreamDownloadTask streamTask = photo.getStorageRef().getStream();
+        final InputStream[] is = new InputStream[1];
 
         streamTask.addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
-                //getStream();
+                is[0] = taskSnapshot.getStream();
             }
         });
 
-        return null;
+        return BitmapFactory.decodeStream(is[0]);
+
     }
 
     @Override
@@ -147,9 +151,6 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
         return 0;
     }
 
-    private void addToRemoteStorage(Photo photo) {
-
-    }
 }
 
 

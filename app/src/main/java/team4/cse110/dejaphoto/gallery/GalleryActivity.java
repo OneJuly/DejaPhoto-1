@@ -227,10 +227,6 @@ public class GalleryActivity extends BaseActivity {
                         Photo photo = new Photo();
                         photo.setLocalPath(path);
                         fbPhotoDatabase.addPhoto(photo);
-
-                        // TODO enable this only if user wants to share photos?
-                        // TODO should be in the DB class
-                        //addToRemoteStorage(photo);
                     }
                 }
 

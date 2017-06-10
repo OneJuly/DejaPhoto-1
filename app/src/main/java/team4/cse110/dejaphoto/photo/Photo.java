@@ -25,6 +25,11 @@ public class Photo {
 
     private Context context;
 
+    public Photo() {}
+    public Photo(Context context, String s, boolean b) {
+        // For testing
+    }
+
     @Exclude
     public String getLocalPath() {
         return localPath;

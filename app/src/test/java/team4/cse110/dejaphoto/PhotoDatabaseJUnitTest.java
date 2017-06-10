@@ -5,12 +5,6 @@ import android.test.mock.MockContext;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
-import team4.cse110.dejaphoto.database.PhotoDatabase;
-import team4.cse110.dejaphoto.photo.Photo;
-import team4.cse110.dejaphoto.utilities.DejaAlgorithm;
-
 import static junit.framework.Assert.assertEquals;
 
 /*
@@ -23,7 +17,7 @@ public class PhotoDatabaseJUnitTest {
         /* CREATE NEEDED MOCK OBJECTS */
         MockContext context = new MockContext();
         //PhotoDatabase db = new PhotoDatabase() {
-        Photo photo = new Photo(context, "2_Mt_Everest.jpg", true);
+//        Photo photo = new Photo(context, "2_Mt_Everest.jpg", true);
     }
 
     /**
