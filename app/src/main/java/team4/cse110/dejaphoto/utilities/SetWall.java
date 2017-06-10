@@ -14,14 +14,14 @@ import team4.cse110.dejaphoto.photo.Photo;
  * Created by Sean on 5/15/2017.
  */
 
-public class SetWallpaper extends AsyncTask<Photo, Void, Bitmap> {
+public class SetWall extends AsyncTask<Photo, Void, Bitmap> {
 
-    private static final String TAG = "SetWallpaper";
+    private static final String TAG = "SetWall";
     FirebasePhotoDatabase fb = new FirebasePhotoDatabase();
 
     private Context mContext;
 
-    public SetWallpaper(Context context) {
+    public SetWall(Context context) {
         mContext = context;
     }
 

@@ -6,16 +6,18 @@ import android.location.LocationManager;
 import android.util.Log;
 
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.Calendar;
 
+@IgnoreExtraProperties
 public class Photo {
 
     @SuppressWarnings("unused")
     public static final String TAG = "Photo";
 
-    private StorageReference storageRef;
+    private String storageRef;
     private String customLoc;
     private String localPath;
     public double weight;
@@ -34,12 +36,12 @@ public class Photo {
         this.localPath = localPath;
     }
 
-    public StorageReference getStorageRef() {
+    public String getStorageRef() {
         return storageRef;
     }
 
     public void setStorageRef(StorageReference storageRef) {
-        this.storageRef = storageRef;
+        this.storageRef = storageRef.toString();
     }
 
     public String getCustomLoc() {
@@ -218,7 +220,7 @@ public class Photo {
         temp = Double.doubleToLongBits(lon);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + (int) (time ^ (time >>> 32));
-        result = 31 * result + context.hashCode();
+//        result = 31 * result + context.hashCode();
         return result;
     }
 }

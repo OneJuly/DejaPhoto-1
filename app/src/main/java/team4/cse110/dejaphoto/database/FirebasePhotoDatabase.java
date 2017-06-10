@@ -39,7 +39,7 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
 
     public FirebasePhotoDatabase() {
         this.dbRef = FirebaseDatabase.getInstance().getReference();
-        this.storageRef = FirebaseStorage.getInstance().getReference();
+        this.storageRef = FirebaseStorage.getInstance().getReference("/users/");
         this.user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
@@ -47,7 +47,9 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
     public void addPhoto(Photo photo) {
         // Store photo in cloud and get pointer
         Uri file = Uri.fromFile(new File(photo.getLocalPath()));
-        StorageReference photoRef = storageRef.child(user.getUid());
+        StorageReference photoRef = storageRef.child(user.getUid()
+                + "/" + file.getLastPathSegment());
+        photoRef.putFile(file);
         photo.setStorageRef(photoRef);
 
         // see firebase.google.com/docs/storage/android/upload-files
@@ -63,15 +65,17 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
         });
 
         // Add photo info to the database
-        dbRef.child(user.getUid()).child(PHOTOS_CHILD)
-                .child(String.valueOf(photo.hashCode())).setValue(photo);
+//        dbRef.child(user.getUid()).child(PHOTOS_CHILD)
+//                .setValue(photo);
+        dbRef.child(user.getUid()).child("photosList").child(
+        String.valueOf(photo.hashCode())).setValue(photo);
     }
 
     @Override
     public void deletePhoto(Photo photo) {
         // Delete from the cloud
-        StorageReference photoRef = photo.getStorageRef();
-        photoRef.delete();
+        String photoRef = photo.getStorageRef();
+        storageRef.child(photoRef).delete();
 
         // Remove photo info from database
         dbRef.child(user.getUid()).child(PHOTOS_CHILD)
@@ -115,7 +119,8 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
 
     @Override
     public Bitmap fetchBitmap(Photo photo) {
-        StreamDownloadTask streamTask = photo.getStorageRef().getStream();
+        StreamDownloadTask streamTask =
+                storageRef.child(photo.getStorageRef()).getStream();
 
         streamTask.addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
             @Override

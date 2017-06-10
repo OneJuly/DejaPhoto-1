@@ -15,8 +15,7 @@ import java.io.IOException;
 import team4.cse110.dejaphoto.R;
 import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.utilities.Algorithm;
-import team4.cse110.dejaphoto.utilities.DejaAlgorithm;
-import team4.cse110.dejaphoto.utilities.SetWallpaper;
+import team4.cse110.dejaphoto.utilities.SetWall;
 
 
 /**
@@ -75,7 +74,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Photo photo = algorithm.prev();
         if (photo != null) {
             Log.v(TAG, "Setting prev bitmap"); // DEBUG
-            setWallpaper(photo, context);
+            setWall(photo, context);
         }
 
         // Enable the karma button if no karma.
@@ -97,7 +96,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Photo photo = algorithm.next();
         if (photo != null) {
             Log.v(TAG, "Setting next bitmap"); // DEBUG
-            setWallpaper(photo, context);
+            setWall(photo, context);
         } else {
             Log.v(TAG, "Setting next default photo"); // DEBUG
             setDefaultWallpaper(context);
@@ -133,7 +132,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         Photo photo = algorithm.release();
         if (photo != null) {
             Log.v(TAG, "Setting release bitmap"); // DEBUG
-            setWallpaper(photo, context);
+            setWall(photo, context);
         } else {
             Log.v(TAG, "Setting release default photo"); // DEBUG
             setDefaultWallpaper(context);
@@ -214,9 +213,9 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
      * @param photo - bitmap of new wallpaper.
      * @param context - current application context.
      */
-    private void setWallpaper(Photo photo, Context context) {
+    private void setWall(Photo photo, Context context) {
         // TODO
-        SetWallpaper sp = new SetWallpaper(context);
+        SetWall sp = new SetWall(context);
         sp.execute(photo);
     }
 
