@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import team4.cse110.dejaphoto.database.FirebasePhotoDatabase;
 import team4.cse110.dejaphoto.photo.Photo;
 
 /**
@@ -16,6 +17,7 @@ import team4.cse110.dejaphoto.photo.Photo;
 public class SetWallpaper extends AsyncTask<Photo, Void, Bitmap> {
 
     private static final String TAG = "SetWallpaper";
+    FirebasePhotoDatabase fb = new FirebasePhotoDatabase();
 
     private Context mContext;
 
@@ -25,7 +27,8 @@ public class SetWallpaper extends AsyncTask<Photo, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(Photo... params) {
-        return params[0].getBitmap();
+//        return params[0].getBitmap();
+        return fb.fetchBitmap(params[0]);
     }
 
     @Override

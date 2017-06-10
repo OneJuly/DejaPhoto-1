@@ -1,12 +1,25 @@
 package team4.cse110.dejaphoto.database;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StreamDownloadTask;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import team4.cse110.dejaphoto.photo.Photo;
@@ -15,65 +28,128 @@ import team4.cse110.dejaphoto.photo.Photo;
  * Created by Sean on 5/21/2017.
  */
 
-public class FirebasePhotoDatabase implements PhotoDatabase {
+public class FirebasePhotoDatabase implements DatabaseInterface{
 
     private static final String TAG = "FirebasePhotoDatabase";
+    private static final String PHOTOS_CHILD = "photosList";
 
-    private static final String LOCAL_DIR = "local-photos";
-
-    private DatabaseReference localPhotos;
-    private StorageReference fbStorageRef;
+    private DatabaseReference dbRef;
+    private StorageReference storageRef;
     private FirebaseUser user;
 
-    public FirebasePhotoDatabase(FirebaseDatabase firebaseDatabase) {
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            String uid = user.getUid();
-            localPhotos = firebaseDatabase.getReference().child(LOCAL_DIR).child(uid);
-            fbStorageRef = FirebaseStorage.getInstance().getReference();
-        }
+    public FirebasePhotoDatabase() {
+        this.dbRef = FirebaseDatabase.getInstance().getReference();
+        this.storageRef = FirebaseStorage.getInstance().getReference();
+        this.user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
-    public List<Photo> getPhotos() {
+    public void addPhoto(Photo photo) {
+        // Store photo in cloud and get pointer
+        Uri file = Uri.fromFile(new File(photo.getLocalPath()));
+        StorageReference photoRef = storageRef.child(user.getUid());
+        photo.setStorageRef(photoRef);
+
+        // see firebase.google.com/docs/storage/android/upload-files
+        UploadTask uploadTask = storageRef.putFile(file);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            }
+        });
+
+        // Add photo info to the database
+        dbRef.child(user.getUid()).child(PHOTOS_CHILD)
+                .child(String.valueOf(photo.hashCode())).setValue(photo);
+    }
+
+    @Override
+    public void deletePhoto(Photo photo) {
+        // Delete from the cloud
+        StorageReference photoRef = photo.getStorageRef();
+        photoRef.delete();
+
+        // Remove photo info from database
+        dbRef.child(user.getUid()).child(PHOTOS_CHILD)
+                .child(String.valueOf(photo.hashCode())).removeValue();
+    }
+
+    @Override
+    public void setSharePhotos(boolean value) {
+    }
+
+    @Override
+    public List<Photo> getPhotoList() {
+        final List<Photo> photoList = new ArrayList<>();
+
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                // nasty jank shit
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot user : dataSnapshot.getChildren()){
+                        if (user.hasChildren()) {
+
+                            for (DataSnapshot photo : user.getChildren()) {
+                                photoList.add(photo.getValue(Photo.class));
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return photoList;
+    }
+
+    @Override
+    public Bitmap fetchBitmap(Photo photo) {
+        StreamDownloadTask streamTask = photo.getStorageRef().getStream();
+
+        streamTask.addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(StreamDownloadTask.TaskSnapshot taskSnapshot) {
+                //getStream();
+            }
+        });
+
         return null;
-    }  // TODO - ?????
+    }
 
     @Override
-    public void removePhoto(Photo p) {
+    public void storePreviousList(ArrayList<Photo> list) {
 
     }
 
     @Override
-    public void addPhoto(Photo p) {
-        localPhotos.child(String.valueOf(p.hashCode())).setValue(p);
-
-        // TODO add to remote storage? only if sharing enabled?
-        // fbStorageRef.putFile(...)
-    }
-
-    @Override
-    public List<Photo> getCache() {
+    public ArrayList<Photo> getPreviousList() {
         return null;
     }
 
     @Override
-    public int getPosition() {
+    public void storePreviousIndex(int index) {
+
+    }
+
+    @Override
+    public int getPreviousIndex() {
         return 0;
     }
 
-    @Override
-    public boolean updatePhoto(Photo p) {
-        return false;
-    }
-
-    @Override
-    public void setCache(List<Photo> cache) {
-
-    }
-
-    @Override
-    public void setPosition(int pos) {
+    private void addToRemoteStorage(Photo photo) {
 
     }
 }
+
+

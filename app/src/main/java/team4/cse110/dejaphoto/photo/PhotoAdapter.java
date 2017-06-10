@@ -43,7 +43,7 @@ public class PhotoAdapter extends FirebaseRecyclerAdapter<Photo, PhotoAdapter.Vi
         // Load images
         Glide
                 .with(context)
-                .load(model.getPath())
+                .load(model.getLocalPath())
                 .into(viewHolder.photo);
 
     }
