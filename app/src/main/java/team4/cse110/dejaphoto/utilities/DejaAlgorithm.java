@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
 
-import team4.cse110.dejaphoto.database.PhotoDatabase;
 import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.settings.PrefUtils;
 
