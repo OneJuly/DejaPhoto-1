@@ -25,7 +25,6 @@ public class TestAlgorithm {
     private FirebaseAuth auth;
     private FirebasePhotoDatabase db;
 
-
     Photo photo1;
     private List<Photo> album;
     private List<Photo> cache;

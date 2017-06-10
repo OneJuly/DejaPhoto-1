@@ -1,9 +1,8 @@
 package team4.cse110.dejaphoto.friends;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -44,9 +43,10 @@ public class FriendsActivity extends BaseActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        //SETUP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
-
         usersdb = FirebaseDatabase.getInstance().getReference();
         friendsNameView = (ListView)findViewById(R.id.friendList);
 
@@ -58,33 +58,30 @@ public class FriendsActivity extends BaseActivity {
         final String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
         System.out.println("user: " + user);
 
+
         //defines list view's button funcionality
         AdapterView.OnItemClickListener mMessageClickedHandler = new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
 
                 String name = (String) parent.getAdapter().getItem(position);
-             //   System.out.println("position:" + Integer.toString(position));
-             //   System.out.println("name:" + name);
-
-
                 if (name.indexOf("(friend)") >= 0) {
                     name = name.replace(" (friend)","");
                     usersNames.set(position, name);
-                    System.out.println("new entry: " + name);
                     friendsID.child(name).removeValue();
-
+                    Log.v("Deleting friend: ", name);
                 }
                 else{
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child(user).child("friendsList");
                     mDatabase.child(name).setValue(name);
+                    Log.v("Adding friend: ", name);
                 }
-
                 arrayAdapter.notifyDataSetChanged();
             }
         };
         friendsNameView.setOnItemClickListener(mMessageClickedHandler);
 
 
+        //maintains an arrayList of Strings representing friend Uid's
         friendsID = FirebaseDatabase.getInstance().getReference().child(user).child("friendsList");
         friendsID.addChildEventListener(new ChildEventListener() {
             @Override
@@ -92,11 +89,7 @@ public class FriendsActivity extends BaseActivity {
                 String value = dataSnapshot.getValue(String.class);
                 friendsNames.add(value);
                 arrayAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                Log.v("Added to friendsNames: ", value);
             }
 
             @Override
@@ -104,16 +97,19 @@ public class FriendsActivity extends BaseActivity {
                 String value = dataSnapshot.getValue(String.class);
                 friendsNames.remove(value);
                 arrayAdapter.notifyDataSetChanged();
+                Log.v("Del from friendsNames: ", value);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
@@ -126,7 +122,9 @@ public class FriendsActivity extends BaseActivity {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     String appUser = postSnapshot.getKey();
 
-                    if (appUser.equals(user)){
+                    //does not allow the adding of the current him/herself as a friend
+                    //and skips over photos
+                    if (appUser.equals(user) || appUser.equals("photos")){
                         continue;
                     }
 
@@ -137,6 +135,8 @@ public class FriendsActivity extends BaseActivity {
                             break;
                         }
                     }
+                    //adds non-friends to the arrayList of all users
+                    Log.v("Adding to usersNames: ", appUser);
                     usersNames.add(appUser);
                     arrayAdapter.notifyDataSetChanged();
                 }
@@ -145,16 +145,5 @@ public class FriendsActivity extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-        //adds functionality to he FAB
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
-
 }
