@@ -35,7 +35,7 @@ public class TestAlgorithm {
     Context context;
 
     /**
-     * Standard test fixture - TODO
+     * Standard test fixture.
      */
     @Before
     public void setup() {

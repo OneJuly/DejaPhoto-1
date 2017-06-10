@@ -23,6 +23,9 @@ import java.util.List;
 import team4.cse110.dejaphoto.BaseActivity;
 import team4.cse110.dejaphoto.R;
 
+/**
+ * This class keeps track of a user's friends and pointers to their databases.
+ */
 public class FriendsActivity extends BaseActivity {
     /* private member variables */
     private DatabaseReference usersdb;
@@ -31,12 +34,19 @@ public class FriendsActivity extends BaseActivity {
     private List<String> friendsNames = new ArrayList<>();
     private List<String> usersNames = new ArrayList<>();
 
+    /**
+     * This method retrieves the layout info of the activity.
+     * @return the layout info of the activity.
+     */
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_friends;
     }
 
-
+    /**
+     * This method
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
