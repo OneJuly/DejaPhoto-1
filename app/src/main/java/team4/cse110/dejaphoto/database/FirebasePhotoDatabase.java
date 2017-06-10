@@ -1,7 +1,6 @@
 package team4.cse110.dejaphoto.database;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -20,7 +19,6 @@ import com.google.firebase.storage.StreamDownloadTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,6 +124,7 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
             }
         });
 
+        return null;
     }
 
     @Override

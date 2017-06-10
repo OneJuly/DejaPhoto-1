@@ -20,20 +20,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
 
-import org.w3c.dom.Text;
-
-import java.io.File;
 import java.util.ArrayList;
 
 import droidninja.filepicker.FilePickerBuilder;
@@ -103,7 +97,7 @@ public class GalleryActivity extends BaseActivity {
 
         prefUtils = new PrefUtils(this);
 
-        fbPhotoDatabase = new FirebasePhotoDatabase(FirebaseDatabase.getInstance());
+        fbPhotoDatabase = new FirebasePhotoDatabase();
 
         if (user == null) {
             fbRef = FirebaseDatabase.getInstance().getReference().child("anonymous-photos");
