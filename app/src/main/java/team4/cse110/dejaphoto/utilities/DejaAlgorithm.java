@@ -135,6 +135,11 @@ public class DejaAlgorithm implements Algorithm {
         cachePos = db.getPreviousIndex();
     }
 
+    @Override
+    public DatabaseInterface getDatabase() {
+        return db;
+    }
+
     private Photo getCurrentPhoto() {
         if (!cache.isEmpty() && cachePos != -1) {
             return cache.get(cachePos);

@@ -1,6 +1,7 @@
 package team4.cse110.dejaphoto.widget;
 
 import android.app.PendingIntent;
+import android.app.WallpaperManager;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -8,14 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
-import android.app.WallpaperManager;
 
 import java.io.IOException;
 
 import team4.cse110.dejaphoto.R;
 import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.utilities.Algorithm;
-import team4.cse110.dejaphoto.utilities.DejaAlgorithm;
 import team4.cse110.dejaphoto.utilities.SetWallpaper;
 
 
@@ -241,6 +240,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
      * @return a new algorithm.
      */
     private Algorithm getAlgorithm(Context context) {
-        return new DejaAlgorithm(context);
+//        return new DejaAlgorithm(context);
+        return null; // TODO
     }
 }
