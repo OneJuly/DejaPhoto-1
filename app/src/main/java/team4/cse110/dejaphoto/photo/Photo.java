@@ -33,18 +33,18 @@ public class Photo {
         if (is_same_time()) {
             weight += 100;
         }
-/*        if(is_same_weekday()){
+        if(is_same_weekday()){
             weight += 100;
-        }*/
+        }
         if (is_same_location()) {
             weight += 100;
         }
-/*        if(karma == 1){
-            weight += 200;
-        }*/
-/*        if(is_recently_shown()){
+//        if(karma == 1){
+//            weight += 200;
+//        }
+        if(is_recently_shown()){
             weight -= 200;
-        }*/
+        }
         weight += recentlyTakenWeight();
         Log.v("weight", "weight+ " + weight);
         return weight;
@@ -114,7 +114,7 @@ public class Photo {
     }
 
     @Exclude
-    public boolean is_recently_shown() {
+    private boolean is_recently_shown() {
         return false;
     }
 
