@@ -15,12 +15,13 @@ import team4.cse110.dejaphoto.photo.Photo;
 import team4.cse110.dejaphoto.utilities.DejaAlgorithm;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * This class tests the DejaAlgorithm class' methods.
  */
 public class TestAlgorithm {
-    private DejaAlgorithm dejaAlgorithm;
+    private DejaAlgorithm dejaAlg;
 
     private FirebaseAuth auth;
     private FirebasePhotoDatabase db;
@@ -40,14 +41,16 @@ public class TestAlgorithm {
     public void setup() {
         context = new MockContext();
 
-        dejaAlgorithm = new DejaAlgorithm(context);
+        photo1 = new Photo(context, "2_Mt_Everest.jpg", true);
+
+        dejaAlg = new DejaAlgorithm(context);
+        dejaAlg.addToCache(photo1);
         //auth = FirebaseAuth.getInstance();
         //auth.createUserWithEmailAndPassword("boc024@ucsd.edu", "$DL@2020");
 
         //photo1 = new Photo(context, "2_Mt_Everest.jpg");
-        photo1 = new Photo(context, "2_Mt_Everest.jpg", true);
-        album = db.getPhotos();
-        cachePos = 0;
+        //album = db.getPhotos();
+        //cachePos = 0;
     }
 
     /**
@@ -55,21 +58,8 @@ public class TestAlgorithm {
      */
     @Test
     public void testKarma() {
-        photo1.setKarma(1);
-        assertEquals(photo1.getKarma(), 1);
-        photo1.setKarma(0);
-        assertEquals(photo1.getKarma(), 0);
-        dejaAlgorithm.incKarma();
-        assertEquals(photo1.getKarma(), 1); //????? how does it know which photo
-        assertEquals(dejaAlgorithm.hasKarma(), 1); //again same question
-    }
-
-    /**
-     *
-     */
-    @Test
-    public void testID() {
-
+        dejaAlg.incKarma();
+        assertTrue(dejaAlg.hasKarma());
     }
 
     @Test
@@ -82,7 +72,9 @@ public class TestAlgorithm {
      */
     @Test
     public void testRelease() {
-
+        assertTrue(dejaAlg.getCurrentPhoto() != null);
+        dejaAlg.release();
+        assertEquals(dejaAlg.getCurrentPhoto(), null);
     }
 
     /**

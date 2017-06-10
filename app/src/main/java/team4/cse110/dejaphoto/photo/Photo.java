@@ -1,16 +1,24 @@
 package team4.cse110.dejaphoto.photo;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Exclude;
 
 import java.util.Calendar;
+
+import static java.security.AccessController.getContext;
 
 /**
  * This class handles the information contained in each Photo object.
@@ -304,11 +312,23 @@ public class Photo {
      */
     @Exclude
     public Bitmap getBitmap() {
+        // Get phone's display pixels.
+        DisplayMetrics display = Resources.getSystem().getDisplayMetrics();
+        int width = display.widthPixels;
+        int height = display.heightPixels;
+
+        // .
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inScaled = true;
         opt.inPreferredConfig = Bitmap.Config.RGB_565;
 
-        return BitmapFactory.decodeFile(path, opt);
+        // Get the Bitmap photo.
+        Bitmap photo = BitmapFactory.decodeFile(path, opt);
+
+        // Scale the photo to match the phone's display specs.
+        Bitmap.createScaledBitmap(photo, width, height, true);
+
+        return photo;
     }
 
     @Override

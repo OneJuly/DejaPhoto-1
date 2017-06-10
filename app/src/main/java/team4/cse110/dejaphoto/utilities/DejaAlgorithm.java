@@ -3,6 +3,7 @@ package team4.cse110.dejaphoto.utilities;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
@@ -43,7 +44,7 @@ public class DejaAlgorithm implements Algorithm {
      */
     @Override
     public Photo next() {
-//        if (album.isEmpty()) return null;
+        if (album.isEmpty()) return null;
 
         // Handle non DejaVu next
         if (!PrefUtils.dejaVuEnabled(context)) {
@@ -102,9 +103,9 @@ public class DejaAlgorithm implements Algorithm {
     @Override
     public void incKarma() {
         Photo photo = getCurrentPhoto();
-        if (photo != null) {
+        if (photo != null /*&& db != null*/) {
             photo.setKarma(1);
-            db.updatePhoto(photo);
+            //db.updatePhoto(photo);
         }
     }
 
@@ -115,7 +116,12 @@ public class DejaAlgorithm implements Algorithm {
     @Override
     public boolean hasKarma() {
         Photo photo = getCurrentPhoto();
-        return photo != null && photo.getKarma() == 1;
+        //return photo != null && photo.getKarma() == 1;
+        if(photo != null)
+        {
+            return photo.getKarma() == 1;
+        }
+        return false;
     }
 
     /**
@@ -135,7 +141,7 @@ public class DejaAlgorithm implements Algorithm {
 
         // Update album
         album.remove(photo);
-        db.removePhoto(photo);
+        //db.removePhoto(photo);
 
         // Get the next photo to display
         return next();
@@ -155,16 +161,20 @@ public class DejaAlgorithm implements Algorithm {
      */
     @Override
     public void load() {
-//        album = db.getPhotos();
-  //      cache = db.getCache();
-    //    cachePos = db.getPosition();
+        //album = db.getPhotos();
+        //cache = db.getCache();
+        //cachePos = db.getPosition();
+
+        album = new ArrayList<Photo>();
+        cache = new ArrayList<Photo>();
+        cachePos = -1;
     }
 
     /**
      * This method TODO
      * @return TODO
      */
-    private Photo getCurrentPhoto() {
+    public Photo getCurrentPhoto() {
         if (!cache.isEmpty() && cachePos != -1) {
             return cache.get(cachePos);
         } else {
@@ -182,11 +192,11 @@ public class DejaAlgorithm implements Algorithm {
 
     }
 
-    private void addToCache(Photo photo) {
+    public void addToCache(Photo photo) {
         // Check if we need to remove everything after pointer
-        Log.v("cachepos", "pos+ "  + cachePos);
-        Log.v("cachesize ", "size " + cache.size());
-        if (!cache.isEmpty() && cachePos != cache.size() - 1) {
+        //Log.v("cachepos", "pos+ "  + cachePos);
+        //Log.v("cachesize ", "size " + cache.size());
+        if (cache != null && !cache.isEmpty() && cachePos != cache.size() - 1) {
             ListIterator<Photo> itr = cache.listIterator(cachePos);
             itr.remove(); // remove self
             while (itr.hasNext()) {
@@ -203,8 +213,9 @@ public class DejaAlgorithm implements Algorithm {
         }
         cachePos = cache.size() - 1;
 
-        db.setCache(cache);
-        //db.setPosition(cachePos);
-        db.setPosition(cachePos);
+        if(db != null && cache != null) {
+            db.setCache(cache);
+            db.setPosition(cachePos);
+        }
     }
 }
