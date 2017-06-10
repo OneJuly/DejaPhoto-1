@@ -15,15 +15,24 @@ public class Photo {
     @SuppressWarnings("unused")
     public static final String TAG = "Photo";
 
-    @Exclude
-    public double weight;
     private StorageReference storageRef;
     private String customLoc;
+    private String localPath;
+    public double weight;
     private double lat;
     private double lon;
     private long time;
 
     private Context context;
+
+    @Exclude
+    public String getLocalPath() {
+        return localPath;
+    }
+
+    public void setLocalPath(String localPath) {
+        this.localPath = localPath;
+    }
 
     public StorageReference getStorageRef() {
         return storageRef;
@@ -180,5 +189,36 @@ public class Photo {
         else {
             return 0;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Photo photo = (Photo) o;
+
+        if (Double.compare(photo.lat, lat) != 0) return false;
+        if (Double.compare(photo.lon, lon) != 0) return false;
+        if (time != photo.time) return false;
+        if (!storageRef.equals(photo.storageRef)) return false;
+        if (!localPath.equals(photo.localPath)) return false;
+        return context.equals(photo.context);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = storageRef.hashCode();
+        result = 31 * result + localPath.hashCode();
+        temp = Double.doubleToLongBits(lat);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(lon);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (int) (time ^ (time >>> 32));
+        result = 31 * result + context.hashCode();
+        return result;
     }
 }

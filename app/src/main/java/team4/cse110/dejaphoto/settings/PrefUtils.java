@@ -56,10 +56,11 @@ public class PrefUtils {
      * @param context
      * @return
      */
-    public static boolean shareOwnPhotos(Context context) {
+    public static boolean setSharePhotos(Context context, boolean pref) {
         return PreferenceManager.getDefaultSharedPreferences(context)
-                .getBoolean(getString(R.string.pref_share_own_key), true);
+                .getBoolean(getString(R.string.pref_share_own_key), pref);
     }
+
     /**
      * Get string from resource ID helper
      * @param resID

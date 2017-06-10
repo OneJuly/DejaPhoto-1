@@ -230,7 +230,8 @@ public class GalleryActivity extends BaseActivity {
                     paths.addAll(data.getStringArrayListExtra(FilePickerConst.KEY_SELECTED_MEDIA));
 
                     for (String path : paths) {
-                        Photo photo = new Photo(this, path);
+                        Photo photo = new Photo();
+                        photo.setLocalPath(path);
                         fbPhotoDatabase.addPhoto(photo);
 
                         // TODO enable this only if user wants to share photos?
@@ -246,7 +247,9 @@ public class GalleryActivity extends BaseActivity {
                     Uri image = data.getData();
                     if (image != null) {
                         String path = getPathFromUri(image);
-                        fbPhotoDatabase.addPhoto(new Photo(this, path));
+                        Photo photo = new Photo();
+                        photo.setLocalPath(path);
+                        fbPhotoDatabase.addPhoto(photo);
                     }
                 }
                 break;
@@ -284,7 +287,7 @@ public class GalleryActivity extends BaseActivity {
                 // TODO handle the case where file doesn't exist; currently adds empty view
                 Glide
                         .with(GalleryActivity.this)
-                        .load(photo.getPath())
+                        .load(photo.getLocalPath())
                         .into(holder.photo);
 
             }
@@ -428,36 +431,5 @@ public class GalleryActivity extends BaseActivity {
                 .setCancelable(false)
                 .setMessage(messageResId)
                 .show();
-
-    }
-
-    /**
-     *
-     * @param photo
-     */
-    private void addToRemoteStorage(Photo photo) {
-        Uri file = Uri.fromFile(new File(photo.getPath()));
-        StorageReference remote =
-                storageRef.child(photo.getUserUID() + "/photos/"  + file.getLastPathSegment());
-
-        // see firebase.google.com/docs/storage/android/upload-files
-        UploadTask uploadTask = remote.putFile(file);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-                // TODO handle failed upload
-
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                //Toast.makeText(GalleryActivity.this, "Success!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-
     }
 }
