@@ -36,8 +36,13 @@ public class FriendsActivity extends BaseActivity {
         return R.layout.activity_friends;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        //links tap/tap functionality to each item in the list view
+ //       friendsNameView.setOnItemClickListener(mMessageClickedHandler);
 
         //Banner for the available users interface
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -168,6 +173,29 @@ public class FriendsActivity extends BaseActivity {
 //                arrayAdapter.notifyDataSetChanged();
 //            }
 //        });
+
+        friendsNameView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                String entry = (String) parent.getAdapter().getItem(position);
+                System.out.println("entry is: " + entry);
+                //concatenates a flag onto users that are already friends
+                if (entry.indexOf("(friend)") >= 0){
+                    entry = entry.replace(" (friend)","");
+                    usersNames.set(position, entry);
+                    System.out.println("new entry: " + entry);
+                    friendsID.child(entry).removeValue();
+                }
+                else{
+                   // friendsID.child(entry).push();
+
+                }
+
+                arrayAdapter.notifyDataSetChanged();
+            }
+        });
+
 
         /*
         usersdb.addChildEventListener(new ChildEventListener() {
