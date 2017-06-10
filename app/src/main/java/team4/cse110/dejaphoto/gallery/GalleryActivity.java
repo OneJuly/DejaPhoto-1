@@ -12,6 +12,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -105,7 +107,8 @@ public class GalleryActivity extends BaseActivity {
             fbRef = FirebaseDatabase.getInstance().getReference().child("local-photos").child(user.getUid());
         }
 
-        storageRef = FirebaseStorage.getInstance().getReference();
+        storageRef = FirebaseStorage.getInstance()
+                .getReference();
 
         rvPhotos = (RecyclerView) findViewById(R.id.rv_gallery);
 
@@ -227,10 +230,6 @@ public class GalleryActivity extends BaseActivity {
                         Photo photo = new Photo();
                         photo.setLocalPath(path);
                         fbPhotoDatabase.addPhoto(photo);
-
-                        // TODO enable this only if user wants to share photos?
-                        // TODO should be in the DB class
-                        //addToRemoteStorage(photo);
                     }
                 }
 
@@ -278,12 +277,14 @@ public class GalleryActivity extends BaseActivity {
             @Override
             protected void populateViewHolder(PhotoHolder holder, Photo photo, int position) {
                 // Load images
-                // TODO handle the case where file doesn't exist; currently adds empty view
-                Glide
-                        .with(GalleryActivity.this)
-                        .load(photo.getLocalPath())
-                        .into(holder.photo);
+                StorageReference image = storageRef.getStorage()
+                        .getReferenceFromUrl(photo.getDownloadUrl());
+                Log.v(TAG, image.toString());
 
+                Glide.with(GalleryActivity.this)
+                        .using(new FirebaseImageLoader())
+                        .load(image)
+                        .into(holder.photo);
             }
 
             @Override
@@ -291,8 +292,8 @@ public class GalleryActivity extends BaseActivity {
                 if (progressDialog != null && progressDialog.isShowing()) {
                     hideProgressDialog();
                 }
-
             }
+
         };
 
     }

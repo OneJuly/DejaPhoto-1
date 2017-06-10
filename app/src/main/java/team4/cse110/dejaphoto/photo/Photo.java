@@ -17,7 +17,7 @@ public class Photo {
     @SuppressWarnings("unused")
     public static final String TAG = "Photo";
 
-    private String storageRef;
+    private String downloadUrl;
     private String customLoc;
     private String localPath;
     public double weight;
@@ -36,12 +36,12 @@ public class Photo {
         this.localPath = localPath;
     }
 
-    public String getStorageRef() {
-        return storageRef;
+    public String getDownloadUrl() {
+        return downloadUrl;
     }
 
-    public void setStorageRef(StorageReference storageRef) {
-        this.storageRef = storageRef.toString();
+    public void setDownloadUrl(StorageReference downloadUrl) {
+        this.downloadUrl = downloadUrl.getDownloadUrl().toString();
     }
 
     public String getCustomLoc() {
@@ -203,7 +203,7 @@ public class Photo {
         if (Double.compare(photo.lat, lat) != 0) return false;
         if (Double.compare(photo.lon, lon) != 0) return false;
         if (time != photo.time) return false;
-        if (!storageRef.equals(photo.storageRef)) return false;
+        if (!downloadUrl.equals(photo.downloadUrl)) return false;
         if (!localPath.equals(photo.localPath)) return false;
         return context.equals(photo.context);
 
@@ -213,7 +213,7 @@ public class Photo {
     public int hashCode() {
         int result;
         long temp;
-        result = storageRef.hashCode();
+        result = downloadUrl.hashCode();
         result = 31 * result + localPath.hashCode();
         temp = Double.doubleToLongBits(lat);
         result = 31 * result + (int) (temp ^ (temp >>> 32));

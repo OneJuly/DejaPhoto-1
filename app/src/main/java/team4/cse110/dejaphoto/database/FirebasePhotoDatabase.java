@@ -50,7 +50,7 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
         StorageReference photoRef = storageRef.child(user.getUid()
                 + "/" + file.getLastPathSegment());
         photoRef.putFile(file);
-        photo.setStorageRef(photoRef);
+        photo.setDownloadUrl(photoRef);
 
         // see firebase.google.com/docs/storage/android/upload-files
         UploadTask uploadTask = storageRef.putFile(file);
@@ -74,7 +74,7 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
     @Override
     public void deletePhoto(Photo photo) {
         // Delete from the cloud
-        String photoRef = photo.getStorageRef();
+        String photoRef = photo.getDownloadUrl();
         storageRef.child(photoRef).delete();
 
         // Remove photo info from database
@@ -120,7 +120,7 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
     @Override
     public Bitmap fetchBitmap(Photo photo) {
         StreamDownloadTask streamTask =
-                storageRef.child(photo.getStorageRef()).getStream();
+                storageRef.child(photo.getDownloadUrl()).getStream();
 
         streamTask.addOnSuccessListener(new OnSuccessListener<StreamDownloadTask.TaskSnapshot>() {
             @Override
