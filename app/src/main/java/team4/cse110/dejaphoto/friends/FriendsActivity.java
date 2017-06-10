@@ -75,7 +75,7 @@ public class FriendsActivity extends BaseActivity {
                 }
                 else{
                     DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference().child("Sam").child("friendsList");
-                    mDatabase.push().setValue(name);
+                    mDatabase.child(name).setValue(name);
                 }
 
                 arrayAdapter.notifyDataSetChanged();
