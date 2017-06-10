@@ -278,7 +278,7 @@ public class GalleryActivity extends BaseActivity {
                 // Load images
 
                 StorageReference imageRef = storageRef
-                        .child(photo.getRefPath());
+                        .child("/users/").child(photo.getRefPath());
 
 
                 Glide.with(GalleryActivity.this)

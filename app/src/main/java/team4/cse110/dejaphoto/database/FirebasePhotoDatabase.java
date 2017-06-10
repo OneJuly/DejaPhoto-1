@@ -51,7 +51,7 @@ public class FirebasePhotoDatabase implements DatabaseInterface{
                 + "/" + file.getLastPathSegment());
         photoRef.putFile(file);
         photo.setUid(user.getUid());
-        photo.setRefPath(photo.getUid() + file.getLastPathSegment());
+        photo.setRefPath(user.getUid() + "/" + file.getLastPathSegment());
 
         // see firebase.google.com/docs/storage/android/upload-files
         UploadTask uploadTask = storageRef.putFile(file);
