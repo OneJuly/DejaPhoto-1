@@ -39,7 +39,7 @@ public class DejaAlgorithm implements Algorithm {
         if (album.isEmpty()) return null;
 
         // See if we can just move forward in the cache
-        if (cachePos < cache.size() - 1) {
+        if (cachePos < cache.size() - 1 && cachePos != -1) {
             cachePos++;
             db.storePreviousIndex(cachePos);
             return cache.get(cachePos);
@@ -117,11 +117,12 @@ public class DejaAlgorithm implements Algorithm {
 
         // Update cache. db update done in next()
         cache.remove(photo);
-        cachePos = cache.size() - 1;
+        if (cache.isEmpty()) cachePos = -1;
 
         // Update album
         album.remove(photo);
         db.deletePhoto(photo);
+        save();
 
         // Get the next photo to display
         return next();
@@ -162,7 +163,6 @@ public class DejaAlgorithm implements Algorithm {
         }
         cachePos = cache.size() - 1;
 
-        db.storePreviousIndex(cachePos);
-        db.storePreviousList(cache);
+        save();
     }
 }

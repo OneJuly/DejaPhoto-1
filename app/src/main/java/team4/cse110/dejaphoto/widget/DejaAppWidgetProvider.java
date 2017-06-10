@@ -79,12 +79,12 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
 
         // Enable the karma button if no karma.
-/*        if (!algorithm.hasKarma()) {
-            Log.v(TAG, "Enabling button karma after prev"); // DEBUG
-            RemoteViews remoteViews = getDefaultRemoteViews(context);
-            enableView(R.id.button_karma, remoteViews);
-            updateRemoteViews(context, remoteViews);
-        }*/
+//        if (!algorithm.hasKarma()) {
+//            Log.v(TAG, "Enabling button karma after prev"); // DEBUG
+//            RemoteViews remoteViews = getDefaultRemoteViews(context);
+//            enableView(R.id.button_karma, remoteViews);
+//            updateRemoteViews(context, remoteViews);
+//        }
     }
 
     private void onNext(Context context, Intent intent) {
@@ -104,12 +104,12 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
         }
 
         // Enable the karma button if no karma
-/*        if (!algorithm.hasKarma()) {
+        if (!algorithm.hasKarma()) {
             Log.v(TAG, "Enabling button karma after next"); // DEBUG
             RemoteViews remoteViews = getDefaultRemoteViews(context);
             enableView(R.id.button_karma, remoteViews);
             updateRemoteViews(context, remoteViews);
-        }*/
+        }
     }
 
     private void onKarma(Context context, Intent intent) {
@@ -215,7 +215,7 @@ public class DejaAppWidgetProvider extends AppWidgetProvider {
      * @param context - current application context.
      */
     private void setWallpaper(Photo photo, Context context) {
-
+        // TODO
         SetWallpaper sp = new SetWallpaper(context);
         sp.execute(photo);
     }
