@@ -169,3 +169,4 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 .idea/copyright/
+/.idea/
